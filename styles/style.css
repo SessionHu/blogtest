@@ -1,0 +1,31 @@
+@charset "utf-8";
+
+@media (min-width: 260px) {
+    #theme-switch {
+        float: right;
+    }
+}
+
+#theme-switch > * {
+    line-height: 100%;
+}
+
+div[carousel-item] > div {
+    text-align: center;
+}
+
+div[carousel-item] > div > * {
+    height: inherit;
+}
+
+div.layui-panel {
+    border-radius: 8px;
+}
+
+.background {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
