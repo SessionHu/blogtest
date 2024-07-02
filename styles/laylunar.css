@@ -1,0 +1,82 @@
+@charset "utf-8";
+
+/* https://layui.dev/docs/2/laydate/#demo-custom-cell */
+
+.laydate-theme-lunar .layui-laydate-main {
+    width: auto;
+}
+
+.laydate-theme-lunar .date-cell-inner {
+    padding: 6px;
+    width: 44px;
+    height: 40px;
+    border-radius: 4px !important;
+}
+
+.laydate-theme-lunar .layui-this {
+    border-radius: 4px !important;
+}
+
+.laydate-theme-lunar .date-cell-inner b {
+    display: block;
+    font-weight: 400;
+    height: 16px;
+    font-size: 14px;
+}
+
+.laydate-theme-lunar .date-cell-inner i {
+    display: block;
+    font-style: normal;
+    font-size: 10px;
+}
+
+.laydate-theme-lunar .badge {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    background-color: #4e5877;
+    color: #fff;
+    font-size: 12px;
+    line-height: 14px;
+    padding: 1px 2px;
+    border-radius: 4px;
+    text-decoration: none;
+    transform: scale(0.7);
+}
+
+.laydate-theme-lunar .holiday .badge {
+    background-color: #eb3333 !important;
+}
+
+.laydate-theme-lunar .hightlight i {
+    color: #1e9fff;
+}
+
+.laydate-theme-lunar .layui-this .hightlight i {
+    color: #fff;
+}
+
+.laydate-theme-lunar .laydate-month-list>li {
+    height: 50px !important;
+    line-height: 50px !important;
+    width: 24.2% !important;
+    margin: 18px 1px !important;
+}
+
+.laydate-theme-lunar .laydate-year-list>li {
+    height: 40px !important;
+    line-height: normal !important;
+    width: 31.3% !important;
+    margin: 8px 2px !important;
+}
+
+.laydate-theme-lunar .preview-inner>* {
+    display: inline-block;
+    margin-right: 5px;
+    position: relative;
+    font-size: 12px;
+}
+
+.laydate-theme-lunar .preview-inner>.badge {
+    margin-right: 0;
+}

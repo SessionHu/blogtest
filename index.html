@@ -42,28 +42,50 @@
     <div class="layui-container">
         <div class="layui-row layui-col-space16">
 
-            <div class="layui-col-md9">
+            <div class="layui-col-md8">
                 <div class="layui-panel layui-card">
                     <div class="layui-card-header" id="main-title">
                         <noscript>Welcome!</noscript>
                     </div>
                     <div class="layui-card-body" id="main">
                         <noscript>
-                            Please go to <a href="/home.html">/home.html</a> if you do not use JavaScript.
+                            You can go to following pages if you do not use JavaScript.
+                            <ul>
+                                <li>
+                                    <a href="/home.html">/home.html</a>
+                                </li>
+                                <li>
+                                    <a href="/category.html">/category.html</a>
+                                </li>
+                                <li>
+                                    <a href="/about.html">/about.html</a>
+                                </li>
+                            </ul>
                         </noscript>
                     </div>
                 </div>
             </div>
 
-            <div class="layui-col-md3">
-                <div class="layui-panel layui-card">
+            <div class="layui-col-md4">
+                <div class="layui-panel layui-card" id="name-face-container">
                     <div class="layui-card-header">
                         Session小胡
                     </div>
                     <div class="layui-card-body">
                         <img src="https://avatars.githubusercontent.com/u/102411014?s=100" alt="face">
                     </div>
-
+                </div>
+                <div class="layui-panel layui-card" id="lunar-calendar-container">
+                    <div class="layui-card-header">
+                        农历
+                    </div>
+                    <div class="layui-card-body layui-text">
+                        <script src="https://unpkg.com/lunar-javascript@1.6.12/lunar.js"></script>
+                        <script src="/scripts/laylunar.js"></script>
+                        <link rel="stylesheet" href="/styles/laylunar.css" />
+                        <div></div>
+                        <p></p>
+                    </div>
                 </div>
             </div>
 
