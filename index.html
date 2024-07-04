@@ -72,7 +72,15 @@
                         Session小胡
                     </div>
                     <div class="layui-card-body">
-                        <img src="https://avatars.githubusercontent.com/u/102411014?s=100" alt="face">
+                        <div id="pers-desc">
+                            <div id="pageview-contianer">
+                                <span id="pageview">114514</span>
+                                <span>浏览</span>
+                            </div>
+                        </div>
+                        <div id="face-container">
+                            <img src="https://avatars.githubusercontent.com/u/102411014?s=100" alt="face">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-panel layui-card" id="lunar-calendar-container">
@@ -80,10 +88,12 @@
                         农历
                     </div>
                     <div class="layui-card-body layui-text">
+                        <!-- lunar calendar -->
                         <script src="https://unpkg.com/lunar-javascript@1.6.12/lunar.js"></script>
                         <script src="/scripts/laylunar.js"></script>
                         <link rel="stylesheet" href="/styles/laylunar.css" />
                         <div></div>
+                        <!-- fortune -->
                         <p></p>
                     </div>
                 </div>

@@ -1,29 +1,7 @@
 {
-    const fun = () => {
-        try {
-            const container = document.querySelector("div#lunar-calendar-container");
-            if (362 > container.getBoundingClientRect().width) {
-                container.querySelector(".layui-card-body > div").style.display = "none";
-                container.querySelector(".layui-card-body > p").style.display = "inline";
-                container.querySelector(".layui-card-header").innerText = "Fortune";
-            } else {
-                container.querySelector(".layui-card-body > div").style.display = "block";
-                container.querySelector(".layui-card-body > p").style.display = "block";
-                container.querySelector(".layui-card-header").innerText = "农历";
-            }
-        } catch (e) {
-            Sess.openErrLayer(e);
-        }
-    }
-    window.addEventListener("resize", fun);
-    window.addEventListener("load", fun);
-}
 
-// https://layui.dev/docs/2/laydate/#demo-custom-cell
-layui.use(function () {
-    const $ = layui.$;
-    // 渲染
-    layui.laydate.render({
+    // https://layui.dev/docs/2/laydate/#demo-custom-cell
+    const laylunar = () => layui.laydate.render({
         elem: '#lunar-calendar-container > .layui-card-body > div',
         position: 'static',
         // value: '2024-03-30',
@@ -34,7 +12,7 @@ layui.use(function () {
         ready: function (date) {
             if (!this._previewEl) {
                 const key = this.elem.attr('lay-key');
-                const panelEl = $('#layui-laydate' + key);
+                const panelEl = layui.$('#layui-laydate' + key);
                 this._previewEl = panelEl.find('.layui-laydate-preview');
                 this.cellRender(date);
             }
@@ -95,8 +73,8 @@ layui.use(function () {
                     '</div>',
                 ].join('');
                 // render(content)
-                // render($(content)[0])
-                const contentEl = $(content);
+                // render(layui.$(content)[0])
+                const contentEl = layui.$(content);
                 contentEl.on('contextmenu', function (e) {
                     e.preventDefault();
                     layer.tips(lunarDate.toString(), this, {
@@ -118,4 +96,27 @@ layui.use(function () {
             }
         },
     });
-});
+
+    const fun = () => {
+        try {
+            const container = document.querySelector("div#lunar-calendar-container");
+            if (362 > container.getBoundingClientRect().width) {
+                container.querySelector(".layui-card-body > div").style.display = "none";
+                container.querySelector(".layui-card-body > p").style.display = "inline";
+                container.querySelector(".layui-card-header").innerText = "Fortune";
+            } else {
+                container.querySelector(".layui-card-body > div").style.display = "block";
+                container.querySelector(".layui-card-body > p").style.display = "block";
+                container.querySelector(".layui-card-header").innerText = "农历";
+                if (container.querySelector("#lunar-calendar-container > .layui-card-body > div > div") === null) {
+                    laylunar();
+                }
+            }
+        } catch (e) {
+            Sess.openErrLayer(e);
+        }
+    }
+    window.addEventListener("resize", fun);
+    layui.use(fun);
+
+}

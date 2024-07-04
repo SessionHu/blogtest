@@ -1,5 +1,11 @@
 @charset "utf-8";
 
+html {
+    width: 100vw;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+}
+
 /* theme switch */
 
 @media (min-width: 260px) {
@@ -14,11 +20,11 @@
 
 /* carousel */
 
-div[carousel-item]>div {
+div[carousel-item] > div {
     text-align: center;
 }
 
-div[carousel-item]>div>* {
+div[carousel-item] > div > * {
     height: inherit;
 }
 
@@ -40,27 +46,52 @@ div.layui-panel {
 
 /* lunar calendar custom */
 
-#name-face-container > .layui-card-body,
 #lunar-calendar-container > .layui-card-body {
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-#lunar-calendar-container > .layui-card-body > div {
+#lunar-calendar-container > .layui-card-body > div > div {
     text-align: initial;
 }
 
-/* fortune */
-
-/* #lunar-calendar-container > .layui-card-body > * {
-    padding: 6px 0;
-} */
-
-
 /* face */
+
+#name-face-container > .layui-card-header {
+    background-color: #c2c2c2;
+    background-image: url('https://static.wikia.nocookie.net/phigros/images/f/fb/Miracle_Forest_%28VIP_Mix%29_jacket.png');
+    background-image: url('https://netdisk.xhustudio.eu.org/images/webp/Miracle_Forest__VIP_Mix__jacket.webp');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: rgba(255,255,255,.9);
+    border-radius: 8px 8px 0 0;
+}
+
+#name-face-container > .layui-card-body {
+    display: flex;
+    justify-content: space-between;
+}
+
+#face-container {
+    width: 100px;
+    height: 68px;
+}
 
 img[alt=face] {
     border-color: #6cf;
     border-radius: 64px;
+    position: relative;
+    top: -32px;
+}
+
+@media (max-width: 256px) {
+    img[alt=face] {
+        display: none;
+    }
+}
+
+#pers-desc {
+    width: 100%;
 }
