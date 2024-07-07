@@ -33,7 +33,7 @@
             head.appendChild(darkFix);
             layui.data("sessblog", { key: "theme", value: "dark" });
             themeSwitchButton.innerHTML = "&#xe6c2;";
-            window.setTimeout(() => {if (dotLine) dotLine.color = "#f0f0f0";}, 50);
+            setDotlineColor("#f0f0f0");
             layer.tips('已启用深色模式', "#theme-switch", {
                 tips: 3,
                 time: 1600
@@ -43,11 +43,22 @@
             head.removeChild(darkFix);
             layui.data("sessblog", { key: "theme", value: "light" });
             themeSwitchButton.innerHTML = "&#xe748;";
-            if (dotLine) dotLine.color = "#000";
+            setDotlineColor("#000");
             layer.tips('已启用浅色模式', "#theme-switch", {
                 tips: [3, "#666"],
                 time: 1600
             });
+        }
+    }
+
+    /**
+     * @param {string} color 
+     */
+    const setDotlineColor = (color) => {
+        if (dotLine && dotLine.color) {
+            window.setTimeout(() => dotLine.color = color, 50);
+        } else {
+            window.setTimeout(() => setDotlineColor(color), 50);
         }
     }
 
@@ -81,14 +92,15 @@ class Sess {
         layer.open({
             type: 0,
             title: e.name,
-            content: e.stack.replaceAll(" at", "<br />&nbsp;&nbsp;&nbsp;&nbsp;at").replaceAll("@", "<br />&nbsp;&nbsp;&nbsp;&nbsp;@"),
+            content: e.stack.replaceAll(" at", "<br />&nbsp;&nbsp;&nbsp;&nbsp;at"),
             icon: e instanceof Warning ? 0 : 2,
             skin: "layui-layer-win10",
             shade: .01,
             shadeClose: true,
             resize: false,
             ...options // merge
-        })
+        });
+        console.error(e);
     }
 
     /**
@@ -250,12 +262,8 @@ class Sess {
             "carousel-720x360-5": showCarouselPhotos
         });
         // forune & pageview
-        await this.fortune();
-        await this.pageview();
-        // debug
-        // window.addEventListener("resize", () => {
-        //     layer.msg("w:" + window.innerWidth + "<br>h:" + window.innerHeight);
-        // });
+        this.fortune().catch((e) => Sess.openErrLayer(e));
+        this.pageview().catch((e) => Sess.openErrLayer(e));
 
     }
 

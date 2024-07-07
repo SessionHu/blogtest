@@ -18,6 +18,10 @@ html {
     line-height: 100%;
 }
 
+* {
+    transition: all 100ms ease-in-out;
+}
+
 /* carousel */
 
 div[carousel-item] > div {
@@ -32,6 +36,10 @@ div[carousel-item] > div > * {
 
 div.layui-panel {
     border-radius: 8px;
+}
+
+.layui-row > * > * {
+    background-color: rgb(255, 255, 255, 0.94);
 }
 
 /* background */

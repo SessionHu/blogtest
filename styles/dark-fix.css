@@ -44,3 +44,8 @@
     /* background-image: url('https://static.wikia.nocookie.net/phigros/images/c/cb/Rainy_Heart_jacket.png') */
     background-image: url('https://netdisk.xhustudio.eu.org/images/png/Rainy_Heart_jacket.png');
 }
+
+/* panel */
+.layui-row > * > * {
+    background-color: rgba(36, 36, 36, .94);
+}
