@@ -81,7 +81,7 @@ class Sess {
         layer.open({
             type: 0,
             title: e.name,
-            content: e.stack.replaceAll(" at", "<br />&nbsp;&nbsp;&nbsp;&nbsp;at"),
+            content: e.stack.replaceAll(" at", "<br />&nbsp;&nbsp;&nbsp;&nbsp;at").replaceAll("@", "<br />&nbsp;&nbsp;&nbsp;&nbsp;@"),
             icon: e instanceof Warning ? 0 : 2,
             skin: "layui-layer-win10",
             shade: .01,
@@ -161,41 +161,37 @@ class Sess {
      * Add .layui-this.
      */
     static navthis() {
-        const path = layui.url().hash.path;
-        if (path.length < 1 || path[0] === "") {
-            document.getElementById("nav-index").classList.add("layui-this");
-            return;
+        // clear
+        const nav = document.querySelector("ul[lay-filter=nav-sess]");
+        for (const child of nav.children) {
+            child.classList.remove("layui-this");
         }
-        switch (path[0]) {
-            case "home":
-                document.getElementById("nav-index").classList.add("layui-this");
-                break;
-            case "category":
-                document.getElementById("nav-category").classList.add("layui-this");
-                break;
-            case "about":
-                document.getElementById("nav-about").classList.add("layui-this");
-                break;
-            default:
-            // nothing here...
+        // add
+        const path = layui.url().hash.path;
+        if (path.length < 1 || path[0] === "" || path[0] === "home") {
+            nav.querySelector("#nav-index").classList.add("layui-this");
+        } else if (path[0] === "category") {
+            nav.querySelector("#nav-category").classList.add("layui-this");
+        } else if (path[0] === "about") {
+            nav.querySelector("#nav-about").classList.add("layui-this");
         }
     }
 
     /**
      * Load #main content.
-     * @param {JQuery} elem
+     * @param {HTMLElement} navelem
      */
-    static async loadMainContent(elem = { context: { parentElement: { id: null } } }) {
+    static async loadMainContent(navelem = {id: null}) {
         // param
         let path = layui.url().hash.path;
-        if (elem.context.parentElement.id !== null) path = [null];
+        if (navelem.id !== null) path = [navelem.id.replace("nav-", "")];
         // request path
         let reqpath = "";
-        if (elem.context.parentElement.id === "nav-index" || path.length < 1 || path[0] === "" || path[0] === "home") {
+        if (navelem.id === "nav-index" || path.length < 1 || path[0] === "" || path[0] === "home") {
             reqpath = "/home.html";
-        } else if (elem.context.parentElement.id === "nav-category" || path[0] === "category") {
+        } else if (navelem.id === "nav-category" || path[0] === "category") {
             reqpath = "/category.html";
-        } else if (elem.context.parentElement.id === "nav-about" || path[0] === "about") {
+        } else if (navelem.id === "nav-about" || path[0] === "about") {
             reqpath = "/about.html";
         } else {
             for (const t of path) {
@@ -225,6 +221,7 @@ class Sess {
         // render
         this.renderBreadcrumb();
         this.renderCarousel();
+        this.navthis();
     }
 
     /**
@@ -236,7 +233,10 @@ class Sess {
         this.sccrval();
         // load content
         await this.loadMainContent();
-        layui.element.on("nav(nav-sess)", (elem) => this.loadMainContent(elem));
+        layui.element.on("nav(nav-sess)", (elem) => this.loadMainContent(elem.context.parentElement));
+        layui.util.on("lay-on", {
+            "bc-home": () => Sess.loadMainContent({id: "nav-index"})
+        });
         // show carousel photos
         const showCarouselPhotos = function () {
             layer.photos({
