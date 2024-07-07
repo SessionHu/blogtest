@@ -147,6 +147,7 @@ class Sess {
             scvt.style.fontWeight = "bold";
             scvt.style.whiteSpace = "nowrap";
             scvt.style.userSelect = "none";
+            scvt.style.transition = "none";
             scvt.style.opacity = "1";
             scvt.style.zIndex = "1145141919";
             // layui style
@@ -198,6 +199,8 @@ class Sess {
         let path = layui.url().hash.path;
         if (navelem.id !== null) path = [navelem.id.replace("nav-", "")];
         // request path
+        this.setPageloadProgress("0%");
+        document.querySelector("*[lay-filter=pageload-progress]").classList.remove("layui-hide");
         let reqpath = "";
         if (navelem.id === "nav-index" || path.length < 1 || path[0] === "" || path[0] === "home") {
             reqpath = "/home.html";
@@ -213,9 +216,11 @@ class Sess {
             reqpath += ".html";
         }
         // get HTML in #main
+        this.setPageloadProgress("6%");
         const maincontainer = document.createElement("div");
         try {
             const response = await fetch(reqpath);
+            this.setPageloadProgress("90%");
             if (response.ok) {
                 maincontainer.innerHTML = await response.text();
             } else {
@@ -224,6 +229,7 @@ class Sess {
         } catch (e) {
             Sess.openErrLayer(e);
         }
+        this.setPageloadProgress("99%");
         if (maincontainer.innerHTML === "") maincontainer.innerHTML = `
             <h1 id="main-title">404 Not Found</h1>
             <div id="main">There is nothing you wanted...</div>
@@ -234,6 +240,21 @@ class Sess {
         this.renderBreadcrumb();
         this.renderCarousel();
         this.navthis();
+        this.setPageloadProgress("100%");
+    }
+    
+    /**
+     * @param {string} progress
+     */
+    static setPageloadProgress(progress) {
+       layui.element.progress("pageload-progress", progress);
+       if (progress === "100%") {
+            window.setTimeout(() => {
+                document.querySelector("*[lay-filter=pageload-progress]").classList.add("layui-hide");
+            }, 1000);
+        } else if (progress === "0%") {
+            document.querySelector("*[lay-filter=pageload-progress]").classList.remove("layui-hide");
+        }
     }
 
     /**

@@ -118,3 +118,19 @@ img[alt=face] {
 #pers-desc {
     width: 100%;
 }
+
+/* pageload progress */
+
+*[lay-filter=pageload-progress] {
+    height: 2px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: transparent;
+    z-index: 1;
+}
+
+*[lay-filter=pageload-progress] > * {
+    height: 100%;
+}
