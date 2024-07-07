@@ -56,6 +56,7 @@ div.layui-panel {
     background-size: cover;
     /* background-image: url('https://static.wikia.nocookie.net/phigros/images/e/eb/Broken_Sky_jacket.png'); */
     background-image: url('https://netdisk.xhustudio.eu.org/images/webp/Broken_Sky_jacket.webp');
+    transition: background-image 256ms ease-in-out;
 }
 
 /* lunar calendar custom */
@@ -74,7 +75,7 @@ div.layui-panel {
 
 #name-face-container > .layui-card-header {
     background-color: #c2c2c2;
-    background-image: url('https://static.wikia.nocookie.net/phigros/images/f/fb/Miracle_Forest_%28VIP_Mix%29_jacket.png');
+    /* background-image: url('https://static.wikia.nocookie.net/phigros/images/f/fb/Miracle_Forest_%28VIP_Mix%29_jacket.png'); */
     background-image: url('https://netdisk.xhustudio.eu.org/images/webp/Miracle_Forest__VIP_Mix__jacket.webp');
     background-position: center;
     background-repeat: no-repeat;
