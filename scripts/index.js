@@ -92,7 +92,7 @@ class Sess {
         layer.open({
             type: 0,
             title: e.name,
-            content: e.stack.replaceAll(" at", "<br />&nbsp;&nbsp;&nbsp;&nbsp;at"),
+            content: e.stack.replaceAll(" ", "&nbsp;").replaceAll("\n", "<br />"),
             icon: e instanceof Warning ? 0 : 2,
             skin: "layui-layer-win10",
             shade: .01,
@@ -236,6 +236,8 @@ class Sess {
         `;
         document.getElementById("main-title").innerHTML = maincontainer.querySelector("#main-title").innerHTML;
         document.getElementById("main").innerHTML = maincontainer.querySelector("#main").innerHTML;
+        // fill home #latest-container
+        await this.fillHomeLatest(await this.getPostsList(), new Date().getUTCFullYear());
         // render
         this.renderBreadcrumb();
         this.renderCarousel();
@@ -295,7 +297,7 @@ class Sess {
             if (elem !== null) {
                 elem.innerText = await (await fetch("https://v1.hitokoto.cn/?encode=text")).text();
             } else {
-                throw new Warnning("no place to show fortune");
+                throw new Warning("no place to show fortune");
             }
         } catch (e) {
             this.openErrLayer(e);
@@ -315,6 +317,61 @@ class Sess {
         }
     }
 
+    static async getPostsList() {
+        return await (await fetch("/posts/index.json")).json();
+    }
+
+    /**
+     * @param {any} postsList
+     * @param {number} year
+     */
+    static async fillHomeLatest(postsList, year) {
+        // this year
+        const latestContainerDiv = document.querySelector("div#latest-container");
+        if (latestContainerDiv === null || latestContainerDiv.querySelector(`div#latest-${year}`) !== null) {
+            return;
+        }
+        const thisYearLatestDiv = document.createElement("div");
+        thisYearLatestDiv.id = `latest-year-${year}`;
+        latestContainerDiv.appendChild(thisYearLatestDiv);
+        for (const yearPosts of postsList) {
+            if (yearPosts.year === year) {
+                for (const aPost of yearPosts.posts) {
+                    const datetime = new Date(aPost.time);
+                    // div
+                    thisYearLatestDiv.insertAdjacentHTML("beforeend", `
+                        <a class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime.getTime()}">
+                            <div class="postcard-bg" style="background-image:url('${aPost.image}');"></div>
+                            <div class="postcard-desc layui-padding-2">
+                                <div class="postcard-title layui-font-18">${aPost.title}</div>
+                                <div class="postcard-sub">
+                                    ${aPost.category}&nbsp;&nbsp;${datetime.toLocaleString().replace(":00", "")}
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                }
+                break;
+            }
+        }
+    }
+
 }
 
 Sess.main().catch((e) => Sess.openErrLayer(e));
+
+// debug
+//{
+//    const disableDotline = () => {
+//        if (dotLine) {
+//            window.setTimeout(() => {
+//                dotLine.ctx = null;
+//                dotLine.move = () => {};
+//                console.log("[sess] Dotline disabled");
+//            }, 50);
+//        } else {
+//            window.setTimeout(() => disableDotline(), 50);
+//        }
+//    }
+//    disableDotline();
+//}

@@ -1,0 +1,15 @@
+[
+    {
+        "year": 2024,
+        "posts": [
+            {
+                "type": "post",
+                "title": "窗口宽度不能超过 16384",
+                "time": "2024-07-01T14:44+0800",
+                "category": "graphics",
+                "image": "https://netdisk.xhustudio.eu.org/posts/2024/win-size-never-greater-than-16384/Screenshot_20240702_101435.png",
+                "tags": ["kde", "linux", "windows", "computer", "x11"]
+            }
+        ]
+    }
+]
