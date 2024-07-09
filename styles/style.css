@@ -103,8 +103,6 @@ div.layui-panel {
 }
 
 img[alt=face] {
-    border-color: #6cf;
-    border-radius: 64px;
     position: relative;
     top: -32px;
 }

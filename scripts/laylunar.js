@@ -102,11 +102,11 @@
             const container = document.querySelector("div#lunar-calendar-container");
             if (362 > container.getBoundingClientRect().width) {
                 container.querySelector(".layui-card-body > div").classList.add("layui-hide");
-                container.querySelector(".layui-card-body > p").classList.add("layui-inline");
+                container.querySelector(".layui-card-body > p").style.display = "inline";
                 container.querySelector(".layui-card-header").innerText = "Fortune";
             } else {
                 container.querySelector(".layui-card-body > div").classList.remove("layui-hide");
-                container.querySelector(".layui-card-body > p").classList.remove("layui-inline");
+                container.querySelector(".layui-card-body > p").style.display = "block";
                 container.querySelector(".layui-card-header").innerText = "农历";
                 if (container.querySelector("#lunar-calendar-container > .layui-card-body > div > div") === null) {
                     laylunar();
