@@ -6,7 +6,7 @@
         window.location.pathname = "/";
     } else if (window.location.pathname !== "/") {
         window.location.replace(
-            window.location.protocol + "//" + window.location.host + "/#" +
+            window.location.protocol + "//" + window.location.host + "/#!" +
             window.location.pathname.replace(".html", "") + "/" +
             window.location.search.substring(1) + window.location.hash
         );
@@ -19,7 +19,7 @@
     const head = document.querySelector("head");
     const dark = document.createElement("link");
     dark.rel = "stylesheet";
-    dark.href = "https://unpkg.com/layui-theme-dark@2.9.7/dist/layui-theme-dark.css";
+    dark.href = "https://unpkg.com/layui-theme-dark@2.9.13/dist/layui-theme-dark.css";
     const darkFix = dark.cloneNode(true);
     darkFix.href = "/styles/dark-fix.css";
     const themeSwitchButton = document.querySelector("#theme-switch > button");
@@ -192,21 +192,19 @@ class Sess {
 
     /**
      * Load #main content.
-     * @param {HTMLElement} navelem
      */
-    static async loadMainContent(navelem = {id: null}) {
+    static async loadMainContent() {
         // param
         let path = layui.url(window.location.href.replace("/#!","/#")).hash.path;
-        if (navelem.id !== null) path = [navelem.id.replace("nav-", "")];
         // request path
         this.setPageloadProgress("0%");
         document.querySelector("*[lay-filter=pageload-progress]").classList.remove("layui-hide");
         let reqpath = "";
-        if (navelem.id === "nav-index" || path.length < 1 || path[0] === "" || path[0] === "home") {
+        if (path.length < 1 || path[0] === "" || path[0] === "home") {
             reqpath = "/home.html";
-        } else if (navelem.id === "nav-category" || path[0] === "category") {
+        } else if (path[0] === "category") {
             reqpath = "/category.html";
-        } else if (navelem.id === "nav-about" || path[0] === "about") {
+        } else if (path[0] === "about") {
             reqpath = "/about.html";
         } else {
             for (const t of path) {
@@ -238,6 +236,8 @@ class Sess {
         document.getElementById("main").innerHTML = maincontainer.querySelector("#main").innerHTML;
         // fill home #latest-container
         await this.fillHomeLatest();
+        // fill category #category-container
+        await this.fillCategoryInfo();
         // render
         this.renderBreadcrumb();
         this.renderCarousel();
@@ -268,10 +268,8 @@ class Sess {
         this.sccrval();
         // load content
         await this.loadMainContent();
-        layui.element.on("nav(nav-sess)", (elem) => this.loadMainContent(elem.context.parentElement));
-        layui.util.on("lay-on", {
-            "bc-home": () => Sess.loadMainContent({id: "nav-index"})
-        });
+        // popstate
+        window.addEventListener("popstate", () => Sess.loadMainContent());
         // show carousel photos
         const showCarouselPhotos = function () {
             layer.photos({
@@ -367,6 +365,64 @@ class Sess {
             }
         }
         return ls;
+    }
+
+    static async fillCategoryInfo() {
+        // check
+        const container = document.querySelector("div#category-container");
+        if (container === null) return;
+        // div
+        const collapseDiv = document.createElement("div");
+        collapseDiv.className = "layui-collapse";
+        collapseDiv.setAttribute("lay-filter", "cat-colla");
+        // item
+        const categoryInfo = await this.getCategoryInfo();
+        for (const aCategoryName of Object.keys(categoryInfo)) {
+            const itemDiv = document.createElement("div");
+            itemDiv.className = "layui-colla-item";
+            // title
+            itemDiv.insertAdjacentHTML("afterbegin", `
+                <div class="layui-colla-title">
+                    ${aCategoryName} ${categoryInfo[aCategoryName].count}
+                </div>
+            `);
+            // content
+            const contentDiv = document.createElement("div");
+            contentDiv.className = "layui-colla-content";
+            if (collapseDiv.childElementCount === 0) contentDiv.classList.add("layui-show");
+            const contentText = [];
+            for (const link of categoryInfo[aCategoryName].links) {
+                contentText.push(`<a href="${link.url}">${link.title}</a><br/>`);
+            }
+            contentDiv.innerHTML = contentText.join("");
+            itemDiv.insertAdjacentElement("beforeend", contentDiv);
+            collapseDiv.appendChild(itemDiv);
+        }
+        container.appendChild(collapseDiv);
+        layui.element.render("collapse", "cat-colla");
+    }
+
+    static async getCategoryInfo() {
+        // eg: {"cat":{"count":1,"links":["title":"iamtitle",url:"/#!/"]}}
+        const categoryInfo = {};
+        const postsIndexJson = await (await fetch("/posts/index.json")).json();
+        for (const yearPosts of postsIndexJson) {
+            for (const aPost of yearPosts.posts) {
+                if (aPost.category in categoryInfo) {
+                    categoryInfo[aPost.category].count++;
+                } else {
+                    categoryInfo[aPost.category] = {
+                        count: 1,
+                        links: []
+                    };
+                }
+                categoryInfo[aPost.category].links.push({
+                    "title": aPost.title,
+                    "url": `/#!/posts/${yearPosts.year}/${aPost.fname}`
+                });
+            }
+        }
+        return categoryInfo;
     }
 
 }
