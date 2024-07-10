@@ -180,7 +180,7 @@ class Sess {
             child.classList.remove("layui-this");
         }
         // add
-        const path = layui.url().hash.path;
+        const path = layui.url(window.location.href.replace("/#!","/#")).hash.path;
         if (path.length < 1 || path[0] === "" || path[0] === "home") {
             nav.querySelector("#nav-index").classList.add("layui-this");
         } else if (path[0] === "category") {
@@ -196,7 +196,7 @@ class Sess {
      */
     static async loadMainContent(navelem = {id: null}) {
         // param
-        let path = layui.url().hash.path;
+        let path = layui.url(window.location.href.replace("/#!","/#")).hash.path;
         if (navelem.id !== null) path = [navelem.id.replace("nav-", "")];
         // request path
         this.setPageloadProgress("0%");
@@ -332,6 +332,7 @@ class Sess {
         const toyear = new Date().getFullYear();
         layui.flow.load({
             elem: "div#latest-container",
+            end: "没有了喵",
             done: (page, next) => {
                 const ls = this.getHomeLatestByYear(postsIndexJson, toyear - page + 1);
                 next(ls.join(""), page < postsIndexJson.length);
