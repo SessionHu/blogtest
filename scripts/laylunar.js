@@ -100,7 +100,7 @@
     const fun = () => {
         try {
             const container = document.querySelector("div#lunar-calendar-container");
-            if (362 > container.getBoundingClientRect().width) {
+            if (360 > container.getBoundingClientRect().width) {
                 container.querySelector(".layui-card-body > div").classList.add("layui-hide");
                 container.querySelector(".layui-card-body > p").style.display = "inline";
                 container.querySelector(".layui-card-header").innerText = "Fortune";
