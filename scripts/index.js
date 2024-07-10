@@ -237,20 +237,20 @@ class Sess {
         document.getElementById("main-title").innerHTML = maincontainer.querySelector("#main-title").innerHTML;
         document.getElementById("main").innerHTML = maincontainer.querySelector("#main").innerHTML;
         // fill home #latest-container
-        await this.fillHomeLatest(await this.getPostsList(), new Date().getUTCFullYear());
+        await this.fillHomeLatest();
         // render
         this.renderBreadcrumb();
         this.renderCarousel();
         this.navthis();
         this.setPageloadProgress("100%");
     }
-    
+
     /**
      * @param {string} progress
      */
     static setPageloadProgress(progress) {
-       layui.element.progress("pageload-progress", progress);
-       if (progress === "100%") {
+        layui.element.progress("pageload-progress", progress);
+        if (progress === "100%") {
             window.setTimeout(() => {
                 document.querySelector("*[lay-filter=pageload-progress]").classList.add("layui-hide");
             }, 1000);
@@ -306,14 +306,16 @@ class Sess {
 
     static async pageview() {
         const elem = document.querySelector("#pageview");
-        try {
-            if (elem !== null) {
-                elem.innerText = await (await fetch("https://api.xhustudio.eu.org/pv")).text();
-            } else {
-                throw new Warning("no place to show pageview");
+        if (elem !== null) {
+            let pvcount = 114514;
+            try {
+                pvcount = await (await fetch("https://api.xhustudio.eu.org/pv")).text();
+            } catch (e) {
+                this.openErrLayer(e);
             }
-        } catch (e) {
-            this.openErrLayer(e);
+            elem.innerText = pvcount;
+        } else {
+            throw new Warning("no place to show pageview");
         }
     }
 
@@ -321,25 +323,34 @@ class Sess {
         return await (await fetch("/posts/index.json")).json();
     }
 
+    static async fillHomeLatest() {
+        const latestContainerDiv = document.querySelector("div#latest-container");
+        if (latestContainerDiv === null) {
+            return;
+        }
+        const postsIndexJson = await (await fetch("/posts/index.json")).json();
+        const toyear = new Date().getFullYear();
+        layui.flow.load({
+            elem: "div#latest-container",
+            done: (page, next) => {
+                const ls = this.getHomeLatestByYear(postsIndexJson, toyear - page + 1);
+                next(ls.join(""), page < postsIndexJson.length);
+            }
+        });
+    }
+
     /**
      * @param {any} postsList
      * @param {number} year
      */
-    static async fillHomeLatest(postsList, year) {
-        // this year
-        const latestContainerDiv = document.querySelector("div#latest-container");
-        if (latestContainerDiv === null || latestContainerDiv.querySelector(`div#latest-${year}`) !== null) {
-            return;
-        }
-        const thisYearLatestDiv = document.createElement("div");
-        thisYearLatestDiv.id = `latest-year-${year}`;
-        latestContainerDiv.appendChild(thisYearLatestDiv);
+    static getHomeLatestByYear(postsList, year) {
+        const ls = [];
         for (const yearPosts of postsList) {
             if (yearPosts.year === year) {
                 for (const aPost of yearPosts.posts) {
                     const datetime = new Date(aPost.time);
                     // div
-                    thisYearLatestDiv.insertAdjacentHTML("beforeend", `
+                    ls.push(`
                         <a class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime.getTime()}">
                             <div class="postcard-bg" style="background-image:url('${aPost.image}');"></div>
                             <div class="postcard-desc layui-padding-2">
@@ -354,6 +365,7 @@ class Sess {
                 break;
             }
         }
+        return ls;
     }
 
 }
