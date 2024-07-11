@@ -56,7 +56,7 @@
                     '</div>'
                 ].join('');
                 this._previewEl.html(tipsText);
-            };
+            }
             if (!render) return;
             // 面板类型
             if (info.type === 'date') {
