@@ -4,7 +4,7 @@
 
 - 几年前在 B 站上看到一个视频, 讲了特别大的屏幕, 就是把几块显示器拼在一起作为一个屏幕使用. 里面有一段是游戏不支持那么宽的屏幕全屏显示, 于是尝试窗口化到屏幕大小, 结果游戏崩溃, 查询得知 Windows 屏幕或窗口的宽度只支持到 `16384`, 否则崩给你看. 泽生一直这么相信.
 
-> 后面在问 BingAI 时好像找到了这个视频的后续 [BV1Sw411z7LJ](https://www.bilibili.com/video/BV1Sw411z7LJ), 还上了[微软社区](https://answers.microsoft.com/zh-hans/windows/forum/all/%E4%BD%BF%E7%94%A8%E6%98%BE%E5%8D%A1%E7%9A%84/a5e7b62e-a3f6-4178-a4d3-7f69c95f4f6a)
+> 后面在问 BingAI 时好像找到了这个视频的后续 [BV1Sw411z7LJ](https://www.bilibili.com/video/BV1Sw411z7LJ), 还上了[微软社区](https://answers.microsoft.com/zh-hans/windows/forum/all/%E4%BD%BF%E7%94%A8%E6%98%BE%E5%8D%A1%E7%9A%84/a5e7b62e-a3f6-4178-a4d3-7f69c95f4f6a).
 
 ## 夕拾
 
@@ -120,7 +120,7 @@
 
 - 可惜在值为 `24, 10, 16346, 8, 16, 18, 16362, 580` 的时候又崩坏了. 怀疑可能这里的数字要加一下.
 
-- 于是改成了 `xprop -id 0x05a00004 | grep =` 顺便查询了一下[文档](https://specifications.freedesktop.org/wm-spec/latest/). 发现有两个选项与本次探究主题最相关 `_NET_FRAME_EXTENTS` 和 `_NET_WM_OPAQUE_REGION`.
+- 于是改成了 `xprop -id 0x05a00004 | grep =` 顺便查询了一下[文档](https://specifications.freedesktop.org/wm-spec/latest/). 发现有两个选项与本次探究主题最相关, `_NET_FRAME_EXTENTS` 和 `_NET_WM_OPAQUE_REGION`.
 
   ```
   _NET_FRAME_EXTENTS, left, right, top, bottom, CARDINAL[4]/32

@@ -216,11 +216,12 @@ class Sess {
         // get HTML in #main
         this.setPageloadProgress("6%");
         const maincontainer = document.createElement("div");
+        let responseRaw;
         try {
             const response = await fetch(reqpath);
             this.setPageloadProgress("90%");
             if (response.ok) {
-                maincontainer.innerHTML = await response.text();
+                responseRaw = await response.text();
             } else {
                 throw new Error(`${response.status} ${response.statusText}`);
             }
@@ -228,13 +229,15 @@ class Sess {
             Sess.openErrLayer(e);
         }
         this.setPageloadProgress("99%");
-        if (maincontainer.innerHTML === "") {
+        if (responseRaw === "") {
             maincontainer.innerHTML = `
                 <h1 id="main-title">404 Not Found</h1>
                 <div id="main">There is nothing you wanted...</div>
             `;
         } else if (path.length > 0 && path[0] === "posts") {
-            if (path.length === 3) maincontainer.innerHTML = await this.getPostHTML(maincontainer.innerHTML, path);
+            if (path.length === 3) maincontainer.innerHTML = await this.getPostHTML(responseRaw, path);
+        } else {
+            maincontainer.innerHTML = responseRaw;
         }
         document.getElementById("main-title").innerHTML = maincontainer.querySelector("#main-title").innerHTML;
         document.getElementById("main").innerHTML = maincontainer.querySelector("#main").innerHTML;
@@ -245,6 +248,11 @@ class Sess {
         // render
         this.renderBreadcrumb();
         this.renderCarousel();
+        layui.code({
+            elem: ".layui-code",
+            langMarker: true,
+            wordWrap: false
+        });
         this.navthis();
         this.setPageloadProgress("100%");
     }
@@ -285,10 +293,11 @@ class Sess {
         // show carousel photos
         layui.util.on("lay-on", {
             "carousel-img": function () {
-            layer.photos({
-                photos: `div[lay-on=${this.getAttribute("lay-on")}]`
-            });
-        }});
+                layer.photos({
+                    photos: `div[lay-on=${this.getAttribute("lay-on")}]`
+                });
+            }
+        });
         // forune & pageview
         this.fortune().catch((e) => Sess.openErrLayer(e));
         this.pageview().catch((e) => Sess.openErrLayer(e));
@@ -464,7 +473,7 @@ class Sess {
                     <a><cite>${titleName}</cite></a>
                 </span>
             </h1>
-            <div id="main"><pre>${raw}</pre></div>
+            <div id="main"><div class="layui-text">${Md2html.md2html(raw)}</div></div>
         `;
     }
 
