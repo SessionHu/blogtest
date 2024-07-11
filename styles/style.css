@@ -44,6 +44,15 @@ div.layui-panel {
     background-color: rgb(255, 255, 255, 0.94);
 }
 
+#main-title {
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+#main-title > .layui-breadcrumb {
+    white-space: nowrap;
+}
+
 /* background */
 
 #dotLine {
