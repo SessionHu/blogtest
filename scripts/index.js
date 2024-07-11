@@ -211,7 +211,7 @@ class Sess {
                 reqpath += "/";
                 reqpath += t;
             }
-            reqpath += ".html";
+            if (path[0] !== "posts") reqpath += ".html";
         }
         // get HTML in #main
         this.setPageloadProgress("6%");
@@ -267,25 +267,27 @@ class Sess {
         this.navthis();
         this.sccrval();
         // load content
-        await this.loadMainContent();
+        const loadMainAndCatch = async () => {
+            try {
+                await this.loadMainContent();
+            } catch (e) {
+                this.openErrLayer(e);
+                this.setPageloadProgress("0%");
+            }
+        };
+        await loadMainAndCatch();
         // popstate
-        window.addEventListener("popstate", () => Sess.loadMainContent());
+        window.addEventListener("popstate", loadMainAndCatch);
         // show carousel photos
-        const showCarouselPhotos = function () {
+        layui.util.on("lay-on", {
+            "carousel-img": function () {
             layer.photos({
                 photos: `div[lay-on=${this.getAttribute("lay-on")}]`
             });
-        };
-        layui.util.on("lay-on", {
-            "carousel-profile-3d-contrib": showCarouselPhotos,
-            "carousel-bing": showCarouselPhotos,
-            "carousel-outer-space": showCarouselPhotos,
-            "carousel-720x360-5": showCarouselPhotos
-        });
+        }});
         // forune & pageview
         this.fortune().catch((e) => Sess.openErrLayer(e));
         this.pageview().catch((e) => Sess.openErrLayer(e));
-
     }
 
     static async fortune() {
@@ -347,10 +349,11 @@ class Sess {
         for (const yearPosts of postsList) {
             if (yearPosts.year === year) {
                 for (const aPost of yearPosts.posts) {
+                    const url = `/#!/posts/${year}/${aPost.fname}`;
                     const datetime = new Date(aPost.time);
                     // div
                     ls.push(`
-                        <a class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime.getTime()}">
+                        <a href="${url}" class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime.getTime()}">
                             <div class="postcard-bg" style="background-image:url('${aPost.image}');"></div>
                             <div class="postcard-desc layui-padding-2">
                                 <div class="postcard-title layui-font-18">${aPost.title}</div>
@@ -427,7 +430,10 @@ class Sess {
 
 }
 
-Sess.main().catch((e) => Sess.openErrLayer(e));
+Sess.main().catch((e) => {
+    Sess.openErrLayer(e);
+    Sess.setPageloadProgress("0%");
+});
 
 // debug
 //{

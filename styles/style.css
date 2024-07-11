@@ -18,7 +18,8 @@ html {
     line-height: 100%;
 }
 
-* {
+.layui-nav *,
+.layui-container * {
     transition: all 100ms ease-in-out;
 }
 
