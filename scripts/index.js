@@ -228,10 +228,14 @@ class Sess {
             Sess.openErrLayer(e);
         }
         this.setPageloadProgress("99%");
-        if (maincontainer.innerHTML === "") maincontainer.innerHTML = `
-            <h1 id="main-title">404 Not Found</h1>
-            <div id="main">There is nothing you wanted...</div>
-        `;
+        if (maincontainer.innerHTML === "") {
+            maincontainer.innerHTML = `
+                <h1 id="main-title">404 Not Found</h1>
+                <div id="main">There is nothing you wanted...</div>
+            `;
+        } else if (path.length > 0 && path[0] === "posts") {
+            if (path.length === 3) maincontainer.innerHTML = await this.getPostHTML(maincontainer.innerHTML, path);
+        }
         document.getElementById("main-title").innerHTML = maincontainer.querySelector("#main-title").innerHTML;
         document.getElementById("main").innerHTML = maincontainer.querySelector("#main").innerHTML;
         // fill home #latest-container
@@ -317,10 +321,6 @@ class Sess {
         } else {
             throw new Warning("no place to show pageview");
         }
-    }
-
-    static async getPostsList() {
-        return await (await fetch("/posts/index.json")).json();
     }
 
     static async fillHomeLatest() {
@@ -426,6 +426,46 @@ class Sess {
             }
         }
         return categoryInfo;
+    }
+
+    /**
+     * @param {string} raw
+     * @param {string[]} path
+     */
+    static async getPostHTML(raw, path) {
+        // basic information
+        const year = parseInt(path[1]);
+        const fname = path[2];
+        let categoryName;
+        let titleName;
+        let datetime
+        // fill information
+        const postsIndexJson = await (await fetch("/posts/index.json")).json();
+        for (const aYearPosts of postsIndexJson) {
+            if (aYearPosts.year === year) {
+                for (const aPost of aYearPosts.posts) {
+                    if (aPost.fname === fname) {
+                        categoryName = aPost.category;
+                        titleName = aPost.title;
+                        datetime = new Date(aPost.time);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        return `
+            <h1 id="main-title">
+                <span class="layui-breadcrumb" lay-separator=">" lay-filter="bc">
+                    <a href="/#!/">首页</a>
+                    <a href="/#!/category">分类</a>
+                    <a href="/#!/category/${categoryName}">${categoryName}</a>
+                    <a><cite>${datetime.toLocaleString().replace(":00", "")}</cite></a>
+                    <a><cite>${titleName}</cite></a>
+                </span>
+            </h1>
+            <div id="main"><pre>${raw}</pre></div>
+        `;
     }
 
 }
