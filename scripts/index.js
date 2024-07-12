@@ -365,7 +365,7 @@ class Sess {
                         <a href="${url}" class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime.getTime()}">
                             <div class="postcard-bg" style="background-image:url('${aPost.image}');"></div>
                             <div class="postcard-desc layui-padding-2">
-                                <div class="postcard-title layui-font-18">${aPost.title}</div>
+                                <div class="postcard-title layui-font-20">${aPost.title}</div>
                                 <div class="postcard-sub">
                                     ${aPost.category}&nbsp;&nbsp;${datetime.toLocaleString().replace(":00", "")}
                                 </div>
@@ -447,7 +447,9 @@ class Sess {
         const fname = path[2];
         let categoryName;
         let titleName;
-        let datetime
+        let datetime;
+        let image;
+        let tags = [""];
         // fill information
         const postsIndexJson = await (await fetch("/posts/index.json")).json();
         for (const aYearPosts of postsIndexJson) {
@@ -457,14 +459,28 @@ class Sess {
                         categoryName = aPost.category;
                         titleName = aPost.title;
                         datetime = new Date(aPost.time);
+                        image = aPost.image;
+                        tags = aPost.tags
                         break;
                     }
                 }
                 break;
             }
         }
+        // colorful tags
+        let colorfultags = "";
+        const bgcolors = [
+            "layui-bg-red", "layui-bg-orange", "layui-bg-green", "layui-bg-cyan",
+            "layui-bg-blue", "layui-bg-purple", "layui-bg-black", "layui-bg-gray"
+        ];
+        let bgi = 0;
+        for (const atag of tags) {
+            colorfultags += `<code class="${bgcolors[bgi++]}">${atag}</code> `;
+            if (bgi >= bgcolors.length) bgi = 0;
+        }
+        // return
         return `
-            <h1 id="main-title">
+            <h1 id="main-title"">
                 <span class="layui-breadcrumb" lay-separator=">" lay-filter="bc">
                     <a href="/#!/">首页</a>
                     <a href="/#!/category">分类</a>
@@ -473,7 +489,20 @@ class Sess {
                     <a><cite>${titleName}</cite></a>
                 </span>
             </h1>
-            <div id="main"><div class="layui-text">${Md2html.md2html(raw)}</div></div>
+            <div id="main">
+                <div class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime.getTime()}">
+                    <div class="postcard-bg" style="background-image:url('${image}');"></div>
+                    <div class="postcard-desc layui-padding-2">
+                        <div class="postcard-title layui-font-32">${titleName}</div>
+                        <div class="postcard-sub" style="opacity:.84;">
+                            ${colorfultags}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-text">
+                    ${Md2html.md2html(raw).replace(new RegExp("<h1[^>]*>.*?</h1>", 'gi'), "")}
+                </div>
+            </div>
         `;
     }
 
