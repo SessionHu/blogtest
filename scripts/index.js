@@ -229,7 +229,7 @@ class Sess {
             Sess.openErrLayer(e);
         }
         this.setPageloadProgress("99%");
-        if (responseRaw === "") {
+        if (responseRaw === undefined || responseRaw === "") {
             maincontainer.innerHTML = `
                 <h1 id="main-title">404 Not Found</h1>
                 <div id="main">There is nothing you wanted...</div>
@@ -245,6 +245,10 @@ class Sess {
         await this.fillHomeLatest();
         // fill category #category-container
         await this.fillCategoryInfo();
+        // lazyimg
+        layui.flow.lazyimg({
+            elem: "img[lay-src]"
+        });
         // render
         this.renderBreadcrumb();
         this.renderCarousel();

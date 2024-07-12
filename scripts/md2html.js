@@ -132,7 +132,7 @@ class Md2html {
             if (inimg && inimgtitle) { imgtitle += c; continue; }
             // else
             if (!inimg && imgalt !== "") {
-                out += `<img src="${imgsrc}" title="${imgtitle}" alt="${imgalt}"/>`;
+                out += `<img lay-src="${imgsrc}" title="${imgtitle}" alt="${imgalt}"/>`;
                 imgalt = imgsrc = imgtitle = "";
                 inimg = inimgalt = inimgsrc = inimgtitle = false;
                 continue;
