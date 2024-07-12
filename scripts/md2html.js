@@ -143,9 +143,21 @@ class Md2html {
             }
             // unexpect case
             if (inimg && !inimgalt && !inimgsrc && !inimgtitle) {
-                out += `![${imgalt}]`;
+                out += `! `;
                 imgalt = imgsrc = imgtitle = "";
                 inimg = inimgalt = inimgsrc = inimgtitle = false;
+            }
+        }
+        // not end
+        if (inimg) {
+            if (imgtitle !== "") {
+                out += `![${imgalt}](${imgsrc} "${imgtitle})`;
+            } else if (imgsrc !== "") {
+                out += `![${imgalt}](${imgsrc}`;
+            } else if (imgalt !== "") {
+                out += `![${imgalt}`;
+            } else {
+                out += '!';
             }
         }
         return out;

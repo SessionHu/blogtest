@@ -56,3 +56,12 @@ code {
     background-color: #6666;
     color: rgba(255, 255, 255, .7);
 }
+
+.hidden {
+    background-color: #888;
+    color: #888;
+}
+
+.hidden:hover {
+    background-color: transparent;
+}

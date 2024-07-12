@@ -30,7 +30,9 @@ div[carousel-item] > div {
 }
 
 div[carousel-item] > div > * {
-    height: inherit;
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
 }
 
 /* panel */
@@ -45,7 +47,7 @@ div.layui-panel {
 }
 
 #main-title {
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
 }
 
@@ -196,4 +198,13 @@ code {
 .layui-text img {
     max-width: 100%;
     border-radius: 4px;
+}
+
+.hidden {
+    background-color: #5f5f5f;
+    transition: color,background-color 200ms ease-in-out;
+}
+
+.hidden:hover {
+    background-color: transparent;
 }
