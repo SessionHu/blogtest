@@ -37,7 +37,7 @@ div[carousel-item] > div > * {
 
 /* panel */
 
-div.layui-panel {
+div.layui-panel, div.layui-collapse {
     border-radius: 8px;
     overflow: hidden;
 }

@@ -196,16 +196,20 @@ class Sess {
     static async loadMainContent() {
         // param
         let path = layui.url(window.location.href.replace("/#!","/#")).hash.path;
+        if (path[path.length - 1] === "") path.pop();
         // request path
         this.setPageloadProgress("0%");
         document.querySelector("*[lay-filter=pageload-progress]").classList.remove("layui-hide");
         let reqpath = "";
-        if (path.length < 1 || path[0] === "" || path[0] === "home") {
+        if (path.length < 1 || path[0] === "home") {
             reqpath = "/home.html";
         } else if (path[0] === "category") {
             reqpath = "/category.html";
         } else if (path[0] === "about") {
             reqpath = "/about.html";
+        } else if (path[0] === "posts" && path.length < 3) {
+            window.location.hash = "!/category";
+            return;
         } else {
             for (const t of path) {
                 reqpath += "/";
@@ -244,7 +248,7 @@ class Sess {
         // fill home #latest-container
         await this.fillHomeLatest();
         // fill category #category-container
-        await this.fillCategoryInfo();
+        await this.fillCategoryInfo(path);
         // lazyimg
         layui.flow.lazyimg({
             elem: "img[lay-src]"
@@ -301,6 +305,10 @@ class Sess {
                     photos: `div[lay-on=${this.getAttribute("lay-on")}]`
                 });
             }
+        });
+        // top
+        layui.util.fixbar({
+            bgcolor: "rgba(166, 166, 166, 0.7)"
         });
         // forune & pageview
         this.fortune().catch((e) => Sess.openErrLayer(e));
@@ -383,7 +391,10 @@ class Sess {
         return ls;
     }
 
-    static async fillCategoryInfo() {
+    /**
+     * @param {string[]} path
+     */
+    static async fillCategoryInfo(path) {
         // check
         const container = document.querySelector("div#category-container");
         if (container === null) return;
@@ -391,6 +402,7 @@ class Sess {
         const collapseDiv = document.createElement("div");
         collapseDiv.className = "layui-collapse";
         collapseDiv.setAttribute("lay-filter", "cat-colla");
+        collapseDiv.setAttribute("lay-accordion", null);
         // item
         const categoryInfo = await this.getCategoryInfo();
         for (const aCategoryName of Object.keys(categoryInfo)) {
@@ -399,13 +411,17 @@ class Sess {
             // title
             itemDiv.insertAdjacentHTML("afterbegin", `
                 <div class="layui-colla-title">
-                    ${aCategoryName} ${categoryInfo[aCategoryName].count}
+                    ${aCategoryName} <span style="float:right;">${categoryInfo[aCategoryName].count}</span>
                 </div>
             `);
             // content
             const contentDiv = document.createElement("div");
             contentDiv.className = "layui-colla-content";
-            if (collapseDiv.childElementCount === 0) contentDiv.classList.add("layui-show");
+            if (path.length >= 2)  {
+                if (path[1] === aCategoryName) contentDiv.classList.add("layui-show");
+            } else {
+                if (collapseDiv.childElementCount === 0 ) contentDiv.classList.add("layui-show");
+            }
             const contentText = [];
             for (const link of categoryInfo[aCategoryName].links) {
                 contentText.push(`<a href="${link.url}">${link.title}</a><br/>`);
@@ -414,6 +430,11 @@ class Sess {
             itemDiv.insertAdjacentElement("beforeend", contentDiv);
             collapseDiv.appendChild(itemDiv);
         }
+        // ensure one colla-item open
+        if (!collapseDiv.querySelector(".layui-show")) {
+            collapseDiv.querySelector(".layui-colla-content").classList.add("layui-show");
+        }
+        // render
         container.appendChild(collapseDiv);
         layui.element.render("collapse", "cat-colla");
     }
