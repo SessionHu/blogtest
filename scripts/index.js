@@ -252,6 +252,8 @@ class Sess {
         }
         document.getElementById("main-title").innerHTML = maincontainer.querySelector("#main-title").innerHTML;
         document.getElementById("main").innerHTML = maincontainer.querySelector("#main").innerHTML;
+        // create post index
+        this.createPostIndex(document.getElementById("main"), path);
         // fill home #latest-container
         await this.fillHomeLatest();
         // fill category #category-container
@@ -553,6 +555,67 @@ class Sess {
                 </div>
             </div>
         `;
+    }
+
+    /**
+     * @param {HTMLDivElement} main
+     * @param {string[]} path
+     */
+    static createPostIndex(main, path) {
+        if (path.length !== 3 || path[0] !== "posts") {
+            return;
+        }
+        // index data tree
+        const mainTitleDiv = main.querySelector("div.postcard-title");
+        const mainContentCollection = main.querySelector("div.layui-text").children;
+        const roottreenode = {
+            title: mainTitleDiv.innerText,
+            id: "H1-root",
+            children: [],
+            spread: true
+        };
+        let lasttreenode = roottreenode;
+        for (const elem of mainContentCollection) {
+            if (elem.tagName.startsWith('H') && elem.tagName.length === 2) {
+                while (parseInt(elem.tagName.charAt(1)) <= parseInt(lasttreenode.id.charAt(1))) {
+                    lasttreenode = lasttreenode.parent;
+                }
+                const newtreenode = {
+                    title: elem.innerText,
+                    id: `${elem.tagName}-${elem.innerText}`,
+                    children: [],
+                    parent: lasttreenode
+                };
+                lasttreenode.children.push(newtreenode);
+                lasttreenode = newtreenode;
+            }
+        }
+        // element
+        document.querySelector(".layui-row > .layui-col-md4").insertAdjacentHTML("beforeend", `
+            <div class="layui-panel layui-card" id="post-index-container">
+                <div class="layui-card-header">文章索引</div>
+                <div class="layui-card-body" id="post-index"></div>
+            </div>
+        `);
+        // render
+        layui.tree.render({
+            elem: "#post-index",
+            data: [roottreenode],
+            accordion: true,
+            click: (obj) => {
+                const idps = obj.data.id.split('-');
+                const elem = document.evaluate(
+                    `//${idps[0].toLowerCase()}[text()='${idps[1]}']`, main, null,
+                    XPathResult.FIRST_ORDERED_NODE_TYPE, null
+                ).singleNodeValue;
+                if (elem !== null) {
+                    elem.scrollIntoView({ behavior: "smooth" });
+                } else {
+                    mainTitleDiv.scrollIntoView({ behavior: "smooth" });
+                }
+            }
+        });
+
     }
 
     //#endregion
