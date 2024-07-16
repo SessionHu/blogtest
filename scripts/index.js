@@ -1,6 +1,7 @@
 "use strict";
 
-// redirect
+//#region redirect
+
 {
     if (window.location.pathname === "/index.html") {
         window.location.pathname = "/";
@@ -13,7 +14,9 @@
     }
 }
 
-// theme
+//#endregion
+//#region theme
+
 {
 
     const head = document.querySelector("head");
@@ -77,11 +80,15 @@
 
 }
 
+//#endregion
+
 class Warning extends Error {
     name = "Warning"
 }
 
 class Sess {
+
+    //#region public
 
     /**
      * Open a dialog about the Error.
@@ -298,9 +305,14 @@ class Sess {
         await loadMainAndCatch();
         // popstate
         window.addEventListener("popstate", loadMainAndCatch);
-        // show carousel photos
+        // show big photos
         layui.util.on("lay-on", {
             "carousel-img": function () {
+                layer.photos({
+                    photos: `div[lay-on=${this.getAttribute("lay-on")}]`
+                });
+            },
+            "post-img": function () {
                 layer.photos({
                     photos: `div[lay-on=${this.getAttribute("lay-on")}]`
                 });
@@ -314,6 +326,9 @@ class Sess {
         this.fortune().catch((e) => Sess.openErrLayer(e));
         this.pageview().catch((e) => Sess.openErrLayer(e));
     }
+
+    //#endregion
+    //#region extapi
 
     static async fortune() {
         //const text = await (await (await fetch("https://v1.hitokoto.cn/")).json()).hitokoto;
@@ -343,6 +358,9 @@ class Sess {
             throw new Warning("no place to show pageview");
         }
     }
+
+    //#endregion
+    //#region home
 
     static async fillHomeLatest() {
         const latestContainerDiv = document.querySelector("div#latest-container");
@@ -390,6 +408,9 @@ class Sess {
         }
         return ls;
     }
+
+    //#endregion
+    //#region category
 
     /**
      * @param {string[]} path
@@ -462,6 +483,9 @@ class Sess {
         return categoryInfo;
     }
 
+    //#endregion
+    //#region posts
+
     /**
      * @param {string} raw
      * @param {string[]} path
@@ -531,6 +555,8 @@ class Sess {
         `;
     }
 
+    //#endregion
+
 }
 
 Sess.main().catch((e) => {
@@ -538,18 +564,21 @@ Sess.main().catch((e) => {
     Sess.setPageloadProgress("0%");
 });
 
-// debug
-//{
-//    const disableDotline = () => {
-//        if (dotLine) {
-//            window.setTimeout(() => {
-//                dotLine.ctx = null;
-//                dotLine.move = () => {};
-//                console.log("[sess] Dotline disabled");
-//            }, 50);
-//        } else {
-//            window.setTimeout(() => disableDotline(), 50);
-//        }
-//    }
-//    disableDotline();
-//}
+//#region debug
+
+// {
+//     const disableDotline = () => {
+//         if (dotLine) {
+//             window.setTimeout(() => {
+//                 dotLine.ctx = null;
+//                 dotLine.move = () => {};
+//                 console.log("[sess] Dotline disabled");
+//             }, 50);
+//         } else {
+//             window.setTimeout(() => disableDotline(), 50);
+//         }
+//     }
+//     disableDotline();
+// }
+
+//#endregion

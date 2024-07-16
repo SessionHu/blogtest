@@ -43,7 +43,7 @@ class Md2html {
                 if (spacecount === 2) out += "</ul>"
             }
         }
-        return out.replaceAll("</li></ul><ul><li>", "</li><li>");
+        return out.replaceAll("</ul><ul>", "");
     }
 
     /**
@@ -132,7 +132,7 @@ class Md2html {
             if (inimg && inimgtitle) { imgtitle += c; continue; }
             // else
             if (!inimg && imgalt !== "") {
-                out += `<img lay-src="${imgsrc}" title="${imgtitle}" alt="${imgalt}"/>`;
+                out += `<div lay-on="post-img"><img lay-src="${imgsrc}" title="${imgtitle}" alt="${imgalt}"/></div>`;
                 imgalt = imgsrc = imgtitle = "";
                 inimg = inimgalt = inimgsrc = inimgtitle = false;
                 continue;
