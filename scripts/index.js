@@ -262,6 +262,8 @@ class Sess {
         layui.flow.lazyimg({
             elem: "img[lay-src]"
         });
+        // title
+        this.setPageTitle(document.querySelector("#main-title > span.layui-breadcrumb"));
         // render
         this.renderBreadcrumb();
         this.renderCarousel();
@@ -327,6 +329,19 @@ class Sess {
         // forune & pageview
         this.fortune().catch((e) => Sess.openErrLayer(e));
         this.pageview().catch((e) => Sess.openErrLayer(e));
+    }
+
+    /**
+     * @param {HTMLSpanElement} breadcrumb
+     */
+    static setPageTitle(breadcrumb) {
+        const acites = breadcrumb.querySelectorAll("a > cite");
+        const contentTitleText = acites.item(acites.length - 1).textContent;
+        if (contentTitleText === "首页") {
+            document.title = "SЕSSのB10GТЕ5Т";
+        } else {
+            document.title = contentTitleText + " - SЕSSのB10GТЕ5Т";
+        }
     }
 
     //#endregion
