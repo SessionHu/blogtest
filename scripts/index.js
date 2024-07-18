@@ -577,8 +577,19 @@ class Sess {
      * @param {string[]} path
      */
     static createPostIndex(main, path) {
+        const postIndexContainer = document.getElementById("post-index-container");
         if (path.length !== 3 || path[0] !== "posts") {
+            if (postIndexContainer !== null) postIndexContainer.remove();
             return;
+        }
+        // element
+        if (postIndexContainer === null) {
+            document.querySelector(".layui-row > .layui-col-md4").insertAdjacentHTML("beforeend", `
+                <div class="layui-panel layui-card" id="post-index-container">
+                    <div class="layui-card-header">文章索引</div>
+                    <div class="layui-card-body" id="post-index"></div>
+                </div>
+            `);
         }
         // index data tree
         const mainTitleDiv = main.querySelector("div.postcard-title");
@@ -605,13 +616,6 @@ class Sess {
                 lasttreenode = newtreenode;
             }
         }
-        // element
-        document.querySelector(".layui-row > .layui-col-md4").insertAdjacentHTML("beforeend", `
-            <div class="layui-panel layui-card" id="post-index-container">
-                <div class="layui-card-header">文章索引</div>
-                <div class="layui-card-body" id="post-index"></div>
-            </div>
-        `);
         // render
         layui.tree.render({
             elem: "#post-index",
@@ -630,7 +634,6 @@ class Sess {
                 }
             }
         });
-
     }
 
     //#endregion
