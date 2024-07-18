@@ -187,7 +187,7 @@ class Sess {
             child.classList.remove("layui-this");
         }
         // add
-        const path = layui.url(window.location.href.replace("/#!","/#")).hash.path;
+        const path = layui.url(window.location.href.replace("/#!", "/#")).hash.path;
         if (path.length < 1 || path[0] === "" || path[0] === "home") {
             nav.querySelector("#nav-index").classList.add("layui-this");
         } else if (path[0] === "category") {
@@ -202,7 +202,7 @@ class Sess {
      */
     static async loadMainContent() {
         // param
-        let path = layui.url(window.location.href.replace("/#!","/#")).hash.path;
+        let path = layui.url(window.location.href.replace("/#!", "/#")).hash.path;
         if (path[path.length - 1] === "") path.pop();
         // request path
         this.setPageloadProgress("0%");
@@ -264,6 +264,35 @@ class Sess {
         });
         // title
         this.setPageTitle(document.querySelector("#main-title > span.layui-breadcrumb"));
+        // top
+        const postIndexContainerJQ = layui.$("#post-index-container");
+        layui.util.fixbar({
+            bgcolor: "rgba(166, 166, 166, 0.7)",
+            bars: postIndexContainerJQ.length ? [{
+                type: "post-index",
+                icon: "layui-icon-list",
+            }] : [],
+            on: {
+                click: type => {
+                    if (type !== "post-index") {
+                        return;
+                    }
+                    layer.open({
+                        type: 1,
+                        offset: 'r',
+                        anim: 'slideLeft',
+                        area: ['320px', '100%'],
+                        shade: .01,
+                        shadeClose: true,
+                        skin: "layui-layer-win10",
+                        move: false,
+                        content: postIndexContainerJQ,
+                        title: "文章索引",
+                        resize: false
+                    });
+                }
+            }
+        });
         // render
         this.renderBreadcrumb();
         this.renderCarousel();
@@ -295,7 +324,6 @@ class Sess {
      */
     static async main() {
         // load UI
-        this.navthis();
         this.sccrval();
         // load content
         const loadMainAndCatch = async () => {
@@ -321,10 +349,6 @@ class Sess {
                     photos: `div[lay-on=${this.getAttribute("lay-on")}]`
                 });
             }
-        });
-        // top
-        layui.util.fixbar({
-            bgcolor: "rgba(166, 166, 166, 0.7)"
         });
         // forune & pageview
         this.fortune().catch((e) => Sess.openErrLayer(e));
@@ -455,10 +479,10 @@ class Sess {
             // content
             const contentDiv = document.createElement("div");
             contentDiv.className = "layui-colla-content";
-            if (path.length >= 2)  {
+            if (path.length >= 2) {
                 if (path[1] === aCategoryName) contentDiv.classList.add("layui-show");
             } else {
-                if (collapseDiv.childElementCount === 0 ) contentDiv.classList.add("layui-show");
+                if (collapseDiv.childElementCount === 0) contentDiv.classList.add("layui-show");
             }
             const contentText = [];
             for (const link of categoryInfo[aCategoryName].links) {

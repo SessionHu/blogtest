@@ -20,7 +20,7 @@ html {
 
 .layui-nav *,
 .layui-container * {
-    transition: all 100ms ease-in-out;
+    transition: all 100ms linear;
 }
 
 /* carousel */
@@ -208,4 +208,26 @@ code {
 
 .hidden:hover {
     background-color: transparent;
+}
+
+/* tree */
+
+.layui-tree * {
+    transition: none;
+}
+
+/* layer */
+
+.layui-layer {
+    transition: none;
+}
+
+.layui-layer .layui-card {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none;
+}
+
+.layui-layer .layui-card-header {
+    display: none;
 }
