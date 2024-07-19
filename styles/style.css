@@ -107,7 +107,6 @@ div.layui-panel, div.layui-collapse {
 
 #name-face-container > .layui-card-body {
     display: flex;
-    justify-content: space-between;
 }
 
 #face-container {
@@ -120,14 +119,44 @@ img[alt=face] {
     top: -32px;
 }
 
-@media (max-width: 256px) {
-    img[alt=face] {
+@media (max-width: 300px) {
+    #face-container {
         display: none;
+    }
+    #maincontainer {
+        margin-right: 0;
     }
 }
 
 #pers-desc {
     width: 100%;
+}
+
+#maincounter {
+    height: 44px;
+    display: flex;
+    justify-content: space-around;
+    line-height: 1.4;
+    margin-right: 12px;
+}
+
+#maincounter > * {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#communi-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+#communi-container * {
+    display: inline-block;
+    width: 20px;
+    text-align: center;
 }
 
 /* pageload progress */

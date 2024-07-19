@@ -362,6 +362,7 @@ class Sess {
         // forune & pageview
         this.fortune().catch((e) => Sess.openErrLayer(e));
         this.pageview().catch((e) => Sess.openErrLayer(e));
+        this.postscount().catch((e) => Sess.openErrLayer(e));
     }
 
     /**
@@ -383,30 +384,33 @@ class Sess {
     static async fortune() {
         //const text = await (await (await fetch("https://v1.hitokoto.cn/")).json()).hitokoto;
         const elem = document.querySelector("#lunar-calendar-container > .layui-card-body > p");
-        try {
-            if (elem !== null) {
-                elem.innerText = await (await fetch("https://v1.hitokoto.cn/?encode=text")).text();
-            } else {
-                throw new Warning("no place to show fortune");
-            }
-        } catch (e) {
-            this.openErrLayer(e);
+        if (elem !== null) {
+            elem.innerText = await (await fetch("https://v1.hitokoto.cn/?encode=text")).text();
+        } else {
+            throw new Warning("no place to show fortune");
         }
     }
 
     static async pageview() {
         const elem = document.querySelector("#pageview");
         if (elem !== null) {
-            let pvcount = 114514;
-            try {
-                pvcount = await (await fetch("https://api.xhustudio.eu.org/pv")).text();
-            } catch (e) {
-                this.openErrLayer(e);
-            }
-            elem.innerText = pvcount;
+            elem.innerText = await (await fetch("https://api.xhustudio.eu.org/pv")).text();
         } else {
             throw new Warning("no place to show pageview");
         }
+    }
+
+    static async postscount() {
+        const elem = document.querySelector("#postscount");
+        if (elem === null) {
+            throw new Warning("no place to show postscount");
+        }
+        let count = 0;
+        const postsIndexJson = await (await fetch("/posts/index.json")).json();
+        for (const yearPosts of postsIndexJson) {
+            count += yearPosts.posts.length;
+        }
+        elem.innerText = count;
     }
 
     //#endregion
