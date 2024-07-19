@@ -290,6 +290,15 @@ class Sess {
                         title: "文章索引",
                         resize: false
                     });
+                },
+                mouseenter: function (type) {
+                    layer.tips(type === "top" ? "回到顶部" : "文章索引", this, {
+                      tips: [4, "#444d"],
+                      fixed: true
+                    });
+                },
+                mouseleave: () => {
+                    layer.closeAll("tips");
                 }
             }
         });
