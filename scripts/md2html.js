@@ -194,7 +194,7 @@ class Md2html {
             if (inlink && inlinktitle) { linktitle += c; continue; }
             // else
             if (!inlink && linktext !== "") {
-                out += `<a href="${linkhref}" title="${linktitle}">${linktext}</a>`;
+                out += `<a href="${linkhref}" title="${linktitle}" target="_blank" rel="noopener">${linktext}</a>`;
                 linktext = linkhref = linktitle = "";
                 inlink = inlinktext = inlinkhref = inlinktitle = false;
                 continue;

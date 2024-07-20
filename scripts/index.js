@@ -614,22 +614,25 @@ class Sess {
      * @param {string[]} path
      */
     static createPostIndex(main, path) {
-        const postIndexContainer = document.getElementById("post-index-container");
-        if (path.length !== 3 || path[0] !== "posts") {
-            if (postIndexContainer !== null) postIndexContainer.remove();
+        const postIndexContainer = document.getElementById("post-index-container") || document.createElement("div");
+        if (!((path.length === 1 && path[0] === "about") || (path.length === 3 && path[0] === "posts"))) {
+            if (postIndexContainer.parentElement !== null) postIndexContainer.remove();
             return;
         }
         // element
-        if (postIndexContainer === null) {
-            document.querySelector(".layui-row > .layui-col-md4").insertAdjacentHTML("beforeend", `
-                <div class="layui-panel layui-card" id="post-index-container">
-                    <div class="layui-card-header">文章索引</div>
-                    <div class="layui-card-body" id="post-index"></div>
-                </div>
-            `);
+        if (postIndexContainer.parentElement === null) {
+            const col = document.querySelector(".layui-row > .layui-col-md4");
+            const footer = col.querySelector("#footer");
+            postIndexContainer.className = "layui-panel layui-card";
+            postIndexContainer.id = "post-index-container";
+            postIndexContainer.innerHTML = `
+                <div class="layui-card-header">文章索引</div>
+                <div class="layui-card-body" id="post-index"></div>
+            `;
+            col.insertBefore(postIndexContainer, footer);
         }
         // index data tree
-        const mainTitleDiv = main.querySelector("div.postcard-title");
+        const mainTitleDiv = main.querySelector("div.postcard-title") || main.querySelector("h1");
         const mainContentCollection = main.querySelector("div.layui-text").children;
         const roottreenode = {
             title: mainTitleDiv.innerText,
@@ -639,7 +642,7 @@ class Sess {
         };
         let lasttreenode = roottreenode;
         for (const elem of mainContentCollection) {
-            if (elem.tagName.startsWith('H') && elem.tagName.length === 2) {
+            if (elem.tagName.startsWith('H') && elem.tagName.length === 2 && elem.tagName !== "H1") {
                 while (parseInt(elem.tagName.charAt(1)) <= parseInt(lasttreenode.id.charAt(1))) {
                     lasttreenode = lasttreenode.parent;
                 }

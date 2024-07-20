@@ -260,3 +260,18 @@ code {
 .layui-layer .layui-card-header {
     display: none;
 }
+
+/* footer */
+
+#footer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 4px;
+}
+
+#footer > * {
+    text-align: center;
+    padding: 2px 4px;
+}
