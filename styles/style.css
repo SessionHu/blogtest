@@ -6,6 +6,10 @@ html {
     scrollbar-width: thin;
 }
 
+.layui-text a:not(.layui-btn):hover {
+    color: #6cf !important;
+}
+
 /* theme switch */
 
 @media (min-width: 260px) {
