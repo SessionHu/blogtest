@@ -252,6 +252,8 @@ class Sess {
         }
         document.getElementById("main-title").innerHTML = maincontainer.querySelector("#main-title").innerHTML;
         document.getElementById("main").innerHTML = maincontainer.querySelector("#main").innerHTML;
+        // random
+        this.randomChildren();
         // create post index
         this.createPostIndex(document.getElementById("main"), path);
         // fill home #latest-container
@@ -674,6 +676,25 @@ class Sess {
                 }
             }
         });
+    }
+
+    //#endregion
+    //#region utils
+
+    static randomChildren() {
+        const elems = document.getElementsByClassName("random");
+        for (const elem of elems) {
+            let children = Array.from(elem.children);
+            for (let t = 0; t <= Math.random() * 12; t++) {
+                for (let i = children.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [children[i], children[j]] = [children[j], children[i]];
+                }
+            }
+            for (const child of children) {
+                elem.appendChild(child);
+            }
+        }
     }
 
     //#endregion
