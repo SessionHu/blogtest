@@ -208,6 +208,7 @@ class Md2html {
                 out += `[${linktext}]`;
                 linktext = linkhref = linktitle = "";
                 inlink = inlinktext = inlinkhref = inlinktitle = false;
+                out += c;
             }
         }
         return out;
