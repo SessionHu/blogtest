@@ -1,3 +1,5 @@
+//@ts-check
+"use strict";
 class Md2html {
 
     /**
@@ -23,7 +25,9 @@ class Md2html {
                 if (spacecount === 2) out += "</ul>"
                 incodeblock = false;
             } else if (incodeblock) {
-                out += line.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+                for (const c of line) {
+                    out += "&#" + c.codePointAt(0) + ";";
+                }
                 out += "\n";
             } else if (line.startsWith("```")) {
                 if (spacecount === 2) out += "<ul>"
@@ -35,15 +39,27 @@ class Md2html {
                 out += `<blockquote class="layui-elem-quote layui-quote-nm">
                     ${this.line(line.substring(2))}
                 </blockquote>`;
-            } else if (line.startsWith("- ") || line.startsWith("+ ")) {
-                out += `<ul><li>${this.line(line.substring(2))}</li></ul>`;
             } else {
-                if (spacecount === 2) out += "<ul>"
-                out += this.line(line);
-                if (spacecount === 2) out += "</ul>"
+                for (let left = spacecount; left > 0; left -= 2) {
+                    out += "<ul>";
+                }
+                if (line.startsWith("- ") || line.startsWith("+ ")) {
+                    out += `<ul><li>${this.line(line.substring(2))}</li></ul>`;
+                } else {
+                    out += this.line(line);
+                }
+                for (let left = spacecount; left > 0; left -= 2) {
+                    out += "</ul>";
+                }
             }
         }
-        return out.replaceAll("</ul><ul>", "");
+        // remove extra
+        while (true) {
+            const rawlen = out.length;
+            out = out.replace(/<\/ul><ul>/g, "");
+            if (rawlen === out.length) break;
+        }
+        return out;
     }
 
     /**
@@ -52,8 +68,7 @@ class Md2html {
     static title(line) {
         // check '#' counts
         let hashcount = 0;
-        for (let i = 0; i < line.length; i++) {
-            const c = line.charAt(i);
+        for (const c of line) {
             if (c === '#') {
                 hashcount++;
             } else {
@@ -80,8 +95,7 @@ class Md2html {
     static code(text) {
         let out = "";
         let symbolcount = 0;
-        for (let i = 0; i < text.length; i++) {
-            const c = text.charAt(i);
+        for (const c of text) {
             if (c === '`') {
                 symbolcount++;
                 if (symbolcount % 2 === 1) {
@@ -91,7 +105,7 @@ class Md2html {
                 }
             } else {
                 if (symbolcount % 2 === 1) {
-                    out += c.replace("<", "&lt;").replace(">", "&gt;");
+                    out += "&#" + c.codePointAt(0) + ";";
                 } else {
                     out += c;
                 }
@@ -115,8 +129,7 @@ class Md2html {
         let imgsrc = "";
         let imgtitle = "";
         // find
-        for (let i = 0; i < text.length; i++) {
-            const c = text.charAt(i);
+        for (const c of text) {
             // mark status
             if (c === '!') { inimg = true; continue; }
             if (inimg && c === '[') { inimgalt = true; continue; }
@@ -178,8 +191,7 @@ class Md2html {
         let linkhref = "";
         let linktitle = "";
         // find
-        for (let i = 0; i < text.length; i++) {
-            const c = text.charAt(i);
+        for (const c of text) {
             // mark status
             if (c === '[') { inlink = inlinktext = true; continue; }
             if (inlink && c === ']') { inlinktext = false; continue; }
