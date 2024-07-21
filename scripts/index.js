@@ -99,7 +99,7 @@ class Sess {
         layer.open({
             type: 0,
             title: e.name,
-            content: e.stack.replaceAll(" ", "&nbsp;").replaceAll("\n", "<br />"),
+            content: e.stack.replace(/ /g, "&nbsp;").replace(/\n/g, "<br />"),
             icon: e instanceof Warning ? 0 : 2,
             skin: "layui-layer-win10",
             shade: .01,
@@ -664,7 +664,19 @@ class Sess {
             data: [roottreenode],
             accordion: true,
             click: (obj) => {
-                const idps = obj.data.id.split('-');
+                const idps = ["", ""];
+                let overdash = false;
+                for (const c of obj.data.id) {
+                    if (!overdash) {
+                        if (c === '-') {
+                            overdash = true;
+                        } else {
+                            idps[0] += c;
+                        }
+                    } else {
+                        idps[1] += c;
+                    }
+                }
                 const elem = document.evaluate(
                     `//${idps[0].toLowerCase()}[text()='${idps[1]}']`, main, null,
                     XPathResult.FIRST_ORDERED_NODE_TYPE, null
