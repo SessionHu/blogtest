@@ -22,7 +22,9 @@ class Md2html {
             line = line.substring(spacecount);
             if (incodeblock && line === "```") {
                 out += "</pre>";
-                if (spacecount === 2) out += "</ul>"
+                for (let left = spacecount; left > 0; left -= 2) {
+                    out += "</ul>";
+                }
                 incodeblock = false;
             } else if (incodeblock) {
                 for (const c of line) {
@@ -30,7 +32,9 @@ class Md2html {
                 }
                 out += "\n";
             } else if (line.startsWith("```")) {
-                if (spacecount === 2) out += "<ul>"
+                for (let left = spacecount; left > 0; left -= 2) {
+                    out += "<ul>";
+                }
                 out += `<pre class="layui-code" lay-options="{lang:'${line.substring(3)}'}">`;
                 incodeblock = true;
             } else if (line.startsWith('#')) {
