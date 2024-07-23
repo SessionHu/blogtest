@@ -98,22 +98,17 @@ class Md2html {
      */
     static code(text) {
         let out = "";
-        let symbolcount = 0;
+        let inCodeBlock = false;
         for (const c of text) {
             if (c === '`') {
-                symbolcount++;
-                if (symbolcount % 2 === 1) {
-                    out += `<code>`;
-                } else {
-                    out += "</code>";
-                }
+                inCodeBlock = !inCodeBlock;
+                out += inCodeBlock ? "<code>" : "</code>";
             } else {
-                if (symbolcount % 2 === 1) {
-                    out += "&#" + c.codePointAt(0) + ";";
-                } else {
-                    out += c;
-                }
+                out += inCodeBlock ? "&#" + c.codePointAt(0) + ";" : c;
             }
+        }
+        if (inCodeBlock) {
+            out += "</code>";
         }
         return out;
     }
@@ -139,7 +134,7 @@ class Md2html {
             if (inimg && c === '[') { inimgalt = true; continue; }
             if (inimg && c === ']') { inimgalt = false; continue; }
             if (inimg && c === '(') { inimgsrc = true; continue; }
-            if (inimg && c === ')') { inimg = inimgsrc = false; }
+            if (inimg && c === ')') { inimg = inimgsrc = false; continue; }
             if (inimg && c === ' ') { inimgsrc = false; continue; }
             if (inimg && c === '"' && !inimgtitle) { inimgtitle = true; continue; }
             if (inimg && c === '"' && inimgtitle) { inimgtitle = false; continue; }
@@ -157,12 +152,6 @@ class Md2html {
             if (!inimg && imgalt === "" && imgsrc === "" && imgtitle === "") {
                 out += c;
                 continue;
-            }
-            // unexpect case
-            if (inimg && !inimgalt && !inimgsrc && !inimgtitle) {
-                out += `! `;
-                imgalt = imgsrc = imgtitle = "";
-                inimg = inimgalt = inimgsrc = inimgtitle = false;
             }
         }
         // not end
@@ -200,7 +189,7 @@ class Md2html {
             if (c === '[') { inlink = inlinktext = true; continue; }
             if (inlink && c === ']') { inlinktext = false; continue; }
             if (inlink && c === '(') { inlinkhref = true; continue; }
-            if (inlink && c === ')') { inlink = inlinkhref = false; }
+            if (inlink && c === ')') { inlink = inlinkhref = false; continue; }
             if (inlink && c === ' ') { inlinkhref = false; continue; }
             if (inlink && c === '"' && !inlinktitle) { inlinktitle = true; continue; }
             if (inlink && c === '"' && inlinktitle) { inlinktitle = false; continue; }
