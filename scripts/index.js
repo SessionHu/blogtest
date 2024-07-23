@@ -133,14 +133,18 @@ class Sess {
      * Render footer.
      */
     static renderFooter() {
+        const footer = document.getElementById("footer");
+        const footerPlaceholder = document.getElementById("footer-placeholder");
+        // set #footer-placeholder
+        footerPlaceholder.style.height = `${footer.offsetHeight + 1}px`;
+        // hide or show
         const documentHeight = document.documentElement.scrollHeight;
         const viewportHeight = window.innerHeight;
         const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-        const footer = document.querySelector("#footer");
         if (scrollPosition + viewportHeight >= documentHeight) {
             footer.style.bottom = "0";
         } else {
-            footer.style.bottom = "-32px";
+            footer.style.bottom = `-${footer.offsetHeight + 1}px`;
         }
     }
 
@@ -355,7 +359,12 @@ class Sess {
     static async main() {
         // load UI
         this.sccrval();
-        window.addEventListener("scroll", this.renderFooter);
+        window.addEventListener("resize", () => {
+            this.renderFooter();
+        });
+        window.addEventListener("scroll", () => {
+            this.renderFooter();
+        });
         // load content
         const loadMainAndCatch = async () => {
             try {
