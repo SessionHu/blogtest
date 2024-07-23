@@ -88,7 +88,7 @@ class Warning extends Error {
 
 class Sess {
 
-    //#region public
+    //#region UI
 
     /**
      * Open a dialog about the Error.
@@ -127,6 +127,21 @@ class Sess {
      */
     static renderBreadcrumb() {
         layui.element.render('breadcrumb', "bc");
+    }
+
+    /**
+     * Render footer.
+     */
+    static renderFooter() {
+        const documentHeight = document.documentElement.scrollHeight;
+        const viewportHeight = window.innerHeight;
+        const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+        const footer = document.querySelector("#footer");
+        if (scrollPosition + viewportHeight >= documentHeight) {
+            footer.style.bottom = "0";
+        } else {
+            footer.style.bottom = "-32px";
+        }
     }
 
     /**
@@ -196,6 +211,9 @@ class Sess {
             nav.querySelector("#nav-about").classList.add("layui-this");
         }
     }
+
+    //#endregion
+    //#region public
 
     /**
      * Load #main content.
@@ -314,6 +332,7 @@ class Sess {
         });
         this.navthis();
         this.setPageloadProgress("100%");
+        this.renderFooter();
     }
 
     /**
@@ -336,6 +355,7 @@ class Sess {
     static async main() {
         // load UI
         this.sccrval();
+        window.addEventListener("scroll", this.renderFooter);
         // load content
         const loadMainAndCatch = async () => {
             try {

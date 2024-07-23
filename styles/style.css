@@ -277,9 +277,18 @@ pre.layui-code {
     flex-wrap: wrap;
     justify-content: center;
     padding: 4px;
+    width: 100%;
+    opacity: .9;
+    position: fixed;
+    transition: bottom 200ms ease-in-out;
+    bottom: 0;
 }
 
 #footer > * {
     text-align: center;
     padding: 2px 4px;
+}
+
+.empty {
+    height: 32px;
 }
