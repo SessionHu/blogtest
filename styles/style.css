@@ -272,10 +272,6 @@ pre.layui-code {
 /* footer */
 
 #footer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
     padding: 4px;
     width: 100%;
     opacity: .9;
@@ -284,13 +280,37 @@ pre.layui-code {
     bottom: 0;
 }
 
-#footer > * {
+#footer-main {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#footer-main > * {
     text-align: center;
-    padding: 2px 4px;
+    padding: 0 4px;
 }
 
 #footer-placeholder {
     height: 32px;
+}
+
+#friend-link-container {
+    text-align: initial;
+}
+
+#friend-links {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: 48px;
+    line-height: 1.333;
+}
+
+#friend-links > * {
+    width: 0;
+    white-space: nowrap;
 }
 
 /* post index */
