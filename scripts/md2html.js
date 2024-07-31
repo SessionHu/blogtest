@@ -118,52 +118,93 @@ class Md2html {
      */
     static img(text) {
         let out = "";
-        // status
-        let inimg = false;
-        let inimgalt = false;
-        let inimgsrc = false;
-        let inimgtitle = false;
-        // info
-        let imgalt = "";
-        let imgsrc = "";
-        let imgtitle = "";
-        // find
-        for (const c of text) {
-            // mark status
-            if (c === '!') { inimg = true; continue; }
-            if (inimg && c === '[') { inimgalt = true; continue; }
-            if (inimg && c === ']') { inimgalt = false; continue; }
-            if (inimg && c === '(') { inimgsrc = true; continue; }
-            if (inimg && c === ')') { inimg = inimgsrc = false; continue; }
-            if (inimg && c === ' ') { inimgsrc = false; continue; }
-            if (inimg && c === '"' && !inimgtitle) { inimgtitle = true; continue; }
-            if (inimg && c === '"' && inimgtitle) { inimgtitle = false; continue; }
-            // add
-            if (inimg && inimgalt) { imgalt += c; continue; }
-            if (inimg && inimgsrc) { imgsrc += c; continue; }
-            if (inimg && inimgtitle) { imgtitle += c; continue; }
-            // else
-            if (!inimg && imgalt !== "") {
-                out += `<div lay-on="post-img"><img lay-src="${imgsrc}" title="${imgtitle}" alt="${imgalt}"/></div>`;
-                imgalt = imgsrc = imgtitle = "";
-                inimg = inimgalt = inimgsrc = inimgtitle = false;
-                continue;
-            }
-            if (!inimg && imgalt === "" && imgsrc === "" && imgtitle === "") {
-                out += c;
-                continue;
-            }
-        }
-        // not end
-        if (inimg) {
-            if (imgtitle !== "") {
-                out += `![${imgalt}](${imgsrc} "${imgtitle})`;
-            } else if (imgsrc !== "") {
-                out += `![${imgalt}](${imgsrc}`;
-            } else if (imgalt !== "") {
-                out += `![${imgalt}`;
-            } else {
-                out += '!';
+        const chars = Array.from(text);
+        for (let i = 0; i < chars.length; i++) {
+            if (chars[i] === '!') {
+                if (++i >= chars.length) { // end of line?
+                    out += '!';
+                    break;
+                } else if (chars[i] === '[') { // is img?
+                    if (++i >= chars.length) { // end of line?
+                        out += '![';
+                        break;
+                    } else {
+                        let imgalt = "";
+                        for (; chars[i] !== ']'; i++) {
+                            if (i >= chars.length) { // end of line?
+                                out += '![';
+                                out += imgalt;
+                                break;
+                            } else { // alt
+                                imgalt += chars[i];
+                            }
+                        }
+                        if (++i >= chars.length) { // end of line?
+                            out += '![';
+                            out += imgalt;
+                            out += ']';
+                            break;
+                        } else if (chars[i] === '(') { // is img?
+                            if (++i >= chars.length) { // end of line?
+                                out += '![';
+                                out += imgalt;
+                                out += '](';
+                                break;
+                            } else {
+                                let imgsrc = "";
+                                for (; chars[i] !== ')'; i++) {
+                                    if (i >= chars.length) { // end of line?
+                                        out += '![';
+                                        out += imgalt;
+                                        out += '](';
+                                        out += imgsrc;
+                                        break;
+                                    } else { // src
+                                        imgsrc += chars[i];
+                                    }
+                                }
+                                // parse src
+                                let imgsrcreal = "";
+                                let imgsrctitle = "";
+                                const srcchars = Array.from(imgsrc);
+                                for (let j = 0; j < srcchars.length; j++) {
+                                    if (srcchars[j] === ' ') { // is title?
+                                        if (++j >= srcchars.length) { // end of line?
+                                            break;
+                                        } else {
+                                            for (; j < srcchars.length; j++) {
+                                                imgsrctitle += srcchars[j];
+                                            }
+                                            break;
+                                        }
+                                    } else {
+                                        imgsrcreal += srcchars[j];
+                                    }
+                                }
+                                // clip
+                                if (imgsrctitle.startsWith('"')) {
+                                    imgsrctitle = imgsrctitle.substring(1);
+                                }
+                                if (imgsrctitle.endsWith('"')) {
+                                    imgsrctitle = imgsrctitle.substring(0, imgsrctitle.length - 1);
+                                }
+                                // add to out
+                                out += `<div lay-on="post-img"><img lay-src="${imgsrcreal}" title="${imgsrctitle}" alt="${imgalt}"/></div>`;
+                            }
+                        } else { // not img
+                            out += '![';
+                            out += imgalt;
+                            out += ']';
+                            out += chars[i];
+                            break;
+                        }
+                    }
+                } else { // not img
+                    out += '!';
+                    out += chars[i];
+                }
+            } else { // not img
+                out += chars[i];
             }
         }
         return out;
@@ -174,46 +215,87 @@ class Md2html {
      */
     static link(text) {
         let out = "";
-        // status
-        let inlink = false;
-        let inlinktext = false;
-        let inlinkhref = false;
-        let inlinktitle = false;
-        // info
-        let linktext = "";
-        let linkhref = "";
-        let linktitle = "";
-        // find
-        for (const c of text) {
-            // mark status
-            if (c === '[') { inlink = inlinktext = true; continue; }
-            if (inlink && c === ']') { inlinktext = false; continue; }
-            if (inlink && c === '(') { inlinkhref = true; continue; }
-            if (inlink && c === ')') { inlink = inlinkhref = false; continue; }
-            if (inlink && c === ' ') { inlinkhref = false; continue; }
-            if (inlink && c === '"' && !inlinktitle) { inlinktitle = true; continue; }
-            if (inlink && c === '"' && inlinktitle) { inlinktitle = false; continue; }
-            // add
-            if (inlink && inlinktext) { linktext += c; continue; }
-            if (inlink && inlinkhref) { linkhref += c; continue; }
-            if (inlink && inlinktitle) { linktitle += c; continue; }
-            // else
-            if (!inlink && linktext !== "") {
-                out += `<a href="${linkhref}" title="${linktitle}" target="_blank" rel="noopener">${linktext}</a>`;
-                linktext = linkhref = linktitle = "";
-                inlink = inlinktext = inlinkhref = inlinktitle = false;
-                continue;
-            }
-            if (!inlink && linktext === "" && linkhref === "" && linktitle === "") {
-                out += c;
-                continue;
-            }
-            // unexpect case
-            if (inlink && !inlinktext && !inlinkhref && !inlinktitle) {
-                out += `[${linktext}]`;
-                linktext = linkhref = linktitle = "";
-                inlink = inlinktext = inlinkhref = inlinktitle = false;
-                out += c;
+        const chars = Array.from(text);
+        for (let i = 0; i < chars.length; i++) {
+            if (chars[i] === '[') { // is link?
+                if (++i >= chars.length) { // end of line? 
+                    out += '[';
+                    break;
+                } else {
+                    // link text
+                    let linktext = "";
+                    for (; chars[i] !== ']'; i++) {
+                        if (i >= chars.length) { // end of line?
+                            out += '[';
+                            out += linktext;
+                            break;
+                        } else { // text
+                            linktext += chars[i];
+                        }
+                    }
+                    // link href
+                    if (++i >= chars.length) { // end of line?
+                        out += '[';
+                        out += linktext;
+                        out += ']';
+                        break;
+                    } else if (chars[i] === '(') { // is link?
+                        if (++i >= chars.length) { // end of line?
+                            out += '[';
+                            out += linktext;
+                            out += '](';
+                            break;
+                        } else {
+                            let linkhreffull = "";
+                            for (; chars[i] !== ')'; i++) {
+                                if (i >= chars.length) { // end of line?
+                                    out += '[';
+                                    out += linktext;
+                                    out += '](';
+                                    out += linkhreffull;
+                                    break;
+                                } else { // href
+                                    linkhreffull += chars[i];
+                                }
+                            }
+                            // parse href
+                            let linkhrefreal = "";
+                            let linkhreftitle = "";
+                            const hrefchars = Array.from(linkhreffull);
+                            for (let j = 0; j < hrefchars.length; j++) {
+                                if (hrefchars[j] === ' ') { // is title?
+                                    if (++j >= hrefchars.length) { // end of line?
+                                        break;
+                                    } else {
+                                        for (; j < hrefchars.length; j++) {
+                                            linkhreftitle += hrefchars[j];
+                                        }
+                                        break;
+                                    }
+                                } else {
+                                    linkhrefreal += hrefchars[j];
+                                }
+                            }
+                            // clip
+                            if (linkhreftitle.startsWith('"')) {
+                                linkhreftitle = linkhreftitle.substring(1);
+                            }
+                            if (linkhreftitle.endsWith('"')) {
+                                linkhreftitle = linkhreftitle.substring(0, linkhreftitle.length - 1);
+                            }
+                            // add to out
+                            out += `<a href="${linkhrefreal}" title="${linkhreftitle}" target="_blank" rel="noopener">${linktext}</a>`;
+                        }
+                    } else { // not link
+                        out += '[';
+                        out += linktext;
+                        out += ']';
+                        out += chars[i];
+                        break;
+                    }
+                }
+            } else { // not link
+                out += chars[i];
             }
         }
         return out;
