@@ -465,6 +465,7 @@ class Sess {
     }
 
     /**
+     * New posts should be added to the beginning of the list!
      * @param {any} postsList
      * @param {number} year
      */

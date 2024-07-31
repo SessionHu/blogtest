@@ -4,12 +4,21 @@
         "posts": [
             {
                 "type": "post",
+                "title": "Debian 之 KDE 与 Wayland 调教指北",
+                "fname": "deb-kde-wayland-guide.md",
+                "time": "2024-07-30T21:40+0800",
+                "category": "graphics",
+                "image": "https://netdisk.xhustudio.eu.org/images/svg/Wayland_Logo.svg",
+                "tags": ["kde", "linux", "debian", "wayland", "x11", "computer", "fcitx5", "obs", "java", "calendar"]
+            },
+            {
+                "type": "post",
                 "title": "窗口宽度不能超过 16384",
                 "fname": "win-size-never-greater-than-16384.md",
                 "time": "2024-07-01T14:44+0800",
                 "category": "graphics",
                 "image": "https://netdisk.xhustudio.eu.org/posts/2024/win-size-never-greater-than-16384/Screenshot_20240702_101435.png",
-                "tags": ["kde", "linux", "windows", "computer", "x11"]
+                "tags": ["kde", "linux", "windows", "computer", "x11", "debian"]
             }
         ]
     }
