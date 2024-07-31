@@ -94,7 +94,7 @@
 
 - 上次在 Wayland 里面尝试录屏发现屏幕一片漆黑, 去群里问了一下决定换回 X11, 现在问了一下 BingAI 成功解决
 
-- 执行 `apt install pipewire` 即可
+- 执行 `sudo apt install pipewire` 即可
 
 - 如果重新打开 OBS Studio 还是没法录制屏幕, 执行 `systemctl --user start pipewire` 或重新登录会话即可
 
@@ -155,7 +155,7 @@
 
 - 字体下完了, 直接右键就可以安装了, 然后 `系统设置 -> 外观 -> 全局主题 -> 字体` 就可以调整字体了
 
-- 选择 Emoji 只需要按下 `Meta+句点` 或者运行 `/usr/bin/plasma-emojier` 就可以了 (Meta 就是 Windows 徽标键), 真的 KDE 什么都有, 不过
+- 选择 Emoji 只需要按下 `Meta+句点` 或者运行 `/usr/bin/plasma-emojier` 就可以了 (Meta 就是 Windows 徽标键), 真的 KDE 什么都有, 就是找起来不太方便而已...
 
 - 关于颜文字的列表可以看看 [这个存储库](https://github.com/rainlime/fcitx-quick-phrase-emoji) 和 [这个 Google 输入法的插件](https://github.com/tisyang/kaos)
 
