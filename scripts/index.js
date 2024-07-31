@@ -130,21 +130,34 @@ class Sess {
     }
 
     /**
-     * Render footer.
+     * Render elements with scroll.
      */
-    static renderFooter() {
+    static renderElemWithScroll() {
+        const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+        const documentHeight = document.documentElement.scrollHeight;
+        const viewportHeight = window.innerHeight;
+        // footer
         const footer = document.getElementById("footer");
         const footerPlaceholder = document.getElementById("footer-placeholder");
         // set #footer-placeholder
         footerPlaceholder.style.height = `${footer.offsetHeight + 1}px`;
         // hide or show
-        const documentHeight = document.documentElement.scrollHeight;
-        const viewportHeight = window.innerHeight;
-        const scrollPosition = window.scrollY || document.documentElement.scrollTop;
         if (scrollPosition + viewportHeight >= documentHeight) {
             footer.style.bottom = "0";
         } else {
             footer.style.bottom = `-${footer.offsetHeight + 1}px`;
+        }
+        // #post-index-container
+        const pic = document.getElementById("post-index-container");
+        if (pic !== null && window.innerWidth >= 992 && pic.parentElement.className !== "layui-layer-content") {
+            const topnum = scrollPosition - pic.parentElement.offsetHeight + pic.offsetHeight;
+            if (topnum > 0) {
+                pic.style.top = topnum + "px";
+            } else {
+                pic.style.top = 0;
+            }
+        } else if (pic !== null) {
+            pic.style.top = 0;
         }
     }
 
@@ -312,8 +325,10 @@ class Sess {
                         move: false,
                         content: postIndexContainerJQ,
                         title: "文章索引",
-                        resize: false
+                        resize: false,
+                        end: () => this.renderElemWithScroll()
                     });
+                    this.renderElemWithScroll();
                 },
                 mouseenter: function (type) {
                     layer.tips(type === "top" ? "回到顶部" : "文章索引", this, {
@@ -336,7 +351,7 @@ class Sess {
         });
         this.navthis();
         this.setPageloadProgress("100%");
-        this.renderFooter();
+        this.renderElemWithScroll();
     }
 
     /**
@@ -359,12 +374,8 @@ class Sess {
     static async main() {
         // load UI
         this.sccrval();
-        window.addEventListener("resize", () => {
-            this.renderFooter();
-        });
-        window.addEventListener("scroll", () => {
-            this.renderFooter();
-        });
+        window.addEventListener("resize", () => this.renderElemWithScroll());
+        window.addEventListener("scroll", () => this.renderElemWithScroll());
         // load content
         const loadMainAndCatch = async () => {
             try {

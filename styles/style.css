@@ -292,3 +292,9 @@ pre.layui-code {
 #footer-placeholder {
     height: 32px;
 }
+
+/* post index */
+
+#post-index-container {
+    transition: none;
+}
