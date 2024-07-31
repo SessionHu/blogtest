@@ -313,6 +313,10 @@ pre.layui-code {
     white-space: nowrap;
 }
 
+.personal-link:hover {
+    color: #6cf;
+}
+
 /* post index */
 
 #post-index-container {
