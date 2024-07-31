@@ -272,7 +272,14 @@ class Sess {
                 throw new Error(`${response.status} ${response.statusText}`);
             }
         } catch (e) {
-            Sess.openErrLayer(e);
+            if (e.message === "Failed to fetch") {
+                responseRaw = `
+                    <h1 id="main-title">Failed to fetch</h1>
+                    <div id="main">Please check your network connection and try again later...</div>
+                `;
+            } else {
+                Sess.openErrLayer(e);
+            }
         }
         this.setPageloadProgress("99%");
         if (responseRaw === undefined || responseRaw === "") {
@@ -318,7 +325,7 @@ class Sess {
                         type: 1,
                         offset: 'r',
                         anim: 'slideLeft',
-                        area: ['320px', '100%'],
+                        area: ['333px', '100%'],
                         shade: .01,
                         shadeClose: true,
                         skin: "layui-layer-win10",
@@ -411,6 +418,7 @@ class Sess {
      * @param {HTMLSpanElement} breadcrumb
      */
     static setPageTitle(breadcrumb) {
+        if(breadcrumb === null) return;
         const acites = breadcrumb.querySelectorAll("a > cite");
         const contentTitleText = acites.item(acites.length - 1).textContent;
         if (contentTitleText === "首页") {
