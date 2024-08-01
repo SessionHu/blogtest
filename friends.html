@@ -1,0 +1,37 @@
+<meta charset="utf-8" />
+<script src="/scripts/index.js"></script>
+<h1 id="main-title">
+    <span class="layui-breadcrumb" lay-separator=">" lay-filter="bc">
+        <a href="/#!/">首页</a>
+        <a><cite>友链</cite></a>
+    </span>
+</h1>
+<div id="main">
+    <blockquote class="layui-text layui-elem-quote friends-page-bg-transp">
+        <ul>
+            <li>这里就是本站的友链页了~ 目前还没有什么链接, 所以都是一些充数内容...</li>
+            <li>但是喵, 如果你<s>不幸</s>在某个地方发现了泽生, 可以当场交换友链的 (´･◡･｀)</li>
+        </ul>
+        <div class="placeholder-halfline"></div>
+        <ul>
+            <li>
+                添加或修改友链的方式很简单: 电邮联系, 或等评论功能上线后直接在评论区留言, 如果你有 GitHub 直接开个 PR 编辑
+                <a href="/friends.json"><code>/friends.json</code></a> 文件即可 φ(゜▽゜*)♪
+            </li>
+            <li>
+                一般只要提供网站标题, 链接, 以及你的名字就够了.
+                最好还可以加上一句话的简介, 网站图片, 中英日三种语言的名字, 纯英文 id.
+            </li>
+            <li>如果有些内容没有提供的话我会尝试去你网站主页 <code>&lt;head&gt;</code> 里面获取喵~</li>
+        </ul>
+    </blockquote>
+    <div id="friends-page-main">
+        <div class="layui-row layui-col-space6" id="friends-page-friends"></div>
+        <div class="layui-row layui-col-space6" id="friends-page-orgs"></div>
+    </div>
+    <noscript>
+        These friends are not available without JavaScript.
+        But you can still see the list in <a href="/friends.json">JSON</a> format.
+        I hope you will try JavaScript one day.
+    </noscript>
+</div>

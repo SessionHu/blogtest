@@ -10,6 +10,14 @@ html {
     color: #6cf !important;
 }
 
+.placeholder-halfline {
+    line-height: .5;
+}
+
+.placeholder-halfline::after {
+    content: "\00a0";
+}
+
 /* theme switch */
 
 @media (min-width: 260px) {
@@ -22,9 +30,8 @@ html {
     line-height: 100%;
 }
 
-.layui-nav *,
-.layui-container * {
-    transition: all 100ms linear;
+* {
+    transition: all 200ms linear;
 }
 
 /* carousel */
@@ -80,8 +87,8 @@ div.layui-panel, div.layui-collapse {
     background-position: center;
     background-size: cover;
     /* background-image: url('https://static.wikia.nocookie.net/phigros/images/e/eb/Broken_Sky_jacket.png'); */
-    background-image: url('https://netdisk.xhustudio.eu.org/images/webp/Broken_Sky_jacket.webp');
-    transition: background-image 256ms ease-in-out;
+    background-image: url('https://static.xhustudio.eu.org/images/webp/Broken_Sky_jacket.webp');
+    transition: background-image 200ms linear;
 }
 
 /* lunar calendar custom */
@@ -101,7 +108,7 @@ div.layui-panel, div.layui-collapse {
 #name-face-container > .layui-card-header {
     background-color: #c2c2c2;
     /* background-image: url('https://static.wikia.nocookie.net/phigros/images/f/fb/Miracle_Forest_%28VIP_Mix%29_jacket.png'); */
-    background-image: url('https://netdisk.xhustudio.eu.org/images/webp/Miracle_Forest__VIP_Mix__jacket.webp');
+    background-image: url('https://static.xhustudio.eu.org/images/webp/Miracle_Forest__VIP_Mix__jacket.webp');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -121,6 +128,7 @@ div.layui-panel, div.layui-collapse {
 img[alt=face] {
     position: relative;
     top: -32px;
+    width: inherit;
 }
 
 @media (max-width: 300px) {
@@ -207,7 +215,7 @@ img[alt=face] {
     position: absolute;
     height: 100%;
     width: 100%;
-    transition: all 300ms;
+    transition: all 200ms linear;
 }
 
 .postcard-desc {
@@ -240,7 +248,7 @@ pre.layui-code {
 
 .hidden {
     background-color: #5f5f5f;
-    transition: color,background-color 200ms ease-in-out;
+    transition: color,background-color 200ms linear;
 }
 
 .hidden:hover {
@@ -276,7 +284,6 @@ pre.layui-code {
     width: 100%;
     opacity: .9;
     position: fixed;
-    transition: bottom 200ms ease-in-out;
     bottom: 0;
 }
 
@@ -295,6 +302,8 @@ pre.layui-code {
 #footer-placeholder {
     height: 32px;
 }
+
+/* friend link */
 
 #friend-link-container {
     text-align: initial;
@@ -315,6 +324,36 @@ pre.layui-code {
 
 .personal-link:hover {
     color: #6cf;
+}
+
+.friends-page-bg-transp {
+    transition: background-color 200ms linear;
+    background-color: #fff6;
+}
+
+.friends-page-bg-link > .layui-card-body {
+    height: 64px;
+    display: flex;
+}
+
+.friends-page-bg-link:hover {
+    background-color: #f0f8ff66; /* aliceblue + 6/f alpha */
+    backdrop-filter: blur(1px);
+}
+
+.friends-page-icon {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.friends-page-desc {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 16px;
+    padding-left: 8px;
 }
 
 /* post index */

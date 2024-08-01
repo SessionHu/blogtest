@@ -11,6 +11,13 @@
             window.location.pathname.replace(".html", "") + "/" +
             window.location.search.substring(1) + window.location.hash
         );
+    } else if (document.referrer === "https://shakaianee.top/" && window.location.hash === "#!/about") {
+        layer.alert("看起来您是从 shakaianee.top 过来的呢, 建议先来首页看看吧~", {
+            skin: "layui-layer-win10",
+            shade: .01,
+            time: 5e3
+        });
+        window.location.hash = "#!/";
     }
 }
 
@@ -145,7 +152,7 @@ class Sess {
         if (scrollPosition + viewportHeight >= documentHeight) {
             footer.style.bottom = "0";
         } else {
-            footer.style.bottom = `-${footer.offsetHeight + 1}px`;
+            footer.style.bottom = `-${footer.offsetHeight + 32}px`;
         }
         // #post-index-container
         const pic = document.getElementById("post-index-container");
@@ -222,10 +229,12 @@ class Sess {
         const path = layui.url(window.location.href.replace("/#!", "/#")).hash.path;
         if (path.length < 1 || path[0] === "" || path[0] === "home") {
             nav.querySelector("#nav-index").classList.add("layui-this");
-        } else if (path[0] === "category") {
+        } else if (path[0] === "category" || path[0] === "posts") {
             nav.querySelector("#nav-category").classList.add("layui-this");
         } else if (path[0] === "about") {
             nav.querySelector("#nav-about").classList.add("layui-this");
+        } else if (path[0] === "friends") {
+            nav.querySelector("#nav-friends").classList.add("layui-this");
         }
     }
 
@@ -302,6 +311,8 @@ class Sess {
         await this.fillHomeLatest();
         // fill category #category-container
         await this.fillCategoryInfo(path);
+        // fill .friends-page-main
+        await this.fillFriendLinkPage();
         // lazyimg
         layui.flow.lazyimg({
             elem: "img[lay-src]"
@@ -408,6 +419,8 @@ class Sess {
                 });
             }
         });
+        // friend link
+        await this.friendLinkFooter();
         // forune & pageview
         this.fortune().catch((e) => Sess.openErrLayer(e));
         this.pageview().catch((e) => Sess.openErrLayer(e));
@@ -740,6 +753,109 @@ class Sess {
     }
 
     //#endregion
+    //#region friends
+
+    static async friendLinkFooter() {
+        const json = await (await fetch("/friends.json")).json();
+        // 3 * friends + 8 * organizations
+        const result = [];
+        const friendlenall = json.friends.length;
+        for (let i = 0; i < (friendlenall < 3 ? friendlenall : 3); i++) {
+            const e = json.friends.splice(Math.floor(Math.random() * json.friends.length), 1)[0];
+            e.className = "personal-link";
+            result.push(e);
+        }
+        const orglenall = json.organizations.length;
+        for (let i = 0; i < (orglenall < 8 ? orglenall : 8); i++) {
+            const e = json.organizations.splice(Math.floor(Math.random() * json.organizations.length), 1)[0];
+            e.className = "layui-hide-xs";
+            result.push(e);
+        }
+        result.push({
+            "id": "more",
+            "title": "...",
+            "href": "/#!/friends",
+            "name": {
+                "en": ["More"],
+                "zh": ["更多"],
+                "jp": ["もっと"]
+            }
+        });
+        // fill
+        const friendlinks = document.getElementById("friend-links");
+        if (friendlinks !== null) {
+            for (const lnk of result) {
+                const names = this.friendLinkLangChooser(lnk.name);
+                friendlinks.insertAdjacentHTML("beforeend", `
+                    <a href="${lnk.href}" ${lnk.id === "more" ? "" : 'target="_blank" rel="noopener"'}
+                        title="${names[Math.floor(Math.random() * names.length)]}"
+                        class="${lnk.className}">${lnk.title}</a>
+                `);
+            }
+        }
+    }
+
+    /**
+     * @param {{zh:string[],en:string[],jp:string[]}} name 
+     */
+    static friendLinkLangChooser(name) {
+        // by user language
+        const langs = window.navigator.languages
+        for (let i = 0; langs.length > i; i++) {
+            if (langs[i].startsWith("zh")) {
+                if (name.zh.length > 0) return name.zh;
+            } else if (langs[i].startsWith("en")) {
+                if (name.en.length > 0) return name.en;
+            } else if (langs[i].startsWith("jp")) {
+                if (name.jp.length > 0) return name.jp;
+            }
+        }
+        // default
+        if (name.zh.length > 0) return name.zh;
+        if (name.en.length > 0) return name.en;
+        if (name.jp.length > 0) return name.jp;
+    }
+
+    static async fillFriendLinkPage() {
+        const mainelem = document.getElementById("friends-page-main");
+        if (mainelem === null) return;
+        const json = await (await fetch("/friends.json")).json();
+        json.friends = this.randomArray(json.friends);
+        json.organizations = this.randomArray(json.organizations);
+        // friends
+        const friendelem = mainelem.querySelector("#friends-page-friends")
+        for (const f of json.friends) {
+            this.fillFriendLinkElem(friendelem, f);
+        }
+        // organizations
+        const orgselem = mainelem.querySelector("#friends-page-orgs");
+        for (const o of json.organizations) {
+            this.fillFriendLinkElem(orgselem, o);
+        }
+    }
+
+    /**
+     * @param {HTMLDivElement} elem
+     * @param {any} link
+     */
+    static fillFriendLinkElem(elem, link) {
+        const f = link;
+        const names = this.friendLinkLangChooser(f.name);
+        console.log(names);
+        elem.insertAdjacentHTML("beforeend", `
+            <a class="layui-col-sm6" href="${f.href}" target="_blank" rel="noopener">
+                <div class="layui-panel layui-card friends-page-bg-transp friends-page-bg-link">
+                    <div class="layui-card-header">${this.randomArray(names).join(" / ")}</div>
+                    <div class="layui-card-body">
+                        <img alt="${f.id}" src="${f.icon}" class="layui-circle friends-page-icon" referrerpolicy="no-referrer" />
+                        <div class="friends-page-desc">${f.desc}</div>
+                    </div>
+                </div>
+            </a>
+        `);
+    }
+
+    //#endregion
     //#region utils
 
     static randomChildren() {
@@ -756,6 +872,18 @@ class Sess {
                 elem.appendChild(child);
             }
         }
+    }
+
+    /**
+     * @param {any[]} arr 
+     */
+    static randomArray(arr) {
+        const result = [];
+        const lenall = arr.length;
+        for (let i = 0; i < lenall; i++) {
+            result.push(arr.splice(Math.floor(Math.random() * arr.length), 1)[0]);
+        }
+        return result;
     }
 
     //#endregion

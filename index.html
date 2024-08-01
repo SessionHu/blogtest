@@ -44,6 +44,9 @@
         <li class="layui-nav-item" id="nav-about">
             <a href="/#!/about">关于</a>
         </li>
+        <li class="layui-nav-item" id="nav-friends">
+            <a href="/#!/friends">友链</a>
+        </li>
         <li class="layui-nav-item" id="theme-switch">
             <button type="button" class="layui-btn layui-btn-primary layui-btn-radius layui-btn-xs layui-icon"
                 lay-on="theme-switch">
@@ -72,6 +75,9 @@
                                 </li>
                                 <li>
                                     <a href="/about.html">/about.html</a>
+                                </li>
+                                <li>
+                                    <a href="/friends.html">/friends.html</a>
                                 </li>
                             </ul>
                         </noscript>
@@ -106,7 +112,7 @@
                             </div>
                         </div>
                         <div id="face-container">
-                            <img class="layui-circle" alt="face" src="https://api.xhustudio.eu.org/fetch?url=https%3A%2F%2Favatars.githubusercontent.com%2Fu%2F102411014%3Fs%3D100" />
+                            <img class="layui-circle" alt="face" src="https://static.xhustudio.eu.org/images/jpeg/102411014.jpg" />
                         </div>
                     </div>
                 </div>
@@ -140,22 +146,16 @@
                 <a href="https://icp.gov.moe/?keyword=20241454" target="_blank" rel="noopener">萌ICP备20241454号</a>
                 <span>
                     <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY-NC-SA-4.0</a>
-                    &
+                    &amp;
                     <a href="https://choosealicense.com/licenses/mit/">MIT License</a>
                 </span>
             </div>
             <div class="layui-col-sm8">
-                <div id="friend-links-container" class="layui-font-12">
-                    <div>友情链接</div>
-                    <div id="friend-links" class="random">
-                        <a href="https://nic.eu.org/" class="layui-hide-xs">EU.org</a>
-                        <a href="https://layui.dev/" class="layui-hide-xs">Layui</a>
-                        <a href="https://zh.minecraft.wiki/" class="layui-hide-xs">Minecraft Wiki</a>
-                        <a href="https://wiki.pigeon-games.com/" class="layui-hide-xs">Limbo Wiki</a>
-                        <a href="https://shakaianee.top/" class="personal-link">易姐的博客</a>
-                        <a href="/#!/" class="layui-show-xs-block layui-hide-sm" style="order:114514;">...</a>
+                <a id="friend-links-container" class="layui-font-12" href="/#!/friends">
+                    <span>友情链接</span>
+                    <div id="friend-links">
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </footer>
