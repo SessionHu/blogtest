@@ -291,7 +291,6 @@ class Md2html {
                         out += linktext;
                         out += ']';
                         out += chars[i];
-                        break;
                     }
                 }
             } else { // not link
