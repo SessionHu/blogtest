@@ -53,7 +53,7 @@
 
 - 点开一看, 画面不忍直视, 一直在诡异的闪烁, 变形, 等等. 下面有张复原图.
 
-  ![Screenshot_20240702_083736.png](https://netdisk.xhustudio.eu.org/posts/2024/win-size-never-greater-than-16384/Screenshot_20240702_083736.png)
+  ![Screenshot_20240702_083736.png](https://static.xhustudio.eu.org/posts/2024/win-size-never-greater-than-16384/Screenshot_20240702_083736.png)
 
 - 即使没有崩溃, 窗口也算是废了. 尝试把窗口恢复成原来的样子, 一切又再次恢复正常, 所有功能不受影响.
 
@@ -154,7 +154,7 @@
 
 - 经过不断微调, 窗口开始闪烁, 崩坏. 窗口宽度刚好是 `16385`.
 
-  ![Screenshot_20240702_095838.png](https://netdisk.xhustudio.eu.org/posts/2024/win-size-never-greater-than-16384/Screenshot_20240702_095838.png)
+  ![Screenshot_20240702_095838.png](https://static.xhustudio.eu.org/posts/2024/win-size-never-greater-than-16384/Screenshot_20240702_095838.png)
 
   ```text
   ❯ xprop -id 0x05a00004 | grep '_GTK_FRAME_EXTENTS\|_NET_WM_OPAQUE_REGION'
@@ -164,11 +164,11 @@
 
 - 再次调整, 窗口宽度来到 `16384` 整, 一切正常. 此时 `canvas` 的 `width` 为 `16329`, 按照最大的不透明矩形, 水平方向的窗口边框为 `3.5`, 好!
 
-  ![Screenshot_20240702_100916.png](https://netdisk.xhustudio.eu.org/posts/2024/win-size-never-greater-than-16384/Screenshot_20240702_100916.png)
+  ![Screenshot_20240702_100916.png](https://static.xhustudio.eu.org/posts/2024/win-size-never-greater-than-16384/Screenshot_20240702_100916.png)
 
 - 多次经过多次验证, 确实临界值是 `16384`, 不能再大了, 否则就会出现显示异常, 但是实际还能够正常操作.
 
-  ![Screenshot_20240702_101435.png](https://netdisk.xhustudio.eu.org/posts/2024/win-size-never-greater-than-16384/Screenshot_20240702_101435.png)
+  ![Screenshot_20240702_101435.png](https://static.xhustudio.eu.org/posts/2024/win-size-never-greater-than-16384/Screenshot_20240702_101435.png)
 
 ### 多次实验寻找普遍规律
 
