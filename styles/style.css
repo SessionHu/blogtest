@@ -6,6 +6,10 @@ html {
     scrollbar-width: thin;
 }
 
+body {
+    font-family: auto;
+}
+
 .layui-text a:not(.layui-btn):hover {
     color: #6cf !important;
 }
@@ -346,6 +350,10 @@ pre.layui-code {
     height: 64px;
     object-fit: cover;
     object-position: center;
+}
+
+.friends-page-icon-org {
+    object-fit: scale-down;
 }
 
 .friends-page-desc {
