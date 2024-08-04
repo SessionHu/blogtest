@@ -4,6 +4,15 @@
         "posts": [
             {
                 "type": "post",
+                "title": "KVM 徒手安装 Arch Linux",
+                "fname": "inst-arch-kvm-self.md",
+                "time": "2024-08-04T21:10+0800",
+                "category": "linux",
+                "image": "https://static.xhustudio.eu.org/posts/2024/inst-arch-kvm-self/Screenshot_20240804_210956.png",
+                "tags": ["linux", "arch", "kvm", "qemu", "systemd", "fdisk", "neofetch", "pacman", "grub"]
+            },
+            {
+                "type": "post",
                 "title": "Debian 之 KDE 与 Wayland 调教指北",
                 "fname": "deb-kde-wayland-guide.md",
                 "time": "2024-07-30T21:40+0800",
