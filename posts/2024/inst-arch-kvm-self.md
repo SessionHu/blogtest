@@ -141,7 +141,7 @@ Copyright (c) 2003-2023 Fabrice Bellard and the QEMU Project developers
 
 - 运行 `systemctl start systemd-networkd.service systemd-resolved.service` 以启动
 
-- 运行 `ln -sf /run/systemd/Resolve/resolv.conf /etc/resolv.conf` 以确保 DHCP 客户端不会乱修改 DNS 配置
+- 运行 `ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf` 以确保 DHCP 客户端不会乱修改 DNS 配置
 
 - 运行 `ping xhustudio.eu.org` 以验证网络连通性, 若不通再试试 `ping bilibili.com`
 
