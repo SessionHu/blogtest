@@ -296,6 +296,7 @@ pre.layui-code {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+    line-height: 120%;
 }
 
 #footer-main > * {

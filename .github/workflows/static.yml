@@ -31,8 +31,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Copy Sitemap
-        run: wget https://github.com/SessionHu/blogtest-sitemap/raw/hidden/sitemap.xml
+      - name: Copy Sitemap & RSS
+        run: wget https://github.com/SessionHu/blogtest-sitemap/raw/hidden/sitemap.xml https://github.com/SessionHu/blogtest-sitemap/raw/hidden/feed.xml
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
