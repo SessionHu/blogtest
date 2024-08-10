@@ -119,9 +119,9 @@ Copyright (c) 2003-2023 Fabrice Bellard and the QEMU Project developers
 
   ![Screenshot_20240804_185343.png](https://static.xhustudio.eu.org/posts/2024/inst-arch-kvm-self/Screenshot_20240804_185343.png)
 
-- 编辑 `/etc/systemd/network/20-wired.network` 为以下内容, 假设您使用的有限适配器为 `ens3`, 且所在网络支持 DHCP (比如 KVM)
+- 编辑 `/etc/systemd/network/20-wired.network` 为以下内容, 假设您使用的有线适配器为 `ens3`, 且所在网络支持 DHCP (比如 KVM)
 
-  ```toml
+  ```conf
   [Match]
   Name=ens3
 
@@ -131,7 +131,7 @@ Copyright (c) 2003-2023 Fabrice Bellard and the QEMU Project developers
 
 - 编辑 `/etc/systemd/resolved.conf`, 取消注释 `DNS=` 并在后面追加 `8.8.8.8`, 在刚刚输入的下面继续追加 `FallbackDNS=114.114.114.114`, 就像下面这样, 以避免被网关污染 DNS
 
-  ```toml
+  ```conf
   [Resolve]
   DNS=8.8.8.8
   FallbackDNS=114.114.114.114
