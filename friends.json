@@ -11,6 +11,18 @@
             "title": "易姐的博客",
             "desc": "",
             "icon": "https://i0.hdslb.com/bfs/face/aebb2639a0d47f2ce1fec0631f412eaf53d4a0be.jpg"
+        },
+        {
+            "id": "glowingstone",
+            "name": {
+                "zh": [],
+                "en": ["glowingstone124"],
+                "jp": []
+            },
+            "href": "https://glowingstone.cn/",
+            "title": "glowingstone's blog",
+            "desc": "",
+            "icon": "https://avatars.githubusercontent.com/u/163746181?s=200&v=4"
         }
     ],
     "organizations": [
