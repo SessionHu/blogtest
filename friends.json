@@ -23,6 +23,18 @@
             "title": "glowingstone's blog",
             "desc": "",
             "icon": "https://avatars.githubusercontent.com/u/163746181?s=200&v=4"
+        },
+        {
+            "id": "skyblogs",
+            "name": {
+                "zh": ["凌空"],
+                "en": [],
+                "jp": []
+            },
+            "href": "https://skyblogs.xyz/",
+            "title": "凌空的博客小站",
+            "desc": "浪漫能邂逅现实吗",
+            "icon": "https://www.skyblogs.xyz/wp-content/uploads/2023/01/cropped-head-192x192.jpg"
         }
     ],
     "organizations": [
