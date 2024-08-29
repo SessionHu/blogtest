@@ -4,6 +4,15 @@
         "posts": [
             {
                 "type": "post",
+                "title": "发送文件到手机的 N 种正确姿势",
+                "fname": "send-files-to-phone.md",
+                "time": "2024-08-29T11:48:14.286777299+0800",
+                "category": "multimedia",
+                "image": "https://static.xhustudio.eu.org/images/svg/file_transfer.svg",
+                "tags": ["multimedia", "linux", "android", "phone", "computer", "network", "kde", "human"]
+            },
+            {
+                "type": "post",
                 "title": "KVM 徒手安装 Arch Linux",
                 "fname": "inst-arch-kvm-self.md",
                 "time": "2024-08-04T21:10+0800",
