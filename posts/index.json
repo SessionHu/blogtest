@@ -4,6 +4,15 @@
         "posts": [
             {
                 "type": "post",
+                "title": "BAC 正处于历史以来最困难的时期 - 中秋考古有感",
+                "fname": "bac-out-of-date.md",
+                "time": "2024-09-18T13:05+0800",
+                "category": "community",
+                "image": "https://socialsisteryi.github.io/bilibili-API-collect/logo2.jpg",
+                "tags": ["bac", "history", "github", "bilibili", "api", "web", "community"]
+            },
+            {
+                "type": "post",
                 "title": "发送文件到手机的 N 种正确姿势",
                 "fname": "send-files-to-phone.md",
                 "time": "2024-08-29T11:48:14.286777299+0800",
