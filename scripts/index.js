@@ -26,21 +26,32 @@
 
 {
 
-    const head = document.querySelector("head");
-    const dark = document.createElement("link");
-    dark.rel = "stylesheet";
-    dark.href = "https://unpkg.com/layui-theme-dark@2.9.13/dist/layui-theme-dark.css";
-    const darkFix = dark.cloneNode(true);
-    darkFix.href = "/styles/dark-fix.css";
+    const mixcss = new Promise((resolve, reject) => {
+        const layrsp = fetch("https://unpkg.com/layui-theme-dark@2.9.13/dist/layui-theme-dark.css");
+        const fixrsp = fetch("/styles/dark-fix.css");
+        const helperfn = async () => {
+            try {
+                const laycss = (await (await layrsp).text()).replace(/^@charset\s.+?\r?\n/, '')
+                const fixcss = (await (await fixrsp).text()).replace(/^@charset\s.+?\r?\n/, '')
+                resolve(`${laycss}\n${fixcss}`);
+            } catch (e) {
+                Sess.openErrLayer(e);
+                reject(e);
+            }
+        };
+        helperfn();
+    });
+
     const themeSwitchButton = document.querySelector("#theme-switch > button");
+    const dark = document.createElement("style");
+    document.querySelector("head").append(dark);
 
     /**
      * @param {{matches: boolean}} ev 
      */
-    const handleTheme = (ev) => {
-        if ((ev.matches || layui.data("sessblog").theme === "dark") && dark.parentElement === null) {
-            head.appendChild(dark);
-            head.appendChild(darkFix);
+    const handleTheme = async (ev) => {
+        if ((ev.matches || layui.data("sessblog").theme === "dark") && dark.innerHTML === "") {
+            dark.innerHTML = await mixcss;
             layui.data("sessblog", { key: "theme", value: "dark" });
             themeSwitchButton.innerHTML = "&#xe6c2;";
             setDotlineColor("#f0f0f0");
@@ -48,9 +59,8 @@
                 tips: 3,
                 time: 1600
             });
-        } else if (dark.parentElement !== null) {
-            head.removeChild(dark);
-            head.removeChild(darkFix);
+        } else if (dark.innerHTML !== "") {
+            dark.innerHTML = "";
             layui.data("sessblog", { key: "theme", value: "light" });
             themeSwitchButton.innerHTML = "&#xe748;";
             setDotlineColor("#000");
@@ -80,12 +90,12 @@
     layui.util.on("lay-on", {
         "theme-switch": layui.throttle(() => {
             handleTheme({
-                matches: dark.parentElement === null
+                matches: dark.innerHTML === ""
             });
         }, 256)
     });
 
-}
+};
 
 //#endregion
 
