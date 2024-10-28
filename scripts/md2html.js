@@ -97,207 +97,32 @@ class Md2html {
      * @param {string} text
      */
     static code(text) {
-        let out = "";
-        let inCodeBlock = false;
-        for (const c of text) {
-            if (c === '`') {
-                inCodeBlock = !inCodeBlock;
-                out += inCodeBlock ? "<code>" : "</code>";
-            } else {
-                out += inCodeBlock ? "&#" + c.codePointAt(0) + ";" : c;
-            }
-        }
-        if (inCodeBlock) {
-            out += "</code>";
-        }
-        return out;
+        const rgx = /`(.+?)`/g;
+        return text.replace(rgx, '<code>$1</code>');
     }
 
     /**
      * @param {string} text
      */
     static img(text) {
-        let out = "";
-        const chars = Array.from(text);
-        for (let i = 0; i < chars.length; i++) {
-            if (chars[i] === '!') {
-                if (++i >= chars.length) { // end of line?
-                    out += '!';
-                    break;
-                } else if (chars[i] === '[') { // is img?
-                    if (++i >= chars.length) { // end of line?
-                        out += '![';
-                        break;
-                    } else {
-                        let imgalt = "";
-                        for (; chars[i] !== ']'; i++) {
-                            if (i >= chars.length) { // end of line?
-                                out += '![';
-                                out += imgalt;
-                                break;
-                            } else { // alt
-                                imgalt += chars[i];
-                            }
-                        }
-                        if (++i >= chars.length) { // end of line?
-                            out += '![';
-                            out += imgalt;
-                            out += ']';
-                            break;
-                        } else if (chars[i] === '(') { // is img?
-                            if (++i >= chars.length) { // end of line?
-                                out += '![';
-                                out += imgalt;
-                                out += '](';
-                                break;
-                            } else {
-                                let imgsrc = "";
-                                for (; chars[i] !== ')'; i++) {
-                                    if (i >= chars.length) { // end of line?
-                                        out += '![';
-                                        out += imgalt;
-                                        out += '](';
-                                        out += imgsrc;
-                                        break;
-                                    } else { // src
-                                        imgsrc += chars[i];
-                                    }
-                                }
-                                // parse src
-                                let imgsrcreal = "";
-                                let imgsrctitle = "";
-                                const srcchars = Array.from(imgsrc);
-                                for (let j = 0; j < srcchars.length; j++) {
-                                    if (srcchars[j] === ' ') { // is title?
-                                        if (++j >= srcchars.length) { // end of line?
-                                            break;
-                                        } else {
-                                            for (; j < srcchars.length; j++) {
-                                                imgsrctitle += srcchars[j];
-                                            }
-                                            break;
-                                        }
-                                    } else {
-                                        imgsrcreal += srcchars[j];
-                                    }
-                                }
-                                // clip
-                                if (imgsrctitle.startsWith('"')) {
-                                    imgsrctitle = imgsrctitle.substring(1);
-                                }
-                                if (imgsrctitle.endsWith('"')) {
-                                    imgsrctitle = imgsrctitle.substring(0, imgsrctitle.length - 1);
-                                }
-                                // add to out
-                                out += `<div lay-on="post-img"><img lay-src="${imgsrcreal}" title="${imgsrctitle}" alt="${imgalt}"/></div>`;
-                            }
-                        } else { // not img
-                            out += '![';
-                            out += imgalt;
-                            out += ']';
-                            out += chars[i];
-                            break;
-                        }
-                    }
-                } else { // not img
-                    out += '!';
-                    out += chars[i];
-                }
-            } else { // not img
-                out += chars[i];
-            }
-        }
-        return out;
+        const rgx = /!\[(.*?)\]\((.*?)\)/g;
+        return text.replace(rgx, (match, p1, p2) => {
+            const [src, title] = p2.split(' ');
+            const html = `<div lay-on="post-img"><img lay-src="${src}" title=${title ? title : '""'} alt="${p1}" /></div>`;
+            return html;
+        });
     }
+
 
     /**
      * @param {string} text
      */
     static link(text) {
-        let out = "";
-        const chars = Array.from(text);
-        for (let i = 0; i < chars.length; i++) {
-            if (chars[i] === '[') { // is link?
-                if (++i >= chars.length) { // end of line? 
-                    out += '[';
-                    break;
-                } else {
-                    // link text
-                    let linktext = "";
-                    for (; chars[i] !== ']'; i++) {
-                        if (i >= chars.length) { // end of line?
-                            out += '[';
-                            out += linktext;
-                            break;
-                        } else { // text
-                            linktext += chars[i];
-                        }
-                    }
-                    // link href
-                    if (++i >= chars.length) { // end of line?
-                        out += '[';
-                        out += linktext;
-                        out += ']';
-                        break;
-                    } else if (chars[i] === '(') { // is link?
-                        if (++i >= chars.length) { // end of line?
-                            out += '[';
-                            out += linktext;
-                            out += '](';
-                            break;
-                        } else {
-                            let linkhreffull = "";
-                            for (; chars[i] !== ')'; i++) {
-                                if (i >= chars.length) { // end of line?
-                                    out += '[';
-                                    out += linktext;
-                                    out += '](';
-                                    out += linkhreffull;
-                                    break;
-                                } else { // href
-                                    linkhreffull += chars[i];
-                                }
-                            }
-                            // parse href
-                            let linkhrefreal = "";
-                            let linkhreftitle = "";
-                            const hrefchars = Array.from(linkhreffull);
-                            for (let j = 0; j < hrefchars.length; j++) {
-                                if (hrefchars[j] === ' ') { // is title?
-                                    if (++j >= hrefchars.length) { // end of line?
-                                        break;
-                                    } else {
-                                        for (; j < hrefchars.length; j++) {
-                                            linkhreftitle += hrefchars[j];
-                                        }
-                                        break;
-                                    }
-                                } else {
-                                    linkhrefreal += hrefchars[j];
-                                }
-                            }
-                            // clip
-                            if (linkhreftitle.startsWith('"')) {
-                                linkhreftitle = linkhreftitle.substring(1);
-                            }
-                            if (linkhreftitle.endsWith('"')) {
-                                linkhreftitle = linkhreftitle.substring(0, linkhreftitle.length - 1);
-                            }
-                            // add to out
-                            out += `<a href="${linkhrefreal}" title="${linkhreftitle}" target="_blank" rel="noopener">${linktext}</a>`;
-                        }
-                    } else { // not link
-                        out += '[';
-                        out += linktext;
-                        out += ']';
-                        out += chars[i];
-                    }
-                }
-            } else { // not link
-                out += chars[i];
-            }
-        }
-        return out;
+        const rgx = /\[(.+?)\]\((.+?)\)/g;
+        return text.replace(rgx, (match, p1, p2) => {
+            const [href, title] = p2.split(' ');
+            return `<a href="${href}" title=${title ? title : '""'} target="_blank" rel="noopener">${p1}</a>`;
+        });
     }
 
 }
