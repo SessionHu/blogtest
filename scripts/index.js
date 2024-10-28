@@ -30,14 +30,10 @@
         const layrsp = fetch("https://unpkg.com/layui-theme-dark@2.9.13/dist/layui-theme-dark.css");
         const fixrsp = fetch("/styles/dark-fix.css");
         const helperfn = async () => {
-            try {
-                const laycss = (await (await layrsp).text()).replace(/^@charset\s.+?\r?\n/, '')
-                const fixcss = (await (await fixrsp).text()).replace(/^@charset\s.+?\r?\n/, '')
-                resolve(`${laycss}\n${fixcss}`);
-            } catch (e) {
-                Sess.openErrLayer(e);
-                reject(e);
-            }
+            const rgx = /^@charset\s\".+?\";\r?\n?/;
+            const laycss = (await (await layrsp).text()).replace(rgx, '')
+            const fixcss = (await (await fixrsp).text()).replace(rgx, '')
+            resolve(`${laycss}\n${fixcss}`);
         };
         helperfn();
     });
