@@ -1,0 +1,41 @@
+@charset "utf-8";
+
+.lineh100 {
+    line-height: 100%;
+}
+
+.margin-t4 {
+    margin-top: 4px;
+}
+
+.margin-t8 {
+    margin-top: 8px;
+}
+
+.margin-t16 {
+    margin-top: 16px;
+}
+
+.margin-b4 {
+    margin-bottom: 4px;
+}
+
+.margin-b8 {
+    margin-bottom: 8px;
+}
+
+.radius {
+    border-radius: 8px;
+}
+
+.bg-trans {
+    background-color: transparent !important;
+}
+
+.color-white {
+    color: white;
+}
+
+.debug {
+    border: red 0.001px dotted;
+}

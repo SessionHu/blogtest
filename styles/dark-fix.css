@@ -69,10 +69,6 @@ code {
 
 /* friend link */
 
-.friends-page-bg-transp {
-    background-color: #3333;
-}
-
 .friends-page-bg-link:hover {
-    background-color: #ffc0cb11; /* pink + 1/f alpha */
+    background-color: #2a2424cc;
 }

@@ -29,25 +29,28 @@
     const mixcss = new Promise((resolve, reject) => {
         const layrsp = fetch("https://unpkg.com/layui-theme-dark@2.9.13/dist/layui-theme-dark.css");
         const fixrsp = fetch("/styles/dark-fix.css");
-        const helperfn = async () => {
-            const rgx = /^@charset\s\".+?\";\r?\n?/;
-            const laycss = (await (await layrsp).text()).replace(rgx, '')
-            const fixcss = (await (await fixrsp).text()).replace(rgx, '')
-            resolve(`${laycss}\n${fixcss}`);
-        };
-        helperfn();
+        (async () => {
+            const laycss = await (await layrsp).text();
+            const fixcss = (await (await fixrsp).text());
+            const blob = new Blob(['@charset "utf-8";\n', laycss, fixcss], {
+                type: "text/css"
+            });
+            resolve(URL.createObjectURL(blob));
+        })().catch(reject);
     });
 
     const themeSwitchButton = document.querySelector("#theme-switch > button");
-    const dark = document.createElement("style");
-    document.querySelector("head").append(dark);
+    const dark = document.createElement("link");
+    dark.rel = "stylesheet";
+    dark.href = "about:blank";
+    document.head.append(dark);
 
     /**
      * @param {{matches: boolean}} ev 
      */
     const handleTheme = async (ev) => {
-        if ((ev.matches || layui.data("sessblog").theme === "dark") && dark.innerHTML === "") {
-            dark.innerHTML = await mixcss;
+        if ((ev.matches || layui.data("sessblog").theme === "dark") && dark.href === "about:blank") {
+            dark.href = await mixcss;
             layui.data("sessblog", { key: "theme", value: "dark" });
             themeSwitchButton.innerHTML = "&#xe6c2;";
             setDotlineColor("#f0f0f0");
@@ -55,8 +58,8 @@
                 tips: 3,
                 time: 1600
             });
-        } else if (dark.innerHTML !== "") {
-            dark.innerHTML = "";
+        } else if (dark.href !== "about:blank") {
+            dark.href = "about:blank";
             layui.data("sessblog", { key: "theme", value: "light" });
             themeSwitchButton.innerHTML = "&#xe748;";
             setDotlineColor("#000");
@@ -79,14 +82,13 @@
     }
 
     const mql = window.matchMedia("(prefers-color-scheme: dark)");
-    handleTheme(mql);
-
+    handleTheme(mql).catch((e) => window.alert(e.stack));
     mql.addEventListener("change", handleTheme);
 
     layui.util.on("lay-on", {
         "theme-switch": layui.throttle(() => {
             handleTheme({
-                matches: dark.innerHTML === ""
+                matches: dark.href === "about:blank"
             });
         }, 256)
     });
@@ -289,26 +291,33 @@ class Sess {
         } catch (e) {
             if (e.message === "Failed to fetch") {
                 responseRaw = `
-                    <h1 id="main-title">Failed to fetch</h1>
-                    <div id="main">Please check your network connection and try again later...</div>
+                    <main id="main-container">
+                        <div class="layui-panel layui-card">
+                            <h1 class="layui-card-header" id="main-title">Failed to fetch</h1>
+                            <div class="layui-card-body" id="main">Please check your network connection and try again later...</div>
+                        </div>
+                    </div>
                 `;
             } else {
                 Sess.openErrLayer(e);
             }
         }
         this.setPageloadProgress("99%");
-        if (responseRaw === undefined || responseRaw === "") {
+        if (!responseRaw || responseRaw === "") {
             maincontainer.innerHTML = `
-                <h1 id="main-title">404 Not Found</h1>
-                <div id="main">There is nothing you wanted...</div>
+                <main id="main-container">
+                    <div class="layui-panel layui-card">
+                        <h1 id="main-title">404 Not Found</h1>
+                        <div id="main">There is nothing you wanted...</div>
+                    </div>
+                </div>
             `;
         } else if (path.length > 0 && path[0] === "posts") {
             if (path.length === 3) maincontainer.innerHTML = await this.getPostHTML(responseRaw, path);
         } else {
             maincontainer.innerHTML = responseRaw;
         }
-        document.getElementById("main-title").innerHTML = maincontainer.querySelector("#main-title").innerHTML;
-        document.getElementById("main").innerHTML = maincontainer.querySelector("#main").innerHTML;
+        document.getElementById("main-container").outerHTML = maincontainer.innerHTML;
         // random
         this.randomChildren();
         // create post index
@@ -653,27 +662,31 @@ class Sess {
         }
         // return
         return `
-            <h1 id="main-title"">
-                <span class="layui-breadcrumb" lay-separator=">" lay-filter="bc">
-                    <a href="/#!/">首页</a>
-                    <a href="/#!/category">分类</a>
-                    <a href="/#!/category/${categoryName}">${categoryName}</a>
-                    <a><cite>${datetime.toLocaleString().replace(":00", "")}</cite></a>
-                    <a><cite>${titleName}</cite></a>
-                </span>
-            </h1>
-            <div id="main">
-                <div class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime.getTime()}">
-                    <div class="postcard-bg" style="background-image:url('${image}');"></div>
-                    <div class="postcard-desc layui-padding-2">
-                        <div class="postcard-title layui-font-32">${titleName}</div>
-                        <div class="postcard-sub" style="opacity:.84;">
-                            ${colorfultags}
+            <main id="main-container">
+                <div class="layui-panel layui-card">
+                    <h1 id="main-title" class="layui-card-header">
+                        <span class="layui-breadcrumb" lay-separator=">" lay-filter="bc">
+                            <a href="/#!/">首页</a>
+                            <a href="/#!/category">分类</a>
+                            <a href="/#!/category/${categoryName}">${categoryName}</a>
+                            <a><cite>${datetime.toLocaleString().replace(":00", "")}</cite></a>
+                            <a><cite>${titleName}</cite></a>
+                        </span>
+                    </h1>
+                    <div class="layui-card-body" id="main">
+                        <div class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime.getTime()}">
+                            <div class="postcard-bg" style="background-image:url('${image}');"></div>
+                            <div class="postcard-desc layui-padding-2">
+                                <div class="postcard-title layui-font-32">${titleName}</div>
+                                <div class="postcard-sub" style="opacity:.84;">
+                                    ${colorfultags}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-text">
+                            ${Md2html.md2html(raw).replace(new RegExp("<h1[^>]*>.*?</h1>", 'gi'), "")}
                         </div>
                     </div>
-                </div>
-                <div class="layui-text">
-                    ${Md2html.md2html(raw).replace(new RegExp("<h1[^>]*>.*?</h1>", 'gi'), "")}
                 </div>
             </div>
         `;
