@@ -1,0 +1,13 @@
+{
+  "name": "sessblogtest",
+  "version": "1.0.0",
+  "main": "back/server.js",
+  "repository": "https://github.com/SessionHu/blogtest.git",
+  "author": "SessionHu <102411014+SessionHu@users.noreply.github.com>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+      "dev": "node back/server.js",
+      "build": "node back/ssg.js"
+  }
+}

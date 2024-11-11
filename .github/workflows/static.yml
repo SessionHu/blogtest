@@ -31,15 +31,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Build
+        run: yarn build
       - name: Copy Sitemap & RSS
-        run: wget https://github.com/SessionHu/blogtest-sitemap/raw/hidden/sitemap.xml https://github.com/SessionHu/blogtest-sitemap/raw/hidden/feed.xml
+        run: cd dist/ && wget https://github.com/SessionHu/blogtest-sitemap/raw/hidden/sitemap.xml https://github.com/SessionHu/blogtest-sitemap/raw/hidden/feed.xml
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          path: './dist/'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

@@ -5,19 +5,15 @@
 {
     if (window.location.pathname === "/index.html") {
         window.location.pathname = "/";
-    } else if (window.location.pathname !== "/") {
-        window.location.replace(
-            window.location.protocol + "//" + window.location.host + "/#!" +
-            window.location.pathname.replace(".html", "") + "/" +
-            window.location.search.substring(1) + window.location.hash
-        );
+    } else if (window.location.hash.includes("#!/")) {
+        window.location.replace(window.location.hash.replace(/#!?/, ""));
     } else if (document.referrer === "https://shakaianee.top/" && window.location.hash === "#!/about") {
         layer.alert("看起来您是从 shakaianee.top 过来的呢, 建议先来首页看看吧~", {
             skin: "layui-layer-win10",
             shade: .01,
             time: 5e3
         });
-        window.location.hash = "#!/";
+        window.location.replace("/");
     }
 }
 
@@ -234,7 +230,7 @@ class Sess {
             child.classList.remove("layui-this");
         }
         // add
-        const path = layui.url(window.location.href.replace("/#!", "/#")).hash.path;
+        const path = window.location.pathname.replace("/", "").split("/");
         if (path.length < 1 || path[0] === "" || path[0] === "home") {
             nav.querySelector("#nav-index").classList.add("layui-this");
         } else if (path[0] === "category" || path[0] === "posts") {
@@ -254,27 +250,28 @@ class Sess {
      */
     static async loadMainContent() {
         // param
-        let path = layui.url(window.location.href.replace("/#!", "/#")).hash.path;
+        let path = window.location.pathname.replace("/", "").split("/");
         if (path[path.length - 1] === "") path.pop();
         // request path
         this.setPageloadProgress("0%");
         document.querySelector("*[lay-filter=pageload-progress]").classList.remove("layui-hide");
-        let reqpath = "";
+        /*let reqpath = "";
         if (path.length < 1 || path[0] === "home") {
-            reqpath = "/home.html";
+            reqpath = "/index.html";
         } else if (path[0] === "category") {
-            reqpath = "/category.html";
+            reqpath = "/category/index.html";
         } else if (path[0] === "about") {
-            reqpath = "/about.html";
+            reqpath = "/about/index.html";
+        } else if (path[0] === "friends") {
+            reqpath = "/friends/index.html";
         } else if (path[0] === "posts" && path.length < 3) {
-            window.location.hash = "!/category";
+            window.location.replace("/category");
             return;
         } else {
             for (const t of path) {
                 reqpath += "/";
-                reqpath += t;
+                reqpath += t.replace(/\.md$/, "/");
             }
-            if (path[0] !== "posts") reqpath += ".html";
         }
         // get HTML in #main
         this.setPageloadProgress("6%");
@@ -317,7 +314,8 @@ class Sess {
         } else {
             maincontainer.innerHTML = responseRaw;
         }
-        document.getElementById("main-container").innerHTML = maincontainer.querySelector("main#main-container").innerHTML;
+        document.getElementById("main-container").innerHTML = maincontainer.querySelector("main#main-container").innerHTML;*/
+        if (path.length === 3) document.getElementById("main-container").innerHTML = await this.getPostHTML(document.querySelector("pre#md-prerender"), path);
         // random
         this.randomChildren();
         // create post index
@@ -521,11 +519,11 @@ class Sess {
         for (const yearPosts of postsList) {
             if (yearPosts.year === year) {
                 for (const aPost of yearPosts.posts) {
-                    const url = `/#!/posts/${year}/${aPost.fname}`;
+                    const url = `/posts/${year}/${aPost.fname}`;
                     const datetime = new Date(aPost.time);
                     // div
                     ls.push(`
-                        <a href="${url}" class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime.getTime()}">
+                        <a href="${url.replace(".md", "")}" class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime.getTime()}">
                             <div class="postcard-bg" style="background-image:url('${aPost.image}');"></div>
                             <div class="postcard-desc layui-padding-2">
                                 <div class="postcard-title layui-font-20">${aPost.title}</div>
@@ -578,7 +576,7 @@ class Sess {
             }
             const contentText = [];
             for (const link of categoryInfo[aCategoryName].links) {
-                contentText.push(`<a href="${link.url}">${link.title}</a><br/>`);
+                contentText.push(`<a href="${link.url.replace(".md", "")}">${link.title}</a><br/>`);
             }
             contentDiv.innerHTML = contentText.join("");
             itemDiv.insertAdjacentElement("beforeend", contentDiv);
@@ -594,7 +592,7 @@ class Sess {
     }
 
     static async getCategoryInfo() {
-        // eg: {"cat":{"count":1,"links":["title":"iamtitle",url:"/#!/"]}}
+        // eg: {"cat":{"count":1,"links":["title":"iamtitle",url:"/"]}}
         const categoryInfo = {};
         const postsIndexJson = await (await fetch("/posts/index.json")).json();
         for (const yearPosts of postsIndexJson) {
@@ -609,7 +607,7 @@ class Sess {
                 }
                 categoryInfo[aPost.category].links.push({
                     "title": aPost.title,
-                    "url": `/#!/posts/${yearPosts.year}/${aPost.fname}`
+                    "url": `/posts/${yearPosts.year}/${aPost.fname}`
                 });
             }
         }
@@ -666,15 +664,15 @@ class Sess {
                 <div class="layui-panel layui-card">
                     <h1 id="main-title" class="layui-card-header">
                         <span class="layui-breadcrumb" lay-separator=">" lay-filter="bc">
-                            <a href="/#!/">首页</a>
-                            <a href="/#!/category">分类</a>
-                            <a href="/#!/category/${categoryName}">${categoryName}</a>
-                            <a><cite>${datetime.toLocaleString().replace(":00", "")}</cite></a>
+                            <a href="/">首页</a>
+                            <a href="/category">分类</a>
+                            <a href="/category/#${categoryName}">${categoryName}</a>
+                            <a><cite>${datetime ? datetime.toLocaleString().replace(":00", "") : undefined}</cite></a>
                             <a><cite>${titleName}</cite></a>
                         </span>
                     </h1>
                     <div class="layui-card-body" id="main">
-                        <div class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime.getTime()}">
+                        <div class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime ? datetime.getTime() : undefined}">
                             <div class="postcard-bg" style="background-image:url('${image}');"></div>
                             <div class="postcard-desc layui-padding-2">
                                 <div class="postcard-title layui-font-32">${titleName}</div>
@@ -793,7 +791,7 @@ class Sess {
         result.push({
             "id": "more",
             "title": "...",
-            "href": "/#!/friends",
+            "href": "/friends",
             "name": {
                 "en": ["More"],
                 "zh": ["更多"],
@@ -913,9 +911,11 @@ class Sess {
 
 }
 
-Sess.main().catch((e) => {
-    Sess.openErrLayer(e);
-    Sess.setPageloadProgress("0%");
+window.addEventListener("load", () => {
+    Sess.main().catch((e) => {
+        Sess.openErrLayer(e);
+        Sess.setPageloadProgress("0%");
+    });
 });
 
 //#region debug
