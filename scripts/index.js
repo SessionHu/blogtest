@@ -317,7 +317,7 @@ class Sess {
         } else {
             maincontainer.innerHTML = responseRaw;
         }
-        document.getElementById("main-container").outerHTML = maincontainer.innerHTML;
+        document.getElementById("main-container").innerHTML = maincontainer.querySelector("main#main-container").innerHTML;
         // random
         this.randomChildren();
         // create post index
