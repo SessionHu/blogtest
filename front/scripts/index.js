@@ -315,7 +315,7 @@ class Sess {
             maincontainer.innerHTML = responseRaw;
         }
         document.getElementById("main-container").innerHTML = maincontainer.querySelector("main#main-container").innerHTML;*/
-        if (path.length === 3) document.getElementById("main-container").innerHTML = await this.getPostHTML(document.querySelector("pre#md-prerender"), path);
+        if (path.length === 3) document.getElementById("main-container").innerHTML = await this.getPostHTML(document.querySelector("pre.md-prerender").innerHTML, path);
         // random
         this.randomChildren();
         // create post index
@@ -624,7 +624,7 @@ class Sess {
     static async getPostHTML(raw, path) {
         // basic information
         const year = parseInt(path[1]);
-        const fname = path[2];
+        const fname = path[2] + ".md";
         let categoryName;
         let titleName;
         let datetime;
@@ -660,30 +660,28 @@ class Sess {
         }
         // return
         return `
-            <main id="main-container">
-                <div class="layui-panel layui-card">
-                    <h1 id="main-title" class="layui-card-header">
-                        <span class="layui-breadcrumb" lay-separator=">" lay-filter="bc">
-                            <a href="/">首页</a>
-                            <a href="/category">分类</a>
-                            <a href="/category/#${categoryName}">${categoryName}</a>
-                            <a><cite>${datetime ? datetime.toLocaleString().replace(":00", "") : undefined}</cite></a>
-                            <a><cite>${titleName}</cite></a>
-                        </span>
-                    </h1>
-                    <div class="layui-card-body" id="main">
-                        <div class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime ? datetime.getTime() : undefined}">
-                            <div class="postcard-bg" style="background-image:url('${image}');"></div>
-                            <div class="postcard-desc layui-padding-2">
-                                <div class="postcard-title layui-font-32">${titleName}</div>
-                                <div class="postcard-sub" style="opacity:.84;">
-                                    ${colorfultags}
-                                </div>
+            <div class="layui-panel layui-card">
+                <h1 id="main-title" class="layui-card-header">
+                    <span class="layui-breadcrumb" lay-separator=">" lay-filter="bc">
+                        <a href="/">首页</a>
+                        <a href="/category">分类</a>
+                        <a href="/category/#${categoryName}">${categoryName}</a>
+                        <a><cite>${datetime ? datetime.toLocaleString().replace(":00", "") : undefined}</cite></a>
+                        <a><cite>${titleName}</cite></a>
+                    </span>
+                </h1>
+                <div class="layui-card-body" id="main">
+                    <div class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime ? datetime.getTime() : undefined}">
+                        <div class="postcard-bg" style="background-image:url('${image}');"></div>
+                        <div class="postcard-desc layui-padding-2">
+                            <div class="postcard-title layui-font-32">${titleName}</div>
+                            <div class="postcard-sub" style="opacity:.84;">
+                                ${colorfultags}
                             </div>
                         </div>
-                        <div class="layui-text">
-                            ${Md2html.md2html(raw).replace(new RegExp("<h1[^>]*>.*?</h1>", 'gi'), "")}
-                        </div>
+                    </div>
+                    <div class="layui-text">
+                        ${Md2html.md2html(raw).replace(new RegExp("<h1[^>]*>.*?</h1>", 'gi'), "")}
                     </div>
                 </div>
             </div>
