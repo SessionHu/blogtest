@@ -35,7 +35,7 @@ body {
 }
 
 * {
-    transition-property: color, background, width, height, top, bottom, left, right;
+    transition-property: color, background;
     transition-duration: 200ms;
     transition-timing-function: linear;
 }
@@ -74,13 +74,13 @@ div.layui-panel, div.layui-collapse {
 
 /* background */
 
-#dotLine {
+/*#dotLine {
     position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-}
+}*/
 
 .background {
     position: fixed;
@@ -94,7 +94,6 @@ div.layui-panel, div.layui-collapse {
     background-size: cover;
     /* background-image: url('https://static.wikia.nocookie.net/phigros/images/e/eb/Broken_Sky_jacket.png'); */
     background-image: url('https://static.xhustudio.eu.org/images/webp/Broken_Sky_jacket.webp');
-    transition: background-image 200ms linear;
 }
 
 /* lunar calendar custom */
@@ -221,7 +220,6 @@ img[alt=face] {
     position: absolute;
     height: 100%;
     width: 100%;
-    transition: all 200ms linear;
 }
 
 .postcard-desc {
@@ -254,23 +252,10 @@ pre.layui-code {
 
 .hidden {
     background-color: #5f5f5f;
-    transition: color,background-color 200ms linear;
 }
 
 .hidden:hover {
     background-color: transparent;
-}
-
-/* tree */
-
-.layui-tree * {
-    transition: none;
-}
-
-/* layer */
-
-.layui-layer {
-    transition: none;
 }
 
 .layui-layer .layui-card {
@@ -291,6 +276,7 @@ pre.layui-code {
     opacity: .9;
     position: fixed;
     bottom: 0;
+    transition-property: color, background-color, bottom;
 }
 
 #footer-main {
@@ -339,9 +325,7 @@ pre.layui-code {
 }
 
 .friends-page-bg-link {
-    transition-property: backdrop-filter, background-color;
-    transition-duration: 200ms;
-    transition-timing-function: linear;
+    transition-property: backdrop-filter, background-color, color;
 }
 
 .friends-page-bg-link:hover {
@@ -366,10 +350,4 @@ pre.layui-code {
     font-size: 14px;
     line-height: 16px;
     padding-left: 8px;
-}
-
-/* post index */
-
-#post-index-container {
-    transition: none;
 }

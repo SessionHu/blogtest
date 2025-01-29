@@ -16,72 +16,72 @@ if (!window.$) window.$ = layui.$;
 
 layui.use(function () {
 
-    const mixcss = new Promise((resolve, reject) => {
-        const layrsp = fetch("https://unpkg.com/layui-theme-dark@2.9.13/dist/layui-theme-dark.css");
-        const fixrsp = fetch("/styles/dark-fix.css");
-        (async () => {
-            const laycss = await (await layrsp).text();
-            const fixcss = (await (await fixrsp).text());
-            const blob = new Blob(['@charset "utf-8";\n', laycss, fixcss], {
-                type: "text/css"
-            });
-            resolve(URL.createObjectURL(blob));
-        })().catch(reject);
+  var layelem = document.createElement('link');
+  layelem.href = "https://unpkg.com/layui-theme-dark@2.9.13/dist/layui-theme-dark.css";
+  layelem.rel = 'stylesheet';
+  var fixelem = document.createElement('link');
+  fixelem.href = "/styles/dark-fix.css";
+  fixelem.rel = 'stylesheet';
+
+  var themeSwitchBtn = $('#theme-switch > button');
+
+  /**
+   * @param {boolean} tips
+   */
+  function _todark(tips) {
+    if (!layelem.parentNode) document.head.appendChild(layelem);
+    if (!fixelem.parentNode) document.head.appendChild(fixelem);
+    themeSwitchBtn.text("\ue6c2");
+    if (tips) layer.tips('已启用深色模式', "#theme-switch", {
+      tips: 3,
+      time: 1600
     });
+  }
 
-    const themeSwitchButton = document.querySelector("#theme-switch > button");
-    const dark = document.createElement("link");
-    dark.rel = "stylesheet";
-    dark.href = "about:blank";
-    document.head.append(dark);
+  /**
+   * @param {boolean} tips
+   */
+  function _tolight(tips) {
+    if (layelem.parentNode) layelem.parentNode.removeChild(layelem);
+    if (fixelem.parentNode) fixelem.parentNode.removeChild(fixelem);
+    themeSwitchBtn.text("\ue748");
+    if (tips) layer.tips('已启用浅色模式', "#theme-switch", {
+      tips: [3, "#666"],
+      time: 1600
+    });
+  }
 
-    /**
-     * @param {{matches: boolean}} ev 
-     */
-    const handleTheme = async (ev) => {
-        if ((ev.matches || layui.data("sessblog").theme === "dark") && dark.href === "about:blank") {
-            dark.href = await mixcss;
-            layui.data("sessblog", { key: "theme", value: "dark" });
-            themeSwitchButton.innerHTML = "&#xe6c2;";
-            //setDotlineColor("#f0f0f0");
-            layer.tips('已启用深色模式', "#theme-switch", {
-                tips: 3,
-                time: 1600
-            });
-        } else if (dark.href !== "about:blank") {
-            dark.href = "about:blank";
-            layui.data("sessblog", { key: "theme", value: "light" });
-            themeSwitchButton.innerHTML = "&#xe748;";
-            //setDotlineColor("#000");
-            layer.tips('已启用浅色模式', "#theme-switch", {
-                tips: [3, "#666"],
-                time: 1600
-            });
-        }
+  /**
+   * @param {boolean} isclick
+   * @param {boolean} isinit
+   * @param {boolean} matches
+   */
+  function _switchTheme(isclick, isinit, matches) {
+    var darksys = layui.data('sessblog').darksys || false;
+    var darkusr = layui.data('sessblog').darkusr || false;
+    if (!isclick && matches !== void 0 && darksys !== matches) {
+      layui.data('sessblog', { key: 'darksys', value: (darksys = matches) });
+      layui.data('sessblog', { key: 'darkusr', value: (darkusr = matches) });
+    } else if (isclick) {
+      layui.data('sessblog', { key: 'darkusr', value: (darkusr = !darkusr) });
     }
+    if (darkusr) _todark(!isinit);
+    else _tolight();
+  }
 
-    // /**
-    //  * @param {string} color 
-    //  */
-    // const setDotlineColor = (color) => {
-    //     if (dotLine && dotLine.color) {
-    //         window.setTimeout(() => dotLine.color = color, 50);
-    //     } else {
-    //         window.setTimeout(() => setDotlineColor(color), 50);
-    //     }
-    // }
-
-    const mql = window.matchMedia("(prefers-color-scheme: dark)");
-    handleTheme(mql).catch((e) => window.alert(e.stack));
-    mql.addEventListener("change", handleTheme);
-
-    layui.util.on("lay-on", {
-        "theme-switch": layui.throttle(() => {
-            handleTheme({
-                matches: dark.href === "about:blank"
-            });
-        }, 256)
+  if (window.matchMedia) {
+    var mql = window.matchMedia("(prefers-color-scheme: dark)");
+    _switchTheme(false, true, mql.matches);
+    mql.addEventListener("change", function (ev) {
+      _switchTheme(false, false, ev.matches);
     });
+  } else {
+    _switchTheme(false, true);
+  }
+
+  themeSwitchBtn.on('click', layui.throttle(function () {
+    _switchTheme(true, false);
+  }, 3e2));
 
 });
 
