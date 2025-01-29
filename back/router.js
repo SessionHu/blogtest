@@ -6,7 +6,8 @@ const routerPatterns = [
   ['/favicon.ico', 'front/favicon.ico'],
   ['/friends.json', 'front/friends.json'],
   ['/category/', 'front/category.html'],
-  ['/friends/', 'front/friends.html']
+  ['/friends/', 'front/friends.html'],
+  ['/404.html', 'front/404.html']
 ];
 
 const rgxUrl2pathname = /^(https?:\/\/[a-zA-z\.0-9:]+?)?(\/.*?)(\?.*)?(#.*)?$/;

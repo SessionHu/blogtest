@@ -24,7 +24,7 @@ function guessMime(fname) {
     return suffix2mime[suffix];
 }
 
-http.createServer((request, response) => {
+http.createServer(async (request, response) => {
     if (request.method !== "GET") {
         response.writeHead(405, {
             "Content-Type": "text/plain"
@@ -34,7 +34,7 @@ http.createServer((request, response) => {
     }
     try {
         const target = req2file(`http://${request.headers.host || "0.0.0.0"}${request.url}`);
-        const content = ssg.render(target);
+        const content = await ssg.render(target);
         const code = target.includes("404.html") ? 404 : 200;
         response.writeHead(code, {
             "Content-Type": guessMime(target) || ""

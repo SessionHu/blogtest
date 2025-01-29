@@ -5,7 +5,7 @@
 if (location.pathname === '/index.html' || (document.referrer === 'https://shakaianee.top/' && location.hash === "#!/about")) {
   location.replace('/');
 } else if (location.hash.startsWith('#!/')) {
-  location.replace(/^#!(\/.*)\.md$/.exec(location.hash)[1]);
+  location.replace(/^#!(\/.*)(\.md)?$/.exec(location.hash)[1]);
 }
 
 //#endregion
@@ -297,10 +297,6 @@ class Sess {
         if (!responseRaw || responseRaw === "") {
             maincontainer.innerHTML = `
                 <main id="main-container">
-                    <div class="layui-panel layui-card">
-                        <h1 id="main-title">404 Not Found</h1>
-                        <div id="main">There is nothing you wanted...</div>
-                    </div>
                 </div>
             `;
         } else if (path.length > 0 && path[0] === "posts") {
