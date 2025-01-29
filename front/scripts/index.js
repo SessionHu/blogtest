@@ -249,7 +249,7 @@ class Sess {
         if (path[path.length - 1] === "") path.pop();
         // request path
         this.setPageloadProgress("0%");
-        document.querySelector("*[lay-filter=pageload-progress]").classList.remove("layui-hide");
+        //document.querySelector("*[lay-filter=pageload-progress]").classList.remove("layui-hide");
         /*let reqpath = "";
         if (path.length < 1 || path[0] === "home") {
             reqpath = "/index.html";
@@ -384,13 +384,26 @@ class Sess {
      * @param {string} progress
      */
     static setPageloadProgress(progress) {
+        var el = $("*[lay-filter=pageload-progress]");
         layui.element.progress("pageload-progress", progress);
         if (progress === "100%") {
-            window.setTimeout(() => {
-                document.querySelector("*[lay-filter=pageload-progress]").classList.add("layui-hide");
-            }, 1000);
-        } else if (progress === "0%") {
-            document.querySelector("*[lay-filter=pageload-progress]").classList.remove("layui-hide");
+          new $.Deferred(function () {
+            var that = this;
+            window.setTimeout(function () {
+              el.animate({
+                top: '-4px'
+              }, 2e2, that.resolve);
+            }, 1e3);
+          }).then(function () {
+            layui.element.progress("pageload-progress", '0%');
+            window.setTimeout(function () {
+              el.animate({
+                top: 0
+              }, 2e2);
+            }, 2e2);
+          });
+        } else {
+          el.css('top', 0);
         }
     }
 

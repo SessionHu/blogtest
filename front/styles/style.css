@@ -145,10 +145,6 @@ img[alt=face] {
     }
 }
 
-#pers-desc {
-    width: 100%;
-}
-
 #maincounter {
     height: 44px;
     display: flex;
@@ -190,6 +186,7 @@ img[alt=face] {
 
 *[lay-filter=pageload-progress] > * {
     height: 100%;
+    transition-property: width;
 }
 
 /* postcard */
