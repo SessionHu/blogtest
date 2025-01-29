@@ -1,4 +1,5 @@
 //@ts-check
+/// <reference path = "./sessx.d.ts" />
 
 import * as fs from "node:fs/promises";
 import * as path from 'node:path';
@@ -6,13 +7,14 @@ import { md2html } from './md2html.js';
 
 /**
  * @param {string} fname
+ * @param {SSGCache} cache
  */
-export async function render(fname) {
+export async function render(fname, cache = {}) {
   const extn = path.extname(fname).toLowerCase();
   if (extn === ".html") {
-    return renderHTML(fname);
+    return renderHTML(fname, cache);
   } else if (extn === ".md") {
-    return renderMarkdown(fname);
+    return renderMarkdown(fname, cache);
   } else {
     return fs.readFile(fname);
   }
@@ -45,16 +47,18 @@ async function readBaseHTML() {
 
 /**
  * @param {string} fname
+ * @param {SSGCache} cache
  */
-async function renderHTML(fname) {
+async function renderHTML(fname, cache = {}) {
   const fc = readHTML(fname);
-  return (await readBaseHTML()).replace('MAIN-CONTENT', (await fc).toString());
+  return (cache.basehtml || (cache.basehtml = await readBaseHTML())).replace('MAIN-CONTENT', (await fc).toString());
 }
 
 /**
  * @param {string} fname
+ * @param {SSGCache} cache
  */
-async function renderMarkdown(fname) {
+async function renderMarkdown(fname, cache = {}) {
   const mdfc = await fs.readFile(fname, { encoding: "utf8" });
   // basic information
   const year = (fname.match(/\d{4,}/) || [])[0];
@@ -65,7 +69,8 @@ async function renderMarkdown(fname) {
   let image;
   let tags = [""];
   // fill information
-  const postsIndexJson = JSON.parse(await fs.readFile("posts/index.json", 'utf8'));
+  /** @type {PostsIndexYearly[]} */
+  const postsIndexJson = cache.postsindex || (cache.postsindex = JSON.parse(await fs.readFile("posts/index.json", 'utf8')));
   for (const aYearPosts of postsIndexJson) {
     if (aYearPosts.year === Number(year)) {
       for (const aPost of aYearPosts.posts) {
@@ -92,7 +97,7 @@ async function renderMarkdown(fname) {
     colorfultags += `<code class="${bgcolors[bgi++ % bgcolors.length]}">${atag}</code> `;
   }
   // return
-  return (await readBaseHTML()).replace('MAIN-CONTENT', `
+  return (cache.basehtml || (cache.basehtml = await readBaseHTML())).replace('MAIN-CONTENT', `
     <div class="layui-panel layui-card">
       <h1 id="main-title" class="layui-card-header">
         <span class="layui-breadcrumb" lay-separator=">" lay-filter="bc">
