@@ -7,7 +7,11 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-      "dev": "node back/server.js",
-      "build": "node back/ssg.js"
+    "dev": "node back/server.js",
+    "build": "node back/build.js"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.32",
+    "@types/node": "^22.10.10"
   }
 }

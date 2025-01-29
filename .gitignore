@@ -6,3 +6,6 @@
 
 # out
 dist
+
+= node
+node_modules/

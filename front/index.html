@@ -3,182 +3,158 @@
 
 <head>
 
-    <meta charset="utf-8" />
+  <meta charset="utf-8" />
 
-    <title>SЕSSのB10GТЕ5Т</title>
-    <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="512x512" href="https://em-content.zobj.net/source/google/387/fish-cake-with-swirl_1f365.png" />
+  <title>SESSのB10GTEST</title>
+  <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="512x512" href="https://em-content.zobj.net/source/google/387/fish-cake-with-swirl_1f365.png" />
 
-    <meta name="description" content="Session的个人博客, 这里有各种类型的有趣的文章内容, 网站基于纯前端构建." />
+  <meta name="description" content="Session的个人博客, 这里有各种类型的有趣的文章内容, 网站基于纯前端构建" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content='width=device-width, initial-scale=1' />
 
-    <script type="text/javascript" src="https://unpkg.com/layui@2.9.14/dist/layui.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/layui@2.9.14/dist/css/layui.css" />
+  <script type="text/javascript" src="https://unpkg.com/layui@2.9.14/dist/layui.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/layui@2.9.14/dist/css/layui.css" />
 
-    <script type="text/javascript" src="https://inde.xhustudio.eu.org/scripts/dotLine.js"></script>
-    <link rel="stylesheet" href="/styles/style.css" />
-    <link rel="stylesheet" href="/styles/atom.css" />
+  <!--<script type="text/javascript" src="https://inde.xhustudio.eu.org/scripts/dotLine.js"></script>-->
+  <link rel="stylesheet" href="/styles/style.css" />
+  <link rel="stylesheet" href="/styles/atom.css" />
 
-    <link rel="stylesheet" href="https://shakaianee.top/usr/themes/Cuckoo/assets/css/iconfont.min.css" />
+  <link rel="stylesheet" href="https://shakaianee.top/usr/themes/Cuckoo/assets/css/iconfont.min.css" />
 
-    <script type="text/javascript" src="/scripts/md2html.js"></script>
+  <script type="text/javascript" src="/scripts/md2html.js"></script>
+
+  <script type="text/javascript" src="/scripts/index.js" defer></script>
+
+  <script src="https://unpkg.com/lunar-javascript@1.6.12/lunar.js"></script>
+  <script src="/scripts/laylunar.js"></script>
+  <link rel="stylesheet" href="/styles/laylunar.css" />
 
 </head>
 
 <body>
 
-    <div class="background"></div>
-    <canvas id="dotLine"></canvas>
+  <div class="background"></div>
+  <!--<canvas id="dotLine"></canvas>-->
 
-    <div class="layui-progress" lay-filter="pageload-progress">
-        <div class="layui-progress-bar"></div>
-    </div>
+  <div class="layui-progress" lay-filter="pageload-progress">
+    <div class="layui-progress-bar"></div>
+  </div>
 
-    <ul class="layui-nav layui-bg-gray" lay-filter="nav-sess">
-        <li class="layui-nav-item" id="nav-index">
-            <a href="/">首页</a>
-        </li>
-        <li class="layui-nav-item" id="nav-category">
-            <a href="/category/">分类</a>
-        </li>
-        <li class="layui-nav-item" id="nav-about">
-            <a href="/about/">关于</a>
-        </li>
-        <li class="layui-nav-item" id="nav-friends">
-            <a href="/friends/">友链</a>
-        </li>
-        <li class="layui-nav-item">
-            <a href="https://gallery.xhustudio.eu.org/">画廊</a>
-        </li>
-        <li class="layui-nav-item" id="theme-switch">
-            <button type="button" class="layui-btn layui-btn-primary layui-btn-radius layui-btn-xs layui-icon"
-                lay-on="theme-switch">
-                &#xe748;
-            </button>
-        </li>
-    </ul>
+  <ul class="layui-nav layui-bg-gray" lay-filter="nav-sess">
+    <li class="layui-nav-item" id="nav-index">
+      <a href="/">首页</a>
+    </li>
+    <li class="layui-nav-item" id="nav-category">
+      <a href="/category/">分类</a>
+    </li>
+    <li class="layui-nav-item" id="nav-about">
+      <a href="/about/">关于</a>
+    </li>
+    <li class="layui-nav-item" id="nav-friends">
+      <a href="/friends/">友链</a>
+    </li>
+    <li class="layui-nav-item">
+      <a href="https://gallery.xhustudio.eu.org/">画廊</a>
+    </li>
+    <li class="layui-nav-item" id="theme-switch">
+      <button type="button" class="layui-btn layui-btn-primary layui-btn-radius layui-btn-xs layui-icon"
+        lay-on="theme-switch">
+        &#xe748;
+      </button>
+    </li>
+  </ul>
 
-    <div class="layui-container">
-        <div class="layui-row layui-col-space16 layui-margin-1">
+  <div class="layui-container">
+    <div class="layui-row layui-col-space16 layui-margin-1">
 
-            <main class="layui-col-md8" id="main-container">
-                <div class="layui-panel layui-card">
-                    <h1 class="layui-card-header" id="main-title">
-                        <noscript>Welcome to SESSのB10GTE5T</noscript>
-                    </h1>
-                    <div class="layui-card-body" id="main">
-                        <noscript>
-                            <span>You can go to following pages but JavaScript is strongly recommended.</span>
-                            <ul>
-                                <li>
-                                    <a href="/home.html">/home.html</a>
-                                </li>
-                                <li>
-                                    <a href="/category.html">/category.html</a>
-                                </li>
-                                <li>
-                                    <a href="/about.html">/about.html</a>
-                                </li>
-                                <li>
-                                    <a href="/friends.html">/friends.html</a>
-                                </li>
-                            </ul>
-                        </noscript>
-                    </div>
+      <main class="layui-col-md8" id="main-container">MAIN-CONTENT</main>
+      
+      <div class="layui-col-md4">
+        <div class="layui-panel layui-card" id="name-face-container">
+          <div class="layui-card-header">
+            Session小胡
+          </div>
+          <div class="layui-card-body">
+            <div id="pers-desc">
+              <div id="maincounter">
+                <div id="postscount-container">
+                  <span class="layui-font-18">文章</span>
+                  <span id="postscount">114514</span>
                 </div>
-            </main>
-            
-            <div class="layui-col-md4">
-                <div class="layui-panel layui-card" id="name-face-container">
-                    <div class="layui-card-header">
-                        Session小胡
-                    </div>
-                    <div class="layui-card-body">
-                        <div id="pers-desc">
-                            <div id="maincounter">
-                                <div id="postscount-container">
-                                    <span class="layui-font-18">文章</span>
-                                    <span id="postscount">114514</span>
-                                </div>
-                                <div id="pageview-container">
-                                    <span class="layui-font-18">浏览</span>
-                                    <span id="pageview">114514</span>
-                                </div>
-                            </div>
-                            <div id="communi-container" class="layui-icon">
-                                <a href="https://github.com/SessionHu" title="GitHub">&#xe6a7;</a>
-                                <a href="https://space.bilibili.com/645769214" title="Bilibili" class="iconfont">&#xe607;</a>
-                                <a href="https://x.com/Session_Hu" title="Twitter" class="iconfont">&#xe6ab;</a>
-                                <a href="https://qm.qq.com/cgi-bin/qm/qr?k=PEistn50EGFyBfBikxT8PLMRh0u9PqFD" title="QQ" class="iconfont">&#xe65b;</a>
-                                <a href="https://t.me/SessX6cf" title="Telegram">&#xe609;</a>
-                                <a href="mailto:sessionhu@xhustudio.eu.org" title="Mail">&#xe618;</a>
-                            </div>
-                        </div>
-                        <div id="face-container">
-                            <img class="layui-circle" alt="face" src="https://static.xhustudio.eu.org/images/jpeg/102411014.jpg" />
-                        </div>
-                    </div>
+                <div id="pageview-container">
+                  <span class="layui-font-18">浏览</span>
+                  <span id="pageview">114514</span>
                 </div>
-                <div class="layui-panel layui-card" id="lunar-calendar-container">
-                    <div class="layui-card-header">
-                        农历
-                    </div>
-                    <div class="layui-card-body layui-text">
-                        <!-- lunar calendar -->
-                        <script src="https://unpkg.com/lunar-javascript@1.6.12/lunar.js"></script>
-                        <script src="/scripts/laylunar.js"></script>
-                        <link rel="stylesheet" href="/styles/laylunar.css" />
-                        <div></div>
-                        <!-- fortune -->
-                        <p></p>
-                    </div>
-                </div>
+              </div>
+              <div id="communi-container" class="layui-icon">
+                <a href="https://github.com/SessionHu" title="GitHub">&#xe6a7;</a>
+                <a href="https://space.bilibili.com/645769214" title="Bilibili" class="iconfont">&#xe607;</a>
+                <a href="https://x.com/Session_Hu" title="Twitter" class="iconfont">&#xe6ab;</a>
+                <a href="https://qm.qq.com/cgi-bin/qm/qr?k=PEistn50EGFyBfBikxT8PLMRh0u9PqFD" title="QQ" class="iconfont">&#xe65b;</a>
+                <a href="https://t.me/SessX6cf" title="Telegram">&#xe609;</a>
+                <a href="mailto:sessionhu@xhustudio.eu.org" title="Mail">&#xe618;</a>
+              </div>
             </div>
-            
+            <div id="face-container">
+              <img class="layui-circle" alt="face" src="https://static.xhustudio.eu.org/images/jpeg/102411014.jpg" />
+            </div>
+          </div>
         </div>
-    </div>
-
-    <div id="footer-placeholder"></div>
-
-    <footer class="layui-panel layui-container layui-padding-2" id="footer">
-        <div class="layui-row layui-col-space2">
-            <div class="layui-col-sm4" id="footer-main">
-                <span>
-                    (C) 2024 <a href="/#!/">SessionHu</a>
-                </span>
-                <a href="https://icp.gov.moe/?keyword=20241454" target="_blank" rel="noopener">萌ICP备20241454号</a>
-                <span>
-                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY-NC-SA-4.0</a>
-                    &amp;
-                    <a href="https://choosealicense.com/licenses/mit/">MIT License</a>
-                </span>
-                <span>
-                    Coded &amp; Designed by <a href="https://github.com/SessionHu" target="_blank" rel="noopener">
-                        SessX6cf
-                    </a>
-                </span>
-                <span>
-                    推荐使用
-                    <a href="https://www.mozilla.org/en-US/firefox/" target="_blank" rel="noopener">Firefox</a>,
-                    <a href="https://chromium.woolyss.com/download/" target="_blank" rel="noopener">Chromium</a>
-                </span>
-                <span>
-                    <a href="feed.xml"><i class="layui-icon-rss layui-icon"></i>RSS</a>&nbsp;&nbsp;
-                    <a href="sitemap.xml"><i class="layui-icon-layouts layui-icon"></i>网站地图</a>
-                </span>
-            </div>
-            <div class="layui-col-sm8">
-                <a id="friend-links-container" class="layui-font-12" href="/#!/friends">
-                    <span>友情链接</span>
-                    <div id="friend-links">
-                    </div>
-                </a>
-            </div>
+        <div class="layui-panel layui-card" id="lunar-calendar-container">
+          <div class="layui-card-header">
+            农历
+          </div>
+          <div class="layui-card-body layui-text">
+            <!-- lunar calendar -->
+            <div></div>
+            <!-- fortune -->
+            <p></p>
+          </div>
         </div>
-    </footer>
+      </div>
+      
+    </div>
+  </div>
 
-    <script type="text/javascript" src="/scripts/index.js"></script>
+  <div id="footer-placeholder"></div>
+
+  <footer class="layui-panel layui-container layui-padding-2" id="footer">
+    <div class="layui-row layui-col-space2">
+      <div class="layui-col-sm4" id="footer-main">
+        <span>
+          (C) 2024 <a href="/#!/">SessionHu</a>
+        </span>
+        <a href="https://icp.gov.moe/?keyword=20241454" target="_blank" rel="noopener">萌ICP备20241454号</a>
+        <span>
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY-NC-SA-4.0</a>
+          &amp;
+          <a href="https://choosealicense.com/licenses/mit/">MIT License</a>
+        </span>
+        <span>
+          Coded &amp; Designed by <a href="https://github.com/SessionHu" target="_blank" rel="noopener">
+            SessX6cf
+          </a>
+        </span>
+        <span>
+          推荐使用
+          <a href="https://www.mozilla.org/en-US/firefox/" target="_blank" rel="noopener">Firefox</a>,
+          <a href="https://chromium.woolyss.com/download/" target="_blank" rel="noopener">Chromium</a>
+        </span>
+        <span>
+          <a href="/feed.xml"><i class="layui-icon-rss layui-icon"></i>RSS</a>&nbsp;&nbsp;
+          <a href="/sitemap.xml"><i class="layui-icon-layouts layui-icon"></i>网站地图</a>
+        </span>
+      </div>
+      <div class="layui-col-sm8">
+        <a id="friend-links-container" class="layui-font-12" href="/#!/friends">
+          <span>友情链接</span>
+          <div id="friend-links">
+          </div>
+        </a>
+      </div>
+    </div>
+  </footer>
 
 </body>
 

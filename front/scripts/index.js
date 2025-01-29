@@ -2,25 +2,19 @@
 
 //#region redirect
 
-{
-    if (window.location.pathname === "/index.html") {
-        window.location.pathname = "/";
-    } else if (window.location.hash.includes("#!/")) {
-        window.location.replace(window.location.hash.replace(/#!?/, ""));
-    } else if (document.referrer === "https://shakaianee.top/" && window.location.hash === "#!/about") {
-        layer.alert("看起来您是从 shakaianee.top 过来的呢, 建议先来首页看看吧~", {
-            skin: "layui-layer-win10",
-            shade: .01,
-            time: 5e3
-        });
-        window.location.replace("/");
-    }
+if (location.pathname === '/index.html' || (document.referrer === 'https://shakaianee.top/' && location.hash === "#!/about")) {
+  location.replace('/');
+} else if (location.hash.startsWith('#!/')) {
+  location.replace(/^#!(\/.*)\.md$/.exec(location.hash)[1]);
 }
 
 //#endregion
+
+if (!window.$) window.$ = layui.$;
+
 //#region theme
 
-{
+layui.use(function () {
 
     const mixcss = new Promise((resolve, reject) => {
         const layrsp = fetch("https://unpkg.com/layui-theme-dark@2.9.13/dist/layui-theme-dark.css");
@@ -49,7 +43,7 @@
             dark.href = await mixcss;
             layui.data("sessblog", { key: "theme", value: "dark" });
             themeSwitchButton.innerHTML = "&#xe6c2;";
-            setDotlineColor("#f0f0f0");
+            //setDotlineColor("#f0f0f0");
             layer.tips('已启用深色模式', "#theme-switch", {
                 tips: 3,
                 time: 1600
@@ -58,7 +52,7 @@
             dark.href = "about:blank";
             layui.data("sessblog", { key: "theme", value: "light" });
             themeSwitchButton.innerHTML = "&#xe748;";
-            setDotlineColor("#000");
+            //setDotlineColor("#000");
             layer.tips('已启用浅色模式', "#theme-switch", {
                 tips: [3, "#666"],
                 time: 1600
@@ -66,16 +60,16 @@
         }
     }
 
-    /**
-     * @param {string} color 
-     */
-    const setDotlineColor = (color) => {
-        if (dotLine && dotLine.color) {
-            window.setTimeout(() => dotLine.color = color, 50);
-        } else {
-            window.setTimeout(() => setDotlineColor(color), 50);
-        }
-    }
+    // /**
+    //  * @param {string} color 
+    //  */
+    // const setDotlineColor = (color) => {
+    //     if (dotLine && dotLine.color) {
+    //         window.setTimeout(() => dotLine.color = color, 50);
+    //     } else {
+    //         window.setTimeout(() => setDotlineColor(color), 50);
+    //     }
+    // }
 
     const mql = window.matchMedia("(prefers-color-scheme: dark)");
     handleTheme(mql).catch((e) => window.alert(e.stack));
@@ -89,7 +83,7 @@
         }, 256)
     });
 
-};
+});
 
 //#endregion
 
@@ -247,8 +241,9 @@ class Sess {
 
     /**
      * Load #main content.
+     * @param {string | URL} url
      */
-    static async loadMainContent() {
+    static async loadMainContent(url) {
         // param
         let path = window.location.pathname.replace("/", "").split("/");
         if (path[path.length - 1] === "") path.pop();
@@ -273,9 +268,9 @@ class Sess {
                 reqpath += t.replace(/\.md$/, "/");
             }
         }
-        // get HTML in #main
+        // get HTML in #main*/
         this.setPageloadProgress("6%");
-        const maincontainer = document.createElement("div");
+        /*const maincontainer = document.createElement("div");
         let responseRaw;
         try {
             const response = await fetch(reqpath);
@@ -299,7 +294,6 @@ class Sess {
                 Sess.openErrLayer(e);
             }
         }
-        this.setPageloadProgress("99%");
         if (!responseRaw || responseRaw === "") {
             maincontainer.innerHTML = `
                 <main id="main-container">
@@ -315,6 +309,12 @@ class Sess {
             maincontainer.innerHTML = responseRaw;
         }
         document.getElementById("main-container").innerHTML = maincontainer.querySelector("main#main-container").innerHTML;*/
+        this.setPageloadProgress("99%");
+        if (url) {
+          await new Promise((resolve) => {
+            $('#main-container').load(url + ' #main-container > *', () => resolve());
+          });
+        }
         if (path.length === 3) document.getElementById("main-container").innerHTML = await this.getPostHTML(document.querySelector("pre.md-prerender").innerHTML, path);
         // random
         this.randomChildren();
@@ -408,9 +408,12 @@ class Sess {
         window.addEventListener("resize", () => this.renderElemWithScroll());
         window.addEventListener("scroll", () => this.renderElemWithScroll());
         // load content
-        const loadMainAndCatch = async () => {
+        /**
+         * @param {string | URL} url
+         */
+        const loadMainAndCatch = async (url) => {
             try {
-                await this.loadMainContent();
+                await this.loadMainContent(url);
             } catch (e) {
                 this.openErrLayer(e);
                 this.setPageloadProgress("0%");
@@ -418,7 +421,17 @@ class Sess {
         };
         await loadMainAndCatch();
         // popstate
-        window.addEventListener("popstate", loadMainAndCatch);
+        //window.addEventListener("popstate", loadMainAndCatch);
+        if (history.pushState) {
+          for (const e of document.querySelectorAll('a')) {
+            e.addEventListener('click', function (ev) {
+              if (this.host !== location.host) return;
+              ev.preventDefault();
+              history.pushState({}, '', this.href);
+              loadMainAndCatch(this.href);
+            });
+          }
+        }
         // show big photos
         layui.util.on("lay-on", {
             "carousel-img": function () {
@@ -498,14 +511,17 @@ class Sess {
             return;
         }
         const postsIndexJson = await (await fetch("/posts/index.json")).json();
-        const toyear = new Date().getFullYear();
+        let toyear = new Date().getFullYear();
+        if (postsIndexJson[0].year !== toyear) toyear--;
         layui.flow.load({
             elem: "div#latest-container",
             end: "没有了喵",
             done: (page, next) => {
                 const ls = this.getHomeLatestByYear(postsIndexJson, toyear - page + 1);
-                next(ls.join(""), page < postsIndexJson.length);
-            }
+                next(ls.join(""), toyear - page > 2023);
+            },
+            mb: 2000,
+            isAuto: true
         });
     }
 

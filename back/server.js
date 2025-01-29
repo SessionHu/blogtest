@@ -1,23 +1,9 @@
-import http from "node:http";
-import * as ssg from "./ssg.js";
+//@ts-check
 
-/**
- * @param {string} url
- */
-function routerFront(url) {
-    const path = new URL(url).pathname;
-    if (path === "/") { // /
-        return "./front/home.html";
-    } else if (path.match(/^\/posts\/\d{4,}\/.+$/)) { // /posts/YYYY/xxx
-        return "./front" + path.replace(/(\/|)$/, ".md");
-    } else if (path.match(/^[^\.]+$/)) { // /xxxxx/xx/
-        return "./front" + path.replace(/(\/|)$/, ".html");
-    } else if (path.match(/^\/[^\.]+\..+$/)) { // /xxx/xx.xx
-        return "./front" + path;
-    } else { // /???
-        return "./front/404.html";
-    }
-}
+import http from "node:http";
+import * as path from 'node:path';
+import * as ssg from "./ssg.js";
+import { req2file } from './router.js';
 
 const suffix2mime = {
     png: "image/png",
@@ -34,7 +20,7 @@ const suffix2mime = {
  * @param {string} fname
  */
 function guessMime(fname) {
-    const suffix = fname.substring(fname.lastIndexOf(".") + 1);
+    const suffix = path.extname(fname).substring(1).toLowerCase();
     return suffix2mime[suffix];
 }
 
@@ -47,9 +33,9 @@ http.createServer((request, response) => {
         return;
     }
     try {
-        const target = routerFront(`http://${request.headers.host || "0.0.0.0"}${request.url}`);
+        const target = req2file(`http://${request.headers.host || "0.0.0.0"}${request.url}`);
         const content = ssg.render(target);
-        const code = target === "./front/404.html" ? 404 : 200;
+        const code = target.includes("404.html") ? 404 : 200;
         response.writeHead(code, {
             "Content-Type": guessMime(target) || ""
         });
