@@ -311,7 +311,6 @@ class Sess {
             $('#main-container').load(url + ' #main-container > *', () => resolve());
           });
         }
-        if (path.length === 3) document.getElementById("main-container").innerHTML = await this.getPostHTML(document.querySelector("pre.md-prerender").innerHTML, path);
         // random
         this.randomChildren();
         // create post index
@@ -628,77 +627,6 @@ class Sess {
 
     //#endregion
     //#region posts
-
-    /**
-     * @param {string} raw
-     * @param {string[]} path
-     */
-    static async getPostHTML(raw, path) {
-        // basic information
-        const year = parseInt(path[1]);
-        const fname = path[2] + ".md";
-        let categoryName;
-        let titleName;
-        let datetime;
-        let image;
-        let tags = [""];
-        // fill information
-        const postsIndexJson = await (await fetch("/posts/index.json")).json();
-        for (const aYearPosts of postsIndexJson) {
-            if (aYearPosts.year === year) {
-                for (const aPost of aYearPosts.posts) {
-                    if (aPost.fname === fname) {
-                        categoryName = aPost.category;
-                        titleName = aPost.title;
-                        datetime = new Date(aPost.time);
-                        image = aPost.image;
-                        tags = aPost.tags
-                        break;
-                    }
-                }
-                break;
-            }
-        }
-        // colorful tags
-        let colorfultags = "";
-        const bgcolors = [
-            "layui-bg-red", "layui-bg-orange", "layui-bg-green", "layui-bg-cyan",
-            "layui-bg-blue", "layui-bg-purple", "layui-bg-black", "layui-bg-gray"
-        ];
-        let bgi = 0;
-        for (const atag of tags) {
-            colorfultags += `<code class="${bgcolors[bgi++]}">${atag}</code> `;
-            if (bgi >= bgcolors.length) bgi = 0;
-        }
-        // return
-        return `
-            <div class="layui-panel layui-card">
-                <h1 id="main-title" class="layui-card-header">
-                    <span class="layui-breadcrumb" lay-separator=">" lay-filter="bc">
-                        <a href="/">首页</a>
-                        <a href="/category">分类</a>
-                        <a href="/category/#${categoryName}">${categoryName}</a>
-                        <a><cite>${datetime ? datetime.toLocaleString().replace(":00", "") : undefined}</cite></a>
-                        <a><cite>${titleName}</cite></a>
-                    </span>
-                </h1>
-                <div class="layui-card-body" id="main">
-                    <div class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime ? datetime.getTime() : undefined}">
-                        <div class="postcard-bg" style="background-image:url('${image}');"></div>
-                        <div class="postcard-desc layui-padding-2">
-                            <div class="postcard-title layui-font-32">${titleName}</div>
-                            <div class="postcard-sub" style="opacity:.84;">
-                                ${colorfultags}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layui-text">
-                        ${Md2html.md2html(raw).replace(new RegExp("<h1[^>]*>.*?</h1>", 'gi'), "")}
-                    </div>
-                </div>
-            </div>
-        `;
-    }
 
     /**
      * @param {HTMLDivElement} main

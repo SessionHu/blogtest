@@ -33,7 +33,7 @@ http.createServer(async (request, response) => {
         return;
     }
     try {
-        const target = req2file(`http://${request.headers.host || "0.0.0.0"}${request.url}`);
+        const target = req2file(request.url || '/');
         const content = await ssg.render(target);
         const code = target.includes("404.html") ? 404 : 200;
         response.writeHead(code, {

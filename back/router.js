@@ -27,13 +27,13 @@ export function req2file(uri) {
   }
   // static resources
   if (pn.startsWith('/styles/') || pn.startsWith('/scripts/')) {
-    return 'front/' + pn;
+    return 'front' + pn;
   }
   // posts
   let rema;
   if (pn === '/posts/index.json') {
     return '.' + pn;
-  } else if (rema = pn.match(/^(\/posts\/\d{4,}\/.+)(\/|\/index\.html)?$/)) {
+  } else if (rema = pn.match(/^(\/posts\/\d{4,}\/.+?)(\/|\/index\.html)?$/)) {
     return '.' + rema[1] + '.md';
   }
   // else

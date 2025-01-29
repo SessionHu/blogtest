@@ -106,7 +106,7 @@ class Md2html {
      */
     static img(text) {
         const rgx = /!\[(.*?)\]\((.*?)\)/g;
-        return text.replace(rgx, (match, p1, p2) => {
+        return text.replace(rgx, (_, p1, p2) => {
             const [src, title] = p2.split(' ');
             const html = `<div lay-on="post-img"><img lay-src="${src}" title=${title ? title : '""'} alt="${p1}" /></div>`;
             return html;
@@ -119,10 +119,17 @@ class Md2html {
      */
     static link(text) {
         const rgx = /\[(.+?)\]\((.+?)\)/g;
-        return text.replace(rgx, (match, p1, p2) => {
+        return text.replace(rgx, (_, p1, p2) => {
             const [href, title] = p2.split(' ');
             return `<a href="${href}" title=${title ? title : '""'} target="_blank" rel="noopener">${p1}</a>`;
         });
     }
 
+}
+
+/**
+ * @param {string} md
+ */
+export function md2html(md) {
+  return Md2html.md2html(md);
 }
