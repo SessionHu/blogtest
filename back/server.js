@@ -1,55 +1,92 @@
 //@ts-check
 
 import http from "node:http";
-import * as path from 'node:path';
-import * as ssg from "./ssg.js";
+import net from 'node:net';
+import path from "node:path";
+import { render } from "./ssg.js";
 import { req2file } from './router.js';
 
-const suffix2mime = {
-    png: "image/png",
-    jpg: "image/jpeg",
-    jpeg: "image/jpeg",
-    js: "text/javascript",
-    json: "application/json",
-    ico: "image/vnd.microsoft.icon",
-    html: "text/html",
-    css: "text/css"
+const mimeTypes = {
+  png: "image/png",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  js: "text/javascript",
+  json: "application/json",
+  ico: "image/vnd.microsoft.icon",
+  html: "text/html",
+  css: "text/css"
 };
 
 /**
- * @param {string} fname
+ * @param {http.ServerResponse} res
+ * @param {any} err
  */
-function guessMime(fname) {
-    const suffix = path.extname(fname).substring(1).toLowerCase();
-    return suffix2mime[suffix];
+async function sendNotFound(res, err = void 0) {
+  const [content, type] = await (async () => {
+    try {
+      return [await render('front/404.html'), 'text/html'];
+    } catch (e) {
+      return [JSON.stringify(err || e), 'application/json'];
+    }
+  })();
+  res.writeHead(404, { 'content-type': type });
+  res.end(content);
+}
+
+/**
+ * @param {net.Socket} socket
+ */
+function socketRemoteAddr(socket) {
+  if (socket.remoteFamily === 'IPv6') {
+    return `[${socket.remoteAddress}]:${socket.remotePort}`;
+  } else {
+    return socket.remoteAddress + ':' + socket.remotePort;
+  }
+}
+
+/**
+ * @param {string} fname
+ * @return {`${string}/${string}`}
+ */
+function guessMimeType(fname) {
+  const extn = path.extname(fname).substring(1).toLowerCase();
+  return mimeTypes[extn] || 'application/octet-stream';
 }
 
 http.createServer(async (request, response) => {
-    if (request.method !== "GET") {
-        response.writeHead(405, {
-            "Content-Type": "text/plain"
-        });
-        response.end("Method Not Allowed");
-        return;
+  if (request.method !== "GET") {
+    response.writeHead(405, {
+      "content-type": "text/plain",
+      'cache-control': 'max-age=0'
+    });
+    return response.end("Method Not Allowed");
+  }
+  const target = req2file(request.url || '/');
+  if (target.includes('front/404.html')) {
+    await sendNotFound(response);
+    console.log(socketRemoteAddr(request.socket), 404, request.url);
+    return;
+  }
+  try {
+    const content = render(target);
+    response.writeHead(200, {
+      "content-type": guessMimeType(target),
+      'cache-control': 'max-age=0'
+    });
+    response.end(await content);
+    console.log(socketRemoteAddr(request.socket), 200, request.url);
+  } catch (e) {
+    if (e.code === "ENOENT") {
+      await sendNotFound(response, e);
+      console.warn(socketRemoteAddr(request.socket), 404, request.url, e);
     }
-    try {
-        const target = req2file(request.url || '/');
-        const content = await ssg.render(target);
-        const code = target.includes("404.html") ? 404 : 200;
-        response.writeHead(code, {
-            "Content-Type": guessMime(target) || ""
-        });
-        response.end(content);
-        console.log(`${request.socket.localAddress}:${request.socket.localPort} - ${code} - ${request.url}`);
-    } catch (e) {
-        const code = e.code === "ENOENT" ? 404 : 500;
-        response.writeHead(code, {
-            "Content-Type": "application/json"
-        });
-        response.end(JSON.stringify(e));
-        console.log(`${request.socket.localAddress}:${request.socket.localPort} - ${code} - ${request.url}`);
-        console.error(e);
-    }
+    response.writeHead(500, {
+      "content-type": "application/json",
+      'cache-control': 'max-age=0'
+    });
+    response.end(JSON.stringify(e));
+    console.error(socketRemoteAddr(request.socket), 500, request.url, e);
+  }
 }).listen(8000);
 
 console.log("Server running at http://localhost:8000/");
