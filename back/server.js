@@ -14,7 +14,8 @@ const mimeTypes = {
   json: "application/json",
   ico: "image/vnd.microsoft.icon",
   html: "text/html",
-  css: "text/css"
+  css: "text/css",
+  md: 'text/html' // rendered
 };
 
 /**

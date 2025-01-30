@@ -338,8 +338,6 @@ class Sess {
         this.randomChildren();
         // create post index
         this.createPostIndex(document.getElementById("main"), path);
-        // fill home #latest-container
-        await this.fillHomeLatest();
         // fill category #category-container
         await this.fillCategoryInfo(path);
         // fill .friends-page-main
@@ -533,60 +531,6 @@ class Sess {
             count += yearPosts.posts.length;
         }
         elem.innerText = count;
-    }
-
-    //#endregion
-    //#region home
-
-    static async fillHomeLatest() {
-        const latestContainerDiv = document.querySelector("div#latest-container");
-        if (latestContainerDiv === null) {
-            return;
-        }
-        const postsIndexJson = await (await fetch("/posts/index.json")).json();
-        let toyear = new Date().getFullYear();
-        if (postsIndexJson[0].year !== toyear) toyear--;
-        layui.flow.load({
-            elem: "div#latest-container",
-            end: "没有了喵",
-            done: (page, next) => {
-                const ls = this.getHomeLatestByYear(postsIndexJson, toyear - page + 1);
-                next(ls.join(""), toyear - page > 2023);
-            },
-            mb: 2000,
-            isAuto: true
-        });
-    }
-
-    /**
-     * New posts should be added to the beginning of the list!
-     * @param {any} postsList
-     * @param {number} year
-     */
-    static getHomeLatestByYear(postsList, year) {
-        const ls = [];
-        for (const yearPosts of postsList) {
-            if (yearPosts.year === year) {
-                for (const aPost of yearPosts.posts) {
-                    const url = `/posts/${year}/${aPost.fname}`;
-                    const datetime = new Date(aPost.time);
-                    // div
-                    ls.push(`
-                        <a href="${url.replace(".md", "/")}" class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime.getTime()}">
-                            <div class="postcard-bg" style="background-image:url('${aPost.image}');"></div>
-                            <div class="postcard-desc layui-padding-2">
-                                <div class="postcard-title layui-font-20">${aPost.title}</div>
-                                <div class="postcard-sub">
-                                    ${aPost.category}&nbsp;&nbsp;${datetime.toLocaleString().replace(":00", "")}
-                                </div>
-                            </div>
-                        </div>
-                    `);
-                }
-                break;
-            }
-        }
-        return ls;
     }
 
     //#endregion

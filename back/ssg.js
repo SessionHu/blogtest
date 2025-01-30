@@ -1,8 +1,8 @@
 //@ts-check
 /// <reference path = "./sessx.d.ts" />
 
-import * as fs from "node:fs/promises";
-import * as path from 'node:path';
+import fs from "node:fs/promises";
+import path from 'node:path';
 import { md2html } from './md2html.js';
 
 /**
@@ -10,9 +10,10 @@ import { md2html } from './md2html.js';
  * @param {SSGCache} cache
  */
 export async function render(fname, cache = {}) {
-  const extn = path.extname(fname).toLowerCase();
+  const extn = path.extname(fname = path.normalize(fname)).toLowerCase();
   if (extn === ".html") {
-    return renderHTML(fname, cache);
+    if (fname === 'front/home.html') return renderHomeHTML(cache);
+    else return renderHTML(readHTML(fname).then((res) => res.toString()), cache);
   } else if (extn === ".md") {
     return renderMarkdown(fname, cache);
   } else {
@@ -39,19 +40,34 @@ async function readHTML(fname, options = void 0) {
 }
 
 /**
+ * @param {SSGCache} cache
  * @returns {Promise<string>}
  */
-async function readBaseHTML() {
-  return (await readHTML('./front/index.html')).toString();
+async function readBaseHTML(cache = {}) {
+  return cache.basehtml || (cache.basehtml = (await readHTML('./front/index.html')).toString());
 }
 
 /**
- * @param {string} fname
+ * @param {SSGCache} cache
+ * @returns {Promise<PostsIndexYearly[]>}
+ */
+async function readPostsIndex(cache = {}) {
+  if (cache.postsindex) return cache.postsindex;
+  /** @type {PostsIndexYearly[]} */
+  const piya = JSON.parse(await fs.readFile("posts/index.json", 'utf8'));
+  piya.sort((a, b) => b.year - a.year);
+  for (let i = 0; i < piya.length; i++) {
+    piya[i].posts.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+  }
+  return cache.postsindex = piya;
+}
+
+/**
+ * @param {string | Promise<string>} content
  * @param {SSGCache} cache
  */
-async function renderHTML(fname, cache = {}) {
-  const fc = readHTML(fname);
-  return (cache.basehtml || (cache.basehtml = await readBaseHTML())).replace('MAIN-CONTENT', (await fc).toString());
+async function renderHTML(content, cache = {}) {
+  return (await readBaseHTML(cache)).replace('MAIN-CONTENT', (await content).toString());
 }
 
 /**
@@ -70,7 +86,7 @@ async function renderMarkdown(fname, cache = {}) {
   let tags = [""];
   // fill information
   /** @type {PostsIndexYearly[]} */
-  const postsIndexJson = cache.postsindex || (cache.postsindex = JSON.parse(await fs.readFile("posts/index.json", 'utf8')));
+  const postsIndexJson = await readPostsIndex(cache);
   for (const aYearPosts of postsIndexJson) {
     if (aYearPosts.year === Number(year)) {
       for (const aPost of aYearPosts.posts) {
@@ -87,17 +103,16 @@ async function renderMarkdown(fname, cache = {}) {
     }
   }
   // colorful tags
-  let colorfultags = "";
+  const colorfultags = [];
   const bgcolors = [
     "layui-bg-red", "layui-bg-orange", "layui-bg-green", "layui-bg-cyan",
     "layui-bg-blue", "layui-bg-purple", "layui-bg-black", "layui-bg-gray"
   ];
-  let bgi = 0;
-  for (const atag of tags) {
-    colorfultags += `<code class="${bgcolors[bgi++ % bgcolors.length]}">${atag}</code> `;
+  for (let i = 0; i < tags.length; i++) {
+    colorfultags.push(`<code class="${bgcolors[i % bgcolors.length]}">${tags[i]}</code>`);
   }
   // return
-  return (cache.basehtml || (cache.basehtml = await readBaseHTML())).replace('MAIN-CONTENT', `
+  return (await readBaseHTML(cache)).replace('MAIN-CONTENT', `
     <div class="layui-panel layui-card">
       <h1 id="main-title" class="layui-card-header">
         <span class="layui-breadcrumb" lay-separator=">" lay-filter="bc">
@@ -113,7 +128,7 @@ async function renderMarkdown(fname, cache = {}) {
           <div class="postcard-bg" style="background-image:url('${image}');"></div>
           <div class="postcard-desc layui-padding-2">
             <div class="postcard-title layui-font-32">${titleName}</div>
-            <div class="postcard-sub" style="opacity:.84;">${colorfultags}</div>
+            <div class="postcard-sub" style="opacity:.84;">${colorfultags.join(' ')}</div>
           </div>
         </div>
         <div class="layui-text">
@@ -122,4 +137,30 @@ async function renderMarkdown(fname, cache = {}) {
       </div>
     </div>
  `);
+}
+
+/**
+ * @param {SSGCache} cache
+ * @returns {Promise<string>}
+ */
+async function renderHomeHTML(cache = {}) {
+  const jsop = readPostsIndex(cache);
+  const homehtml = readHTML('front/home.html');
+  const ls = [];
+  for (const y of await jsop) {
+    for (const p of y.posts) {
+      ls.push(`
+        <a href="/posts/${y.year}/${p.fname.replace(/\.md$/, '/')}" class="postcard layui-margin-2 layui-panel">
+          <div class="postcard-bg" style="background-image:url('${p.image}');"></div>
+          <div class="postcard-desc layui-padding-2">
+            <div class="postcard-title layui-font-20">${p.title}</div>
+            <div class="postcard-sub">
+              ${p.category}&nbsp;&nbsp;${new Date(p.time).toLocaleString().replace(/\:00$/, "")}
+            </div>
+          </div>
+        </a>
+      `.replace(/\s+/g, ' '));
+    }
+  }
+  return renderHTML((await homehtml).toString().replace('HOME-CONTENT', ls.join('')), cache);
 }
