@@ -140,14 +140,14 @@ class Sess {
     static renderElemWithScroll() {
         const scrollPosition = window.scrollY || document.documentElement.scrollTop;
         const documentHeight = document.documentElement.scrollHeight;
-        const viewportHeight = window.innerHeight;
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
         // footer
         const footer = document.getElementById("footer");
         const footerPlaceholder = document.getElementById("footer-placeholder");
         // set #footer-placeholder
-        footerPlaceholder.style.height = `${footer.offsetHeight + 1}px`;
+        footerPlaceholder.style.height = `${footer.offsetHeight + 2}px`;
         // hide or show
-        if (scrollPosition + viewportHeight >= documentHeight) {
+        if (scrollPosition + viewportHeight + 1 >= documentHeight) {
             footer.style.bottom = "0";
         } else {
             footer.style.bottom = `-${footer.offsetHeight + 32}px`;
