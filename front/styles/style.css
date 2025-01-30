@@ -7,7 +7,7 @@ html {
 }
 
 body {
-    font-family: 'ZCOOL KuaiLe', 'Noto Color Emoji', 'HarmonyOS Sans SC', 'Unifont', 'Arial', sans-serif, serif;
+    font-family: 'ZCOOL KuaiLe', 'HarmonyOS Sans SC', 'Noto Sans CJK SC', 'Noto Color Emoji', 'Unifont', 'Arial', sans-serif, serif;
 }
 
 .layui-text a:not(.layui-btn):hover {
