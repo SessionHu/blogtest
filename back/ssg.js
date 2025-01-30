@@ -81,7 +81,7 @@ async function renderMarkdown(fname, cache = {}) {
   const basename = path.basename(fname);
   let categoryName;
   let titleName;
-  let datetime;
+  let date;
   let image;
   let tags = [""];
   // fill information
@@ -93,7 +93,7 @@ async function renderMarkdown(fname, cache = {}) {
         if (aPost.fname === basename) {
           categoryName = aPost.category;
           titleName = aPost.title;
-          datetime = new Date(aPost.time);
+          date = new Date(aPost.time);
           image = aPost.image;
           tags = aPost.tags
           break;
@@ -112,6 +112,7 @@ async function renderMarkdown(fname, cache = {}) {
     colorfultags.push(`<code class="${bgcolors[i % bgcolors.length]}">${tags[i]}</code>`);
   }
   // return
+  if (!date) date = new Date(0);
   return (await readBaseHTML(cache)).replace('MAIN-CONTENT', `
     <div class="layui-panel layui-card">
       <h1 id="main-title" class="layui-card-header">
@@ -119,12 +120,12 @@ async function renderMarkdown(fname, cache = {}) {
           <a href="/">首页</a>
           <a href="/category/">分类</a>
           <a href="/category/#${categoryName}">${categoryName}</a>
-          <a><cite>${datetime ? datetime.toLocaleString().replace(/\:00$/, '') : void 0}</cite></a>
+          <a><cite><time datetime="${date.toISOString()}">${date.toLocaleString('zh').replace(/\:00$/, "")}</time></cite></a>
           <a><cite>${titleName}</cite></a>
         </span>
       </h1>
       <div class="layui-card-body" id="main">
-        <div class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime ? datetime.getTime() : void 0}">
+        <div class="postcard layui-margin-2 layui-panel">
           <div class="postcard-bg" style="background-image:url('${image}');"></div>
           <div class="postcard-desc layui-padding-2">
             <div class="postcard-title layui-font-32">${titleName}</div>
@@ -149,13 +150,14 @@ async function renderHomeHTML(cache = {}) {
   const ls = [];
   for (const y of await jsop) {
     for (const p of y.posts) {
+      const date = new Date(p.time);
       ls.push(`
         <a href="/posts/${y.year}/${p.fname.replace(/\.md$/, '/')}" class="postcard layui-margin-2 layui-panel">
           <div class="postcard-bg" style="background-image:url('${p.image}');"></div>
           <div class="postcard-desc layui-padding-2">
             <div class="postcard-title layui-font-20">${p.title}</div>
             <div class="postcard-sub">
-              ${p.category}&nbsp;&nbsp;${new Date(p.time).toLocaleString().replace(/\:00$/, "")}
+              ${p.category}&nbsp;&nbsp;<time datetime="${date.toISOString()}">${date.toLocaleString('zh').replace(/\:00$/, "")}</time>
             </div>
           </div>
         </a>

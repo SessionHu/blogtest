@@ -334,6 +334,10 @@ class Sess {
             }
           });
         }
+        // datetime
+        $('time[datetime]').text(function () {
+          return new Date(this.dateTime).toLocaleString().replace(/(\d{1,2})\:(\d{1,2})\:00$/, '$1:$2');
+        });
         // random
         this.randomChildren();
         // create post index
