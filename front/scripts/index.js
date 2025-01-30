@@ -305,10 +305,33 @@ class Sess {
             maincontainer.innerHTML = responseRaw;
         }
         document.getElementById("main-container").innerHTML = maincontainer.querySelector("main#main-container").innerHTML;*/
-        this.setPageloadProgress("99%");
         if (url) {
           await new Promise((resolve) => {
             $('#main-container').load(url + ' #main-container > *', () => resolve());
+          });
+        }
+        this.setPageloadProgress("99%");
+        if (history.pushState) {
+          /**
+           * @param {Node} elem
+           * @returns {HTMLAnchorElement | null}
+           */
+          function childoforanchor(elem) {
+            if (elem instanceof HTMLAnchorElement) return elem;
+            else if (!elem.parentNode) return null;
+            else return childoforanchor(elem.parentNode);
+          }
+          document.querySelector('main').addEventListener('click', async function (ev) {
+            var ac;
+            if (!(ac = childoforanchor(ev.target)) || ac.host !== location.host) return;
+            ev.preventDefault();
+            history.pushState({}, '', ac.href);
+            try {
+               await Sess.loadMainContent(ac.href);
+            } catch (e) {
+              Sess.openErrLayer(e);
+              Sess.setPageloadProgress("0%");
+            }
           });
         }
         // random
@@ -428,18 +451,6 @@ class Sess {
             }
         };
         await loadMainAndCatch();
-        // popstate
-        //window.addEventListener("popstate", loadMainAndCatch);
-        if (history.pushState) {
-          for (const e of document.querySelectorAll('a')) {
-            e.addEventListener('click', function (ev) {
-              if (this.host !== location.host) return;
-              ev.preventDefault();
-              history.pushState({}, '', this.href);
-              loadMainAndCatch(this.href);
-            });
-          }
-        }
         // show big photos
         layui.util.on("lay-on", {
             "carousel-img": function () {
@@ -455,6 +466,20 @@ class Sess {
         });
         // friend link
         await this.friendLinkFooter();
+        // pushstate
+        if (history.pushState) {
+          for (const e of [
+            ...document.querySelectorAll('ul li a'),
+            ...document.querySelectorAll('footer .layui-col-sm8 > a')
+          ]) {
+            e.addEventListener('click', function (ev) {
+              if ((ev.target !== this && ev.target instanceof HTMLAnchorElement) || this.host !== location.host) return;
+              ev.preventDefault();
+              history.pushState({}, '', this.href);
+              loadMainAndCatch(this.href);
+            });
+          }
+        }
         // forune & pageview
         this.fortune().catch((e) => Sess.openErrLayer(e));
         this.pageview().catch((e) => Sess.openErrLayer(e));
@@ -547,7 +572,7 @@ class Sess {
                     const datetime = new Date(aPost.time);
                     // div
                     ls.push(`
-                        <a href="${url.replace(".md", "")}" class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime.getTime()}">
+                        <a href="${url.replace(".md", "/")}" class="postcard layui-margin-2 layui-panel" id="latest-post-${datetime.getTime()}">
                             <div class="postcard-bg" style="background-image:url('${aPost.image}');"></div>
                             <div class="postcard-desc layui-padding-2">
                                 <div class="postcard-title layui-font-20">${aPost.title}</div>
@@ -600,7 +625,7 @@ class Sess {
             }
             const contentText = [];
             for (const link of categoryInfo[aCategoryName].links) {
-                contentText.push(`<a href="${link.url.replace(".md", "")}">${link.title}</a><br/>`);
+                contentText.push(`<a href="${link.url.replace(".md", "/")}">${link.title}</a><br/>`);
             }
             contentDiv.innerHTML = contentText.join("");
             itemDiv.insertAdjacentElement("beforeend", contentDiv);
