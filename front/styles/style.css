@@ -44,6 +44,7 @@ body {
 
 div[carousel-item] > div {
     text-align: center;
+    transition-property: background, left, right;
 }
 
 div[carousel-item] > div > * {
@@ -217,6 +218,7 @@ img[alt=face] {
     position: absolute;
     height: 100%;
     width: 100%;
+    transition-property: filter, transform;
 }
 
 .postcard-desc {
