@@ -116,7 +116,7 @@ async function renderMarkdown(fname, cache = {}) {
   return (await readBaseHTML(cache)).replace('MAIN-CONTENT', `
     <div class="layui-panel layui-card">
       <h1 id="main-title" class="layui-card-header">
-        <span class="layui-breadcrumb" lay-separator=">" lay-filter="bc">
+        <span class="layui-breadcrumb" lay-separator=">">
           <a href="/">首页</a>
           <a href="/category/">分类</a>
           <a href="/category/#${categoryName}">${categoryName}</a>

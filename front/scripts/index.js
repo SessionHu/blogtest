@@ -122,104 +122,92 @@ var Renderer = {
   /**
    * Render carousel.
    */
-  renderCarousel: function () {
+  carousel: function () {
     var e = $('.layui-carousel:has(div[carousel-item]:has(*))');
-    if (e) layui.carousel.render({
+    if (e[0]) layui.carousel.render({
       elem: e,
       width: "auto"
+    });
+  },
+
+  /**
+   * Render breadcrumb.
+   */
+  breadcrumb: function () {
+    layui.element.render('breadcrumb', $('.layui-breadcrumb'));
+  },
+
+  /**
+   * Render something on scroll.
+   */
+  onscroll: function () {
+    var sclY = window.scrollY || document.documentElement.scrollTop;
+    var docH = document.documentElement.scrollHeight;
+    var viuH = window.innerHeight || document.documentElement.clientHeight;
+    var viuW = window.innerWidth || document.documentElement.clientWidth;
+    // footer
+    var footer = $('footer');
+    $('#footer-placeholder').css('height', footer.outerHeight() + 2 + 'px');
+    footer.css('bottom', sclY + viuH + 1 >= docH ? 0 : -footer.outerHeight() + 'px');
+    // #post-index-container
+    var pic = $('#post-index-container');
+    if (viuW >= 992 && !pic.hasClass('layui-layer-wrap')) {
+      var topn = sclY - pic.offsetParent().outerHeight() + pic.outerHeight();
+      pic.css('top', topn > 0 ? topn + 'px' : 0);
+    } else {
+      pic.css('top', 0);
+    }
+  },
+
+  /**
+   * Load Socialist Core Values (社会主义核心价值观).
+   */
+  sccrval: function () {
+    var scv = [
+      '富强', '民主', '文明', '和谐',
+      '自由', '平等', '公正', '法治',
+      '爱国', '敬业', '诚信', '友善'
+    ];
+    var colors = [
+      "layui-font-red", "layui-font-orange", "layui-font-green", "layui-font-cyan",
+      "layui-font-blue", "layui-font-purple", "layui-font-black", "layui-font-gray"
+    ];
+    var i = 0;
+    $(document).on('click', function (ev) {
+      var scvt = $('<span></span>').text(scv[i % scv.length]);
+      // basic style
+      scvt.addClass(colors[i++ % colors.length]).css({
+        top: (ev.pageY - 16) + 'px',
+        left: ev.pageX + 'px',
+        position: 'fixed',
+        fontWeight: "bold",
+        whiteSpace: "nowrap",
+        userSelect: "none",
+        transition: "none",
+        opacity: "1",
+        zIndex: "1145141919"
+      });
+      // show
+      scvt.appendTo('body');
+      // remove
+      var k = 1;
+      setTimeout(function cb() {
+        scvt.css({
+          opacity: parseFloat(scvt.css('opacity')) - .02,
+          top: parseFloat(scvt.css('top').substring(0, scvt.css('top').length - 2)) - (k += .1) + 'px'
+        });
+        if (parseFloat(scvt.css('opacity')) <= 0) {
+            scvt.remove();
+        } else {
+          setTimeout(cb, 20);
+        }
+      }, 20);
     });
   }
 
 };
 
 class Sess {
-
-    /**
-     * Render breadcrumb.
-     */
-    static renderBreadcrumb() {
-        layui.element.render('breadcrumb', "bc");
-    }
-
-    /**
-     * Render elements with scroll.
-     */
-    static renderElemWithScroll() {
-        const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-        const documentHeight = document.documentElement.scrollHeight;
-        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-        // footer
-        const footer = document.getElementById("footer");
-        const footerPlaceholder = document.getElementById("footer-placeholder");
-        // set #footer-placeholder
-        footerPlaceholder.style.height = `${footer.offsetHeight + 2}px`;
-        // hide or show
-        if (scrollPosition + viewportHeight + 1 >= documentHeight) {
-            footer.style.bottom = "0";
-        } else {
-            footer.style.bottom = `-${footer.offsetHeight + 32}px`;
-        }
-        // #post-index-container
-        const pic = document.getElementById("post-index-container");
-        if (pic !== null && window.innerWidth >= 992 && pic.parentElement.className !== "layui-layer-content") {
-            const topnum = scrollPosition - pic.parentElement.offsetHeight + pic.offsetHeight;
-            if (topnum > 0) {
-                pic.style.top = topnum + "px";
-            } else {
-                pic.style.top = 0;
-            }
-        } else if (pic !== null) {
-            pic.style.top = 0;
-        }
-    }
-
-    /**
-     * Load Socialist Core Values.
-     */
-    static sccrval() {
-        const scv = [
-            "富强", "民主", "文明", "和谐",
-            "自由", "平等", "公正", "法治",
-            "爱国", "敬业", "诚信", "友善"
-            // "功德 +1"
-        ];
-        const colors = [
-            "layui-font-red", "layui-font-orange", "layui-font-green", "layui-font-cyan",
-            "layui-font-blue", "layui-font-purple", "layui-font-black", "layui-font-gray"
-        ];
-        let scvi = 0;
-        let colori = 0;
-        window.addEventListener("click", (ev) => {
-            const scvt = document.createElement("span");
-            // basic style
-            scvt.style.position = "fixed";
-            scvt.style.top = `${ev.y - 16}px`;
-            scvt.style.left = `${ev.x}px`;
-            scvt.style.fontWeight = "bold";
-            scvt.style.whiteSpace = "nowrap";
-            scvt.style.userSelect = "none";
-            scvt.style.transition = "none";
-            scvt.style.opacity = "1";
-            scvt.style.zIndex = "1145141919";
-            // layui style
-            scvt.className = colors[colori++];
-            scvt.innerText = scv[scvi++];
-            if (colori >= colors.length) colori = 0;
-            if (scvi >= scv.length) scvi = 0;
-            // show
-            document.body.appendChild(scvt);
-            // remove
-            let k = 1;
-            const itv = window.setInterval(() => {
-                scvt.style.opacity = parseFloat(scvt.style.opacity) - .02;
-                scvt.style.top = `${parseFloat(scvt.style.top.substring(0, scvt.style.top.length - 2)) - (k += .1)}px`;
-                if (scvt.style.opacity <= 0) {
-                    scvt.remove();
-                    window.clearInterval(itv);
-                }
-            }, 20);
-        });
-    }
 
     /**
      * Add .layui-this.
@@ -343,7 +331,7 @@ class Sess {
         }
         // datetime
         $('time[datetime]').text(function () {
-          return new Date(this.dateTime).toLocaleString().replace(/(\d{1,2})\:(\d{1,2})\:00$/, '$1:$2');
+          return new Date(this.dateTime).toLocaleString().replace(/(\d{1,2})\:(\d{1,2})\:00/, '$1:$2');
         });
         // random
         this.randomChildren();
@@ -376,7 +364,7 @@ class Sess {
                         type: 1,
                         offset: 'r',
                         anim: 'slideLeft',
-                        area: ['333px', '100%'],
+                        area: [333 < document.documentElement.clientWidth ? '333px' : '100%', '100%'],
                         shade: .01,
                         shadeClose: true,
                         skin: "layui-layer-win10",
@@ -384,9 +372,9 @@ class Sess {
                         content: postIndexContainerJQ,
                         title: "文章索引",
                         resize: false,
-                        end: () => this.renderElemWithScroll()
+                        end: Renderer.onscroll
                     });
-                    this.renderElemWithScroll();
+                    Renderer.onscroll();
                 },
                 mouseenter: function (type) {
                     layer.tips(type === "top" ? "回到顶部" : "文章索引", this, {
@@ -400,8 +388,8 @@ class Sess {
             }
         });
         // render
-        this.renderBreadcrumb();
-        Renderer.renderCarousel();
+        Renderer.breadcrumb();
+        Renderer.carousel();
         layui.code({
             elem: ".layui-code",
             langMarker: true,
@@ -409,7 +397,7 @@ class Sess {
         });
         this.navthis();
         this.setPageloadProgress("100%");
-        this.renderElemWithScroll();
+        Renderer.onscroll();
     }
 
     /**
@@ -444,9 +432,9 @@ class Sess {
      */
     static async main() {
         // load UI
-        this.sccrval();
-        window.addEventListener("resize", () => this.renderElemWithScroll());
-        window.addEventListener("scroll", () => this.renderElemWithScroll());
+        Renderer.sccrval();
+        window.addEventListener("resize", Renderer.onscroll);
+        window.addEventListener("scroll", Renderer.onscroll);
         // load content
         /**
          * @param {string | URL} url
