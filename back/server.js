@@ -69,17 +69,18 @@ http.createServer(async (request, response) => {
     return;
   }
   try {
-    const content = render(target);
+    const content = await render(target);
     response.writeHead(200, {
       "content-type": guessMimeType(target),
       'cache-control': 'max-age=0'
     });
-    response.end(await content);
+    response.end(content);
     console.log(socketRemoteAddr(request.socket), 200, request.url);
   } catch (e) {
     if (e.code === "ENOENT") {
       await sendNotFound(response, e);
       console.warn(socketRemoteAddr(request.socket), 404, request.url, e);
+      return;
     }
     response.writeHead(500, {
       "content-type": "application/json",
