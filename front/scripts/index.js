@@ -17,7 +17,7 @@ if (!window.$) window.$ = layui.$;
 layui.use(function () {
 
   var layelem = document.createElement('link');
-  layelem.href = "https://unpkg.com/layui-theme-dark@2.9.13/dist/layui-theme-dark.css";
+  layelem.href = "https://unpkg.com/layui-theme-dark@2.9.20/dist/layui-theme-dark.css";
   layelem.rel = 'stylesheet';
   var fixelem = document.createElement('link');
   fixelem.href = "/styles/dark-fix.css";
@@ -87,45 +87,52 @@ layui.use(function () {
 
 //#endregion
 
-class Warning extends Error {
-    name = "Warning"
+/** @class */
+function Warning(message) {
+  Error.call(this, message);
+  this.name = 'Warning';
 }
+Warning.prototype = Object.create(Error.prototype);
+Warning.prototype.constructor = Warning;
+
+//#region UI
+
+var Renderer = {
+
+  /**
+   * Open a dialog about the Error.
+   * @param {Error} e
+   * @param {any} options?
+   */
+  openErrLayer: function (e, options) {
+    layer.open({
+      type: 0,
+      title: e.name,
+      content: e.stack.replace(/ /g, "&nbsp;").replace(/\n/g, "<br />"),
+      icon: e instanceof Warning ? 0 : 2,
+      skin: "layui-layer-win10",
+      shade: .01,
+      shadeClose: true,
+      resize: false,
+      ...options // merge
+    });
+    console.error(e);
+  },
+
+  /**
+   * Render carousel.
+   */
+  renderCarousel: function () {
+    var e = $('.layui-carousel:has(div[carousel-item]:has(*))');
+    if (e) layui.carousel.render({
+      elem: e,
+      width: "auto"
+    });
+  }
+
+};
 
 class Sess {
-
-    //#region UI
-
-    /**
-     * Open a dialog about the Error.
-     * @param {Error | Warning} e
-     * @param {any} options
-     */
-    static openErrLayer(e, options) {
-        layer.open({
-            type: 0,
-            title: e.name,
-            content: e.stack.replace(/ /g, "&nbsp;").replace(/\n/g, "<br />"),
-            icon: e instanceof Warning ? 0 : 2,
-            skin: "layui-layer-win10",
-            shade: .01,
-            shadeClose: true,
-            resize: false,
-            ...options // merge
-        });
-        console.error(e);
-    }
-
-    /**
-     * Render carousel.
-     */
-    static renderCarousel() {
-        if (document.querySelector(".layui-carousel > div[carousel-item] > *")) {
-            layui.carousel.render({
-                elem: ".layui-carousel",
-                width: "auto"
-            });
-        }
-    }
 
     /**
      * Render breadcrumb.
@@ -329,7 +336,7 @@ class Sess {
             try {
                await Sess.loadMainContent(ac.href);
             } catch (e) {
-              Sess.openErrLayer(e);
+              Renderer.openErrLayer(e);
               Sess.setPageloadProgress("0%");
             }
           });
@@ -394,7 +401,7 @@ class Sess {
         });
         // render
         this.renderBreadcrumb();
-        this.renderCarousel();
+        Renderer.renderCarousel();
         layui.code({
             elem: ".layui-code",
             langMarker: true,
@@ -448,7 +455,7 @@ class Sess {
             try {
                 await this.loadMainContent(url);
             } catch (e) {
-                this.openErrLayer(e);
+                Renderer.openErrLayer(e);
                 this.setPageloadProgress("0%");
             }
         };
@@ -483,9 +490,9 @@ class Sess {
           }
         }
         // forune & pageview
-        this.fortune().catch((e) => Sess.openErrLayer(e));
-        this.pageview().catch((e) => Sess.openErrLayer(e));
-        this.postscount().catch((e) => Sess.openErrLayer(e));
+        this.fortune().catch((e) => Renderer.openErrLayer(e));
+        this.pageview().catch((e) => Renderer.openErrLayer(e));
+        this.postscount().catch((e) => Renderer.openErrLayer(e));
     }
 
     /**
@@ -835,28 +842,9 @@ class Sess {
 
 }
 
-window.addEventListener("load", () => {
-    Sess.main().catch((e) => {
-        Sess.openErrLayer(e);
-        Sess.setPageloadProgress("0%");
-    });
+layui.use(function () {
+  Sess.main().catch((e) => {
+    Renderer.openErrLayer(e);
+    Sess.setPageloadProgress("0%");
+  });
 });
-
-//#region debug
-
-// {
-//     const disableDotline = () => {
-//         if (dotLine) {
-//             window.setTimeout(() => {
-//                 dotLine.ctx = null;
-//                 dotLine.move = () => {};
-//                 console.log("[sess] Dotline disabled");
-//             }, 50);
-//         } else {
-//             window.setTimeout(() => disableDotline(), 50);
-//         }
-//     }
-//     disableDotline();
-// }
-
-//#endregion
