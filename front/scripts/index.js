@@ -330,7 +330,7 @@ class Sess {
           }
           document.querySelector('main').addEventListener('click', async function (ev) {
             var ac;
-            if (!(ac = childoforanchor(ev.target)) || ac.host !== location.host) return;
+            if (!(ac = childoforanchor(ev.target)) || ac.host !== location.host || ac.href.match(/\.(json|ico|css|js|xml)$/)) return;
             ev.preventDefault();
             history.pushState({}, '', ac.href);
             try {
