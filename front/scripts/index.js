@@ -219,7 +219,37 @@ var Renderer = {
         this.classList.remove('layui-this');
       }
     });
+  },
+
+  /**
+   * @param {string} progress
+   */
+  progress: function (progress) {
+    var el = $("*[lay-filter=pageload-progress]");
+    layui.element.progress("pageload-progress", progress);
+    if (progress === "100%") {
+      new $.Deferred(function () {
+        var that = this;
+        window.setTimeout(function () {
+          el.animate({
+            top: '-2px',
+            opacity: 0
+          }, 2e2, 'linear', that.resolve);
+        }, 1e3);
+      }).then(function () {
+        layui.element.progress("pageload-progress", '0%');
+        window.setTimeout(function () {
+          el.animate({
+            top: 0,
+            opacity: 1
+          }, 2e2, 'linear');
+        }, 2e2);
+      });
+    } else {
+      el.css('top', 0);
+    }
   }
+
 
 };
 
@@ -238,9 +268,8 @@ class Sess {
         let path = window.location.pathname.replace("/", "").split("/");
         if (path[path.length - 1] === "") path.pop();
         // request
-        this.setPageloadProgress("0%");
         if (url) {
-          this.setPageloadProgress("6%");
+          Renderer.progress("6%");
           await new Promise((resolve) => {
             $('#main-container').load(url + ' #main-container > *', function (_, textStatus) {
               if (textStatus === 'timeout' || textStatus === 'error' || textStatus === 'parsererror') {
@@ -254,7 +283,7 @@ class Sess {
               resolve();
             });
           });
-          this.setPageloadProgress("99%");
+          Renderer.progress("99%");
         }
         if (history.pushState) {
           /**
@@ -275,7 +304,7 @@ class Sess {
                await Sess.loadMainContent(ac.href);
             } catch (e) {
               Renderer.openErrLayer(e);
-              Sess.setPageloadProgress("0%");
+              Renderer.progress("0%");
             }
           });
         }
@@ -347,34 +376,7 @@ class Sess {
         });
         Renderer.nav();
         Renderer.onscroll();
-        this.setPageloadProgress("100%");
-    }
-
-    /**
-     * @param {string} progress
-     */
-    static setPageloadProgress(progress) {
-        var el = $("*[lay-filter=pageload-progress]");
-        layui.element.progress("pageload-progress", progress);
-        if (progress === "100%") {
-          new $.Deferred(function () {
-            var that = this;
-            window.setTimeout(function () {
-              el.animate({
-                top: '-4px'
-              }, 2e2, that.resolve);
-            }, 1e3);
-          }).then(function () {
-            layui.element.progress("pageload-progress", '0%');
-            window.setTimeout(function () {
-              el.animate({
-                top: 0
-              }, 2e2);
-            }, 2e2);
-          });
-        } else {
-          el.css('top', 0);
-        }
+        Renderer.progress("100%");
     }
 
     /**
@@ -394,7 +396,7 @@ class Sess {
                 await this.loadMainContent(url);
             } catch (e) {
                 Renderer.openErrLayer(e);
-                this.setPageloadProgress("0%");
+                Renderer.progress("0%");
             }
         };
         await loadMainAndCatch();
@@ -786,6 +788,6 @@ class Sess {
 layui.use(function () {
   Sess.main().catch((e) => {
     Renderer.openErrLayer(e);
-    Sess.setPageloadProgress("0%");
+    Renderer.progress("0%");
   });
 });
