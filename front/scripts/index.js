@@ -203,35 +203,30 @@ var Renderer = {
         }
       }, 20);
     });
+  },
+
+  /**
+   * Add .layui-this.
+   */
+  nav: function () {
+    var pg = location.pathname.split('/')[1];
+    if (pg === 'posts') pg = 'category';
+    else if (pg === 'index.html' || !pg) pg = 'index';
+    $('ul[lay-filter=nav-sess]').children().each(function () {
+      if (this.id === 'nav-' + pg) {
+        this.classList.add('layui-this');
+      } else {
+        this.classList.remove('layui-this');
+      }
+    });
   }
 
 };
 
+//#endregion
+
 class Sess {
 
-    /**
-     * Add .layui-this.
-     */
-    static navthis() {
-        // clear
-        const nav = document.querySelector("ul[lay-filter=nav-sess]");
-        for (const child of nav.children) {
-            child.classList.remove("layui-this");
-        }
-        // add
-        const path = window.location.pathname.replace("/", "").split("/");
-        if (path.length < 1 || path[0] === "" || path[0] === "home") {
-            nav.querySelector("#nav-index").classList.add("layui-this");
-        } else if (path[0] === "category" || path[0] === "posts") {
-            nav.querySelector("#nav-category").classList.add("layui-this");
-        } else if (path[0] === "about") {
-            nav.querySelector("#nav-about").classList.add("layui-this");
-        } else if (path[0] === "friends") {
-            nav.querySelector("#nav-friends").classList.add("layui-this");
-        }
-    }
-
-    //#endregion
     //#region public
 
     /**
@@ -242,70 +237,25 @@ class Sess {
         // param
         let path = window.location.pathname.replace("/", "").split("/");
         if (path[path.length - 1] === "") path.pop();
-        // request path
+        // request
         this.setPageloadProgress("0%");
-        //document.querySelector("*[lay-filter=pageload-progress]").classList.remove("layui-hide");
-        /*let reqpath = "";
-        if (path.length < 1 || path[0] === "home") {
-            reqpath = "/index.html";
-        } else if (path[0] === "category") {
-            reqpath = "/category/index.html";
-        } else if (path[0] === "about") {
-            reqpath = "/about/index.html";
-        } else if (path[0] === "friends") {
-            reqpath = "/friends/index.html";
-        } else if (path[0] === "posts" && path.length < 3) {
-            window.location.replace("/category");
-            return;
-        } else {
-            for (const t of path) {
-                reqpath += "/";
-                reqpath += t.replace(/\.md$/, "/");
-            }
-        }
-        // get HTML in #main*/
-        this.setPageloadProgress("6%");
-        /*const maincontainer = document.createElement("div");
-        let responseRaw;
-        try {
-            const response = await fetch(reqpath);
-            this.setPageloadProgress("90%");
-            if (response.ok) {
-                responseRaw = await response.text();
-            } else {
-                throw new Error(`${response.status} ${response.statusText}`);
-            }
-        } catch (e) {
-            if (e.message === "Failed to fetch") {
-                responseRaw = `
-                    <main id="main-container">
-                        <div class="layui-panel layui-card">
-                            <h1 class="layui-card-header" id="main-title">Failed to fetch</h1>
-                            <div class="layui-card-body" id="main">Please check your network connection and try again later...</div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                Sess.openErrLayer(e);
-            }
-        }
-        if (!responseRaw || responseRaw === "") {
-            maincontainer.innerHTML = `
-                <main id="main-container">
-                </div>
-            `;
-        } else if (path.length > 0 && path[0] === "posts") {
-            if (path.length === 3) maincontainer.innerHTML = await this.getPostHTML(responseRaw, path);
-        } else {
-            maincontainer.innerHTML = responseRaw;
-        }
-        document.getElementById("main-container").innerHTML = maincontainer.querySelector("main#main-container").innerHTML;*/
         if (url) {
+          this.setPageloadProgress("6%");
           await new Promise((resolve) => {
-            $('#main-container').load(url + ' #main-container > *', () => resolve());
+            $('#main-container').load(url + ' #main-container > *', function (_, textStatus) {
+              if (textStatus === 'timeout' || textStatus === 'error' || textStatus === 'parsererror') {
+                this.innerHTML = '\
+                  <div class="layui-panel layui-card">\
+                      <h1 class="layui-card-header" id="main-title">Failed to fetch</h1>\
+                      <div class="layui-card-body" id="main">Please check your network connection and try again later...</div>\
+                  </div>\
+                ';
+              }
+              resolve();
+            });
           });
+          this.setPageloadProgress("99%");
         }
-        this.setPageloadProgress("99%");
         if (history.pushState) {
           /**
            * @param {Node} elem
@@ -395,9 +345,9 @@ class Sess {
             langMarker: true,
             wordWrap: false
         });
-        this.navthis();
-        this.setPageloadProgress("100%");
+        Renderer.nav();
         Renderer.onscroll();
+        this.setPageloadProgress("100%");
     }
 
     /**
@@ -614,6 +564,7 @@ class Sess {
      * @param {string[]} path
      */
     static createPostIndex(main, path) {
+         if (!main) return;
         const postIndexContainer = document.getElementById("post-index-container") || document.createElement("div");
         if (!((path.length === 1 && path[0] === "about") || (path.length === 3 && path[0] === "posts"))) {
             if (postIndexContainer.parentElement !== null) postIndexContainer.remove();
@@ -633,7 +584,9 @@ class Sess {
         }
         // index data tree
         const mainTitleDiv = main.querySelector("div.postcard-title") || main.querySelector("h1");
-        const mainContentCollection = main.querySelector("div.layui-text").children;
+        const mainContent = main.querySelector("div.layui-text");
+        if (!mainContent) return;
+        const mainContentCollection = mainContent.children;
         const roottreenode = {
             title: mainTitleDiv.innerText,
             id: "H1-root",
