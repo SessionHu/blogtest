@@ -17,7 +17,7 @@ if (!window.$) window.$ = layui.$;
 layui.use(function () {
 
   var layelem = document.createElement('link');
-  layelem.href = "https://unpkg.com/layui-theme-dark@2.9.20/dist/layui-theme-dark.css";
+  layelem.href = "https://unpkg.com/layui-theme-dark@2.9.21/dist/layui-theme-dark.css";
   layelem.rel = 'stylesheet';
   var fixelem = document.createElement('link');
   fixelem.href = "/styles/dark-fix.css";
@@ -177,8 +177,8 @@ var Renderer = {
       var scvt = $('<span></span>').text(scv[i % scv.length]);
       // basic style
       scvt.addClass(colors[i++ % colors.length]).css({
-        top: (ev.pageY - 16) + 'px',
-        left: ev.pageX + 'px',
+        top: (ev.clientY - 16) + 'px',
+        left: ev.clientX + 'px',
         position: 'fixed',
         fontWeight: "bold",
         whiteSpace: "nowrap",
