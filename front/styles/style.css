@@ -238,6 +238,8 @@ code {
     color: rgba(0, 0, 0, .8);
     font-family: 'JetBrain Mono', 'Consolas', monospace;
     padding: 0 4px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
 }
 
 pre.layui-code {
