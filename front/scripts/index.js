@@ -311,29 +311,6 @@ var Sess = {
           });
           Renderer.progress("99%");
         }
-        if (history.pushState) {
-          /**
-           * @param {Node} elem
-           * @returns {HTMLAnchorElement | null}
-           */
-          function childoforanchor(elem) {
-            if (elem instanceof HTMLAnchorElement) return elem;
-            else if (!elem.parentNode) return null;
-            else return childoforanchor(elem.parentNode);
-          }
-          document.querySelector('main').addEventListener('click', async function (ev) {
-            var ac;
-            if (!(ac = childoforanchor(ev.target)) || ac.host !== location.host || ac.href.match(/\.(json|ico|css|js|xml)$/)) return;
-            ev.preventDefault();
-            history.pushState({}, '', ac.href);
-            try {
-               await Sess.loadMainContent(ac.href);
-            } catch (e) {
-              Renderer.openErrLayer(e);
-              Renderer.progress("0%");
-            }
-          });
-        }
         // datetime
         Renderer.datetime();
         // random
@@ -452,6 +429,27 @@ var Sess = {
               loadMainAndCatch(this.href);
             });
           }
+          /**
+           * @param {Node} elem
+           * @returns {HTMLAnchorElement | null}
+           */
+          function childoforanchor(elem) {
+            if (elem instanceof HTMLAnchorElement) return elem;
+            else if (!elem.parentNode) return null;
+            else return childoforanchor(elem.parentNode);
+          }
+          document.querySelector('main').addEventListener('click', async function (ev) {
+            var ac;
+            if (!(ac = childoforanchor(ev.target)) || ac.host !== location.host || ac.href.match(/\.(json|ico|css|js|xml)$/)) return;
+            ev.preventDefault();
+            history.pushState({}, '', ac.href);
+            try {
+               await Sess.loadMainContent(ac.href);
+            } catch (e) {
+              Renderer.openErrLayer(e);
+              Renderer.progress("0%");
+            }
+          });
         }
         // forune & pageview
         Renderer.fortune();
