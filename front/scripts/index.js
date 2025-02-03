@@ -212,7 +212,7 @@ var Renderer = {
     var pg = location.pathname.split('/')[1];
     if (pg === 'posts') pg = 'category';
     else if (pg === 'index.html' || !pg) pg = 'index';
-    $('ul[lay-filter=nav-sess]').children().each(function () {
+    $('ul[lay-filter=nav-sess] > *').each(function () {
       if (this.id === 'nav-' + pg) {
         this.classList.add('layui-this');
       } else {
@@ -248,14 +248,40 @@ var Renderer = {
     } else {
       el.css('top', 0);
     }
-  }
+  },
 
+  datetime() {
+    $('time[datetime]').text(function () {
+      return new Date(this.dateTime).toLocaleString().replace(/(\d{1,2})\:(\d{1,2})\:00/, '$1:$2');
+    });
+  },
+
+  /**
+   * @param {HTMLElement} bc
+   */
+  pageTitle(bc) {
+    if (!bc) return;
+    var ctx = $("a > cite:last").text();
+    document.title = ctx === "首页" ? "SЕSSのB10GТЕ5Т" : ctx + " - SЕSSのB10GТЕ5Т";
+  },
+
+  fortune() {
+    $.get('https://v1.hitokoto.cn/?encode=text', function (res) {
+      $('#lunar-calendar-container > .layui-card-body > p').text(res);
+    });
+  },
+
+  pageview() {
+    $.get('https://api.xhustudio.eu.org/pv', function (res) {
+      $('#pageview').text(res);
+    });
+  }
 
 };
 
 //#endregion
 
-class Sess {
+var Sess = {
 
     //#region public
 
@@ -263,7 +289,7 @@ class Sess {
      * Load #main content.
      * @param {string | URL} url
      */
-    static async loadMainContent(url) {
+    async loadMainContent(url) {
         // param
         let path = window.location.pathname.replace("/", "").split("/");
         if (path[path.length - 1] === "") path.pop();
@@ -309,9 +335,7 @@ class Sess {
           });
         }
         // datetime
-        $('time[datetime]').text(function () {
-          return new Date(this.dateTime).toLocaleString().replace(/(\d{1,2})\:(\d{1,2})\:00/, '$1:$2');
-        });
+        Renderer.datetime();
         // random
         this.randomChildren();
         // create post index
@@ -325,7 +349,7 @@ class Sess {
             elem: "img[lay-src]"
         });
         // title
-        this.setPageTitle(document.querySelector("#main-title > span.layui-breadcrumb"));
+        Renderer.pageTitle(document.querySelector("#main-title > span.layui-breadcrumb"));
         // top
         const postIndexContainerJQ = layui.$("#post-index-container");
         layui.util.fixbar({
@@ -377,12 +401,12 @@ class Sess {
         Renderer.nav();
         Renderer.onscroll();
         Renderer.progress("100%");
-    }
+    },
 
     /**
      * Main.
      */
-    static async main() {
+    async main() {
         // load UI
         Renderer.sccrval();
         window.addEventListener("resize", Renderer.onscroll);
@@ -430,48 +454,15 @@ class Sess {
           }
         }
         // forune & pageview
-        this.fortune().catch((e) => Renderer.openErrLayer(e));
-        this.pageview().catch((e) => Renderer.openErrLayer(e));
+        Renderer.fortune();
+        Renderer.pageview();
         this.postscount().catch((e) => Renderer.openErrLayer(e));
-    }
-
-    /**
-     * @param {HTMLSpanElement} breadcrumb
-     */
-    static setPageTitle(breadcrumb) {
-        if(breadcrumb === null) return;
-        const acites = breadcrumb.querySelectorAll("a > cite");
-        const contentTitleText = acites.item(acites.length - 1).textContent;
-        if (contentTitleText === "首页") {
-            document.title = "SЕSSのB10GТЕ5Т";
-        } else {
-            document.title = contentTitleText + " - SЕSSのB10GТЕ5Т";
-        }
-    }
+    },
 
     //#endregion
     //#region extapi
 
-    static async fortune() {
-        //const text = await (await (await fetch("https://v1.hitokoto.cn/")).json()).hitokoto;
-        const elem = document.querySelector("#lunar-calendar-container > .layui-card-body > p");
-        if (elem !== null) {
-            elem.innerText = await (await fetch("https://v1.hitokoto.cn/?encode=text")).text();
-        } else {
-            throw new Warning("no place to show fortune");
-        }
-    }
-
-    static async pageview() {
-        const elem = document.querySelector("#pageview");
-        if (elem !== null) {
-            elem.innerText = await (await fetch("https://api.xhustudio.eu.org/pv")).text();
-        } else {
-            throw new Warning("no place to show pageview");
-        }
-    }
-
-    static async postscount() {
+    async postscount() {
         const elem = document.querySelector("#postscount");
         if (elem === null) {
             throw new Warning("no place to show postscount");
@@ -482,7 +473,7 @@ class Sess {
             count += yearPosts.posts.length;
         }
         elem.innerText = count;
-    }
+    },
 
     //#endregion
     //#region category
@@ -490,7 +481,7 @@ class Sess {
     /**
      * @param {string[]} path
      */
-    static async fillCategoryInfo(path) {
+    async fillCategoryInfo(path) {
         // check
         const container = document.querySelector("div#category-container");
         if (container === null) return;
@@ -533,9 +524,9 @@ class Sess {
         // render
         container.appendChild(collapseDiv);
         layui.element.render("collapse", "cat-colla");
-    }
+    },
 
-    static async getCategoryInfo() {
+    async getCategoryInfo() {
         // eg: {"cat":{"count":1,"links":["title":"iamtitle",url:"/"]}}
         const categoryInfo = {};
         const postsIndexJson = await (await fetch("/posts/index.json")).json();
@@ -556,7 +547,7 @@ class Sess {
             }
         }
         return categoryInfo;
-    }
+    },
 
     //#endregion
     //#region posts
@@ -565,7 +556,7 @@ class Sess {
      * @param {HTMLDivElement} main
      * @param {string[]} path
      */
-    static createPostIndex(main, path) {
+    createPostIndex(main, path) {
          if (!main) return;
         const postIndexContainer = document.getElementById("post-index-container") || document.createElement("div");
         if (!((path.length === 1 && path[0] === "about") || (path.length === 3 && path[0] === "posts"))) {
@@ -641,12 +632,12 @@ class Sess {
                 }
             }
         });
-    }
+    },
 
     //#endregion
     //#region friends
 
-    static async friendLinkFooter() {
+    async friendLinkFooter() {
         const json = await (await fetch("/friends.json")).json();
         // 3 * friends + 8 * organizations
         const result = [];
@@ -684,12 +675,12 @@ class Sess {
                 `);
             }
         }
-    }
+    },
 
     /**
      * @param {{zh:string[],en:string[],jp:string[]}} name 
      */
-    static friendLinkLangChooser(name) {
+    friendLinkLangChooser(name) {
         // by user language
         const langs = window.navigator.languages
         for (let i = 0; langs.length > i; i++) {
@@ -705,14 +696,14 @@ class Sess {
         if (name.zh.length > 0) return name.zh;
         if (name.en.length > 0) return name.en;
         if (name.jp.length > 0) return name.jp;
-    }
+    },
 
-    static async fillFriendLinkPage() {
+    async fillFriendLinkPage() {
         const mainelem = document.getElementById("friends-page-main");
         if (mainelem === null) return;
         const json = await (await fetch("/friends.json")).json();
-        json.friends = this.randomArray(json.friends);
-        json.organizations = this.randomArray(json.organizations);
+        json.friends = this.shufArray(json.friends);
+        json.organizations = this.shufArray(json.organizations);
         // friends
         const friendelem = mainelem.querySelector("#friends-page-friends")
         for (const f of json.friends) {
@@ -723,15 +714,15 @@ class Sess {
         for (const o of json.organizations) {
             this.fillFriendLinkElem(orgselem, o, true);
         }
-    }
+    },
 
     /**
      * @param {HTMLDivElement} elem
      * @param {any} link
      */
-    static fillFriendLinkElem(elem, link, isorg) {
+    fillFriendLinkElem(elem, link, isorg) {
         const f = link;
-        const names = this.randomArray(this.friendLinkLangChooser(f.name)).join(" / ");
+        const names = this.shufArray(this.friendLinkLangChooser(f.name)).join(" / ");
         const title = f.title === names ? "" : f.title;
         elem.insertAdjacentHTML("beforeend", `
             <a class="layui-col-sm6" href="${f.href}" target="_blank" rel="noopener">
@@ -748,37 +739,30 @@ class Sess {
                 </div>
             </a>
         `);
-    }
+    },
 
     //#endregion
     //#region utils
 
-    static randomChildren() {
-        const elems = document.getElementsByClassName("random");
-        for (const elem of elems) {
-            let children = Array.from(elem.children);
-            for (let t = 0; t <= Math.random() * 12; t++) {
-                for (let i = children.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [children[i], children[j]] = [children[j], children[i]];
-                }
-            }
-            for (const child of children) {
-                elem.appendChild(child);
-            }
-        }
-    }
+    randomChildren() {
+      Array.from(document.getElementsByClassName("random")).forEach(function (elem) {
+        Sess.shufArray(Array.from(elem.childNodes)).forEach(function (e) {
+          elem.appendChild(e);
+        });
+      });
+    },
 
     /**
      * @param {any[]} arr 
      */
-    static randomArray(arr) {
-        const result = [];
-        const lenall = arr.length;
-        for (let i = 0; i < lenall; i++) {
-            result.push(arr.splice(Math.floor(Math.random() * arr.length), 1)[0]);
-        }
-        return result;
+    shufArray(arr) {
+      for (var i = arr.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * i);
+        var t = arr[j];
+        arr[j] = arr[i];
+        arr[i] = t;
+      }
+      return arr;
     }
 
     //#endregion
