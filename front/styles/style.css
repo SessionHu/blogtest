@@ -221,6 +221,13 @@ img[alt=face] {
     transition-property: filter, transform;
 }
 
+.postcard-bg > img {
+  object-fit: cover;
+  object-position: center;
+  width: inherit;
+  height: inherit;
+}
+
 .postcard-desc {
     background-color: rgba(0, 0, 0, 0.3);
     position: absolute;

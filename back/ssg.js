@@ -126,7 +126,7 @@ async function renderMarkdown(fname, cache = {}) {
       </h1>
       <div class="layui-card-body" id="main">
         <div class="postcard layui-margin-2 layui-panel">
-          <div class="postcard-bg" style="background-image:url('${image}');"></div>
+          <div class="postcard-bg"><img src="https://picsum.photos/400/300?${Math.random()}" lay-src="${image}" /></div>
           <div class="postcard-desc layui-padding-2">
             <div class="postcard-title layui-font-32">${titleName}</div>
             <div class="postcard-sub" style="opacity:.84;">${colorfultags.join(' ')}</div>
@@ -153,7 +153,7 @@ async function renderHomeHTML(cache = {}) {
       const date = new Date(p.time);
       ls.push(`
         <a href="/posts/${y.year}/${p.fname.replace(/\.md$/, '/')}" class="postcard layui-margin-2 layui-panel">
-          <div class="postcard-bg" style="background-image:url('${p.image}');"></div>
+          <div class="postcard-bg"><img src="https://picsum.photos/400/300?${Math.random()}" lay-src="${p.image}" /></div>
           <div class="postcard-desc layui-padding-2">
             <div class="postcard-title layui-font-20">${p.title}</div>
             <div class="postcard-sub">
