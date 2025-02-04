@@ -30,8 +30,8 @@ async function readHTML(fname, options = void 0) {
   return fs.readFile(fname, {
     encoding: 'utf8',
     ...options
-  }).then((res) => {
-    if (res instanceof String && res.match(/(\<script\>)|(\<pre.*?\>)/)) {
+  }).then(/** @param {any} res */(res) => {
+    if (typeof res === 'string' && !res.match(/(\<script\>)|(\<pre.*?\>)/)) {
       return res.replace(/\s+/g, ' ');
     } else {
       return res;
