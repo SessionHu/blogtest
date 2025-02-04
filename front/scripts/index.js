@@ -275,6 +275,16 @@ var Renderer = {
     $.get('https://api.xhustudio.eu.org/pv', function (res) {
       $('#pageview').text(res);
     });
+  },
+
+  postscount() {
+    var count = 0;
+    $.getJSON('/posts/index.json', function (res) {
+      res.forEach(function (e) {
+          count += e.posts.length;
+      });
+      $('#postscount').text(count);
+    });
   }
 
 };
@@ -419,7 +429,7 @@ var Sess = {
         // pushstate
         if (history.pushState) {
           for (const e of [
-            ...document.querySelectorAll('ul li a'),
+            ...document.querySelectorAll('ul.layui-nav li a'),
             ...document.querySelectorAll('footer .layui-col-sm8 > a')
           ]) {
             e.addEventListener('click', function (ev) {
@@ -434,9 +444,11 @@ var Sess = {
            * @returns {HTMLAnchorElement | null}
            */
           function childoforanchor(elem) {
-            if (elem instanceof HTMLAnchorElement) return elem;
-            else if (!elem.parentNode) return null;
-            else return childoforanchor(elem.parentNode);
+            while (true) {
+              if (!elem) return null;
+              else if (elem instanceof HTMLAnchorElement) return elem;
+              else elem = elem.parentNode;
+            }
           }
           document.querySelector('main').addEventListener('click', async function (ev) {
             var ac;
@@ -454,23 +466,7 @@ var Sess = {
         // forune & pageview
         Renderer.fortune();
         Renderer.pageview();
-        this.postscount().catch((e) => Renderer.openErrLayer(e));
-    },
-
-    //#endregion
-    //#region extapi
-
-    async postscount() {
-        const elem = document.querySelector("#postscount");
-        if (elem === null) {
-            throw new Warning("no place to show postscount");
-        }
-        let count = 0;
-        const postsIndexJson = await (await fetch("/posts/index.json")).json();
-        for (const yearPosts of postsIndexJson) {
-            count += yearPosts.posts.length;
-        }
-        elem.innerText = count;
+        Renderer.postscount();
     },
 
     //#endregion
