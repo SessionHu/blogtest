@@ -5,7 +5,7 @@
 if (location.pathname === '/index.html' || (document.referrer === 'https://shakaianee.top/' && location.hash === "#!/about")) {
   location.replace('/');
 } else if (location.hash.startsWith('#!/')) {
-  location.replace(/^#!(\/.*)(\.md)?$/.exec(location.hash)[1]);
+  location.replace(/^#!(\/.*?)(\.md)?$/.exec(location.hash)[1]);
 }
 
 //#endregion
