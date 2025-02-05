@@ -284,6 +284,20 @@ var Renderer = {
       });
       $('#postscount').text(count);
     });
+  },
+
+  code() {
+    layui.code({
+      elem: ".layui-code",
+      langMarker: true,
+      wordWrap: false
+    });
+  },
+
+  lazyimg() {
+    layui.flow.lazyimg({
+      elem: "img[lay-src]"
+    });
   }
 
 };
@@ -292,197 +306,174 @@ var Renderer = {
 
 var Sess = {
 
-    //#region public
+  //#region public
 
+  /**
+   * Load #main content.
+   * @param {string | URL} url
+   * @returns {JQuery.Deferred}
+   */
+  loadMainContent(url) {
+    return new $.Deferred(function (df) {
+      // request
+      if (url) {
+        Renderer.progress("6%");
+        $('#main-container').load(url + ' #main-container > *', function (_, textStatus) {
+          if (textStatus === 'timeout' || textStatus === 'error' || textStatus === 'parsererror') {
+            this.innerHTML = '\
+              <div class="layui-panel layui-card">\
+                  <h1 class="layui-card-header" id="main-title">Failed to fetch</h1>\
+                  <div class="layui-card-body" id="main">Please check your network connection and try again later...</div>\
+              </div>\
+            ';
+          }
+          Renderer.progress("99%");
+          df.resolve();
+        });
+      } else {
+        df.resolve();
+      }
+    }).then(function () {
+      // datetime
+      Renderer.datetime();
+      // random
+      Sess.randomChildren();
+      // create post index
+      Sess.createPostIndex(document.getElementById("main"));
+      // fill .friends-page-main
+      return Sess.fillFriendLinkPage();
+    }).then(function () {
+      // title
+      Renderer.pageTitle(document.querySelector("#main-title > span.layui-breadcrumb"));
+      // lazyimg
+      Renderer.lazyimg();
+      // top
+      var picjq = $("#post-index-container");
+      layui.util.fixbar({
+        bgcolor: "rgba(166, 166, 166, 0.7)",
+        bars: picjq.length ? [{
+          type: "post-index",
+          icon: "layui-icon-list",
+        }] : [],
+        on: {
+          click: function (type) {
+            if (type !== "post-index") {
+              return;
+            }
+            layer.open({
+              type: 1,
+              offset: 'r',
+              anim: 'slideLeft',
+              area: [333 < document.documentElement.clientWidth ? '333px' : '100%', '100%'],
+              shade: .01,
+              shadeClose: true,
+              skin: "layui-layer-win10",
+              move: false,
+              content: picjq,
+              title: "文章索引",
+              resize: false,
+              end: Renderer.onscroll
+            });
+            Renderer.onscroll();
+          },
+          mouseenter: function (type) {
+            layer.tips(type === "top" ? "回到顶部" : "文章索引", this, {
+              tips: [4, "#444d"],
+              fixed: true
+            });
+          },
+          mouseleave: function () {
+            layer.closeAll("tips");
+          }
+        }
+      });
+      // render
+      Renderer.breadcrumb();
+      Renderer.carousel();
+      Renderer.collapse();
+      Renderer.nav();
+      Renderer.code();
+      Renderer.onscroll();
+      Renderer.progress("100%");
+    });
+  },
+
+  /**
+   * Main.
+   */
+  main() {
+    // load UI
+    Renderer.sccrval();
+    $(window).on("resize", Renderer.onscroll);
+    $(window).on("scroll", Renderer.onscroll);
+    // load content
     /**
-     * Load #main content.
      * @param {string | URL} url
      */
-    async loadMainContent(url) {
-        // param
-        let path = window.location.pathname.replace("/", "").split("/");
-        if (path[path.length - 1] === "") path.pop();
-        // request
-        if (url) {
-          Renderer.progress("6%");
-          await new Promise((resolve) => {
-            $('#main-container').load(url + ' #main-container > *', function (_, textStatus) {
-              if (textStatus === 'timeout' || textStatus === 'error' || textStatus === 'parsererror') {
-                this.innerHTML = '\
-                  <div class="layui-panel layui-card">\
-                      <h1 class="layui-card-header" id="main-title">Failed to fetch</h1>\
-                      <div class="layui-card-body" id="main">Please check your network connection and try again later...</div>\
-                  </div>\
-                ';
-              }
-              resolve();
-            });
-          });
-          Renderer.progress("99%");
+    function loadMainAndCatch(url) {
+      return Sess.loadMainContent(url).fail(function (e) {
+        Renderer.openErrLayer(e);
+        Renderer.progress("0%");
+      });
+    };
+    loadMainAndCatch();
+    // show big photos
+    layui.util.on("lay-on", {
+      "carousel-img": function () {
+        layer.photos({
+          photos: `div[lay-on=${this.getAttribute("lay-on")}]`
+        });
+      },
+      "post-img": function () {
+        layer.photos({
+          photos: `div[lay-on=${this.getAttribute("lay-on")}]`
+        });
+      }
+    });
+    // friend link
+    this.friendLinkFooter();
+    // pushstate
+    if (history.pushState) {
+      /**
+       * @param {JQuery.ClickEvent} ev
+       */
+      function _onclick(ev) {
+        var ac = ev.target;
+        while (true) {
+          if (!ac) break;
+          else if (ac instanceof HTMLAnchorElement) break;
+          else ac = ac.parentNode;
         }
-        // datetime
-        Renderer.datetime();
-        // random
-        this.randomChildren();
-        // create post index
-        this.createPostIndex(document.getElementById("main"), path);
-        // fill .friends-page-main
-        await this.fillFriendLinkPage();
-        // lazyimg
-        layui.flow.lazyimg({
-            elem: "img[lay-src]"
-        });
-        // title
-        Renderer.pageTitle(document.querySelector("#main-title > span.layui-breadcrumb"));
-        // top
-        const postIndexContainerJQ = layui.$("#post-index-container");
-        layui.util.fixbar({
-            bgcolor: "rgba(166, 166, 166, 0.7)",
-            bars: postIndexContainerJQ.length ? [{
-                type: "post-index",
-                icon: "layui-icon-list",
-            }] : [],
-            on: {
-                click: type => {
-                    if (type !== "post-index") {
-                        return;
-                    }
-                    layer.open({
-                        type: 1,
-                        offset: 'r',
-                        anim: 'slideLeft',
-                        area: [333 < document.documentElement.clientWidth ? '333px' : '100%', '100%'],
-                        shade: .01,
-                        shadeClose: true,
-                        skin: "layui-layer-win10",
-                        move: false,
-                        content: postIndexContainerJQ,
-                        title: "文章索引",
-                        resize: false,
-                        end: Renderer.onscroll
-                    });
-                    Renderer.onscroll();
-                },
-                mouseenter: function (type) {
-                    layer.tips(type === "top" ? "回到顶部" : "文章索引", this, {
-                      tips: [4, "#444d"],
-                      fixed: true
-                    });
-                },
-                mouseleave: () => {
-                    layer.closeAll("tips");
-                }
-            }
-        });
-        // render
-        Renderer.breadcrumb();
-        Renderer.carousel();
-        Renderer.collapse();
-        layui.code({
-            elem: ".layui-code",
-            langMarker: true,
-            wordWrap: false
-        });
-        Renderer.nav();
-        Renderer.onscroll();
-        Renderer.progress("100%");
-    },
-
-    /**
-     * Main.
-     */
-    async main() {
-        // load UI
-        Renderer.sccrval();
-        window.addEventListener("resize", Renderer.onscroll);
-        window.addEventListener("scroll", Renderer.onscroll);
-        // load content
-        /**
-         * @param {string | URL} url
-         */
-        const loadMainAndCatch = async (url) => {
-            try {
-                await this.loadMainContent(url);
-            } catch (e) {
-                Renderer.openErrLayer(e);
-                Renderer.progress("0%");
-            }
-        };
-        await loadMainAndCatch();
-        // show big photos
-        layui.util.on("lay-on", {
-            "carousel-img": function () {
-                layer.photos({
-                    photos: `div[lay-on=${this.getAttribute("lay-on")}]`
-                });
-            },
-            "post-img": function () {
-                layer.photos({
-                    photos: `div[lay-on=${this.getAttribute("lay-on")}]`
-                });
-            }
-        });
-        // friend link
-        await this.friendLinkFooter();
-        // pushstate
-        if (history.pushState) {
-          for (const e of [
-            ...document.querySelectorAll('ul.layui-nav li a'),
-            ...document.querySelectorAll('footer .layui-col-sm8 > a')
-          ]) {
-            e.addEventListener('click', function (ev) {
-              if ((ev.target !== this && ev.target instanceof HTMLAnchorElement) || this.host !== location.host) return;
-              ev.preventDefault();
-              history.pushState({}, '', this.href);
-              loadMainAndCatch(this.href);
-            });
-          }
-          /**
-           * @param {Node} elem
-           * @returns {HTMLAnchorElement | null}
-           */
-          function childoforanchor(elem) {
-            while (true) {
-              if (!elem) return null;
-              else if (elem instanceof HTMLAnchorElement) return elem;
-              else elem = elem.parentNode;
-            }
-          }
-          document.querySelector('main').addEventListener('click', async function (ev) {
-            var ac;
-            if (!(ac = childoforanchor(ev.target)) || ac.host !== location.host || ac.href.match(/\.(json|ico|css|js|xml)$/)) return;
-            ev.preventDefault();
-            history.pushState({}, '', ac.href);
-            try {
-               await Sess.loadMainContent(ac.href);
-            } catch (e) {
-              Renderer.openErrLayer(e);
-              Renderer.progress("0%");
-            }
-          });
-        }
-        // forune & pageview
-        Renderer.fortune();
-        Renderer.pageview();
-        Renderer.postscount();
-    },
+        if (!ac || ac.host !== location.host || ac.href.match(/\.(json|ico|css|js|xml)$/)) return;
+        ev.preventDefault();
+        history.pushState({}, '', ac.href);
+        loadMainAndCatch(ac.href);
+      }
+      $('ul.layui-nav li a').on('click', _onclick);
+      $('footer .layui-col-sm8 > a').on('click', _onclick);
+      $('main').on('click', _onclick);
+    }
+    // forune & pageview
+    Renderer.fortune();
+    Renderer.pageview();
+    Renderer.postscount();
+  },
 
     //#endregion
     //#region posts
 
     /**
      * @param {HTMLDivElement} main
-     * @param {string[]} path
      */
-    createPostIndex(main, path) {
+    createPostIndex(main) {
          if (!main) return;
         const postIndexContainer = document.getElementById("post-index-container") || document.createElement("div");
-        if (!((path.length === 1 && path[0] === "about") || (path.length === 3 && path[0] === "posts"))) {
-            if (postIndexContainer.parentElement !== null) postIndexContainer.remove();
+        if (!location.pathname.match(/\/(about|posts)/)) {
+            if (postIndexContainer.parentElement) postIndexContainer.remove();
             return;
         }
         // element
-        if (postIndexContainer.parentElement === null) {
+        if (!postIndexContainer.parentElement) {
             const col = document.querySelector(".layui-row > .layui-col-md4");
             const footer = col.querySelector("#footer");
             postIndexContainer.className = "layui-panel layui-card";
