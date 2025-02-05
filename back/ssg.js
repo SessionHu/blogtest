@@ -1,9 +1,9 @@
-//@ts-check
 /// <reference path = "./sessx.d.ts" />
 
 import fs from "node:fs/promises";
 import path from 'node:path';
 import { md2html } from './md2html.js';
+import { Element } from './sdom.js';
 
 /**
  * @param {string} fname
@@ -13,6 +13,7 @@ export async function render(fname, cache = {}) {
   const extn = path.extname(fname = path.normalize(fname)).toLowerCase();
   if (extn === ".html") {
     if (fname === 'front/home.html') return renderHomeHTML(cache);
+    if (fname === 'front/category.html') return renderCategoryHTML(cache);
     else return renderHTML(readHTML(fname).then((res) => res.toString()), cache);
   } else if (extn === ".md") {
     return renderMarkdown(fname, cache);
@@ -165,4 +166,51 @@ async function renderHomeHTML(cache = {}) {
     }
   }
   return renderHTML((await homehtml).toString().replace('HOME-CONTENT', ls.join('')), cache);
+}
+
+/**
+ * @param {SSGCache} cache
+ * @returns {Promise<string>}
+ */
+async function renderCategoryHTML(cache = {}) {
+  const posts = readPostsIndex(cache).then((a) => {
+    return a.map((y) => y.posts).flat();
+  });
+  const catehtml = readHTML('front/category.html');
+  // div
+  const colladiv = Element.new('div');
+  colladiv.setAttribute('class', 'layui-collapse');
+  colladiv.setAttribute('lay-accordion', '');
+  // item
+  const /** @type {Map<string, Element>} */ collaitems = new Map();
+  for (const postitem of await posts) {
+    let elem = collaitems.get(postitem.category);
+    if (!elem) {
+      collaitems.set(postitem.category, elem = Element.new('div'));
+      elem.setAttribute('class', 'layui-colla-item');
+      // title
+      const title = Element.new('div');
+      title.setAttribute('class', 'layui-colla-title');
+      title.textContent = postitem.category;
+      const count = Element.new('span');
+      count.setAttribute('style', 'float:right;');
+      count.textContent = '0';
+      title.appendChild(count);
+      elem.appendChild(title);
+      // content
+      const content = Element.new('div');
+      content.setAttribute('class', 'layui-colla-content');
+      content.setAttribute('id', postitem.category);
+      elem.appendChild(content);
+      colladiv.appendChild(elem);
+    }
+    const count = elem.childNodes[0].childNodes[1];
+    count.textContent = (parseInt(count.textContent) + 1).toString();
+    const anchor = Element.new('a');
+    anchor.setAttribute('href', `/posts/${new Date(postitem.time).getUTCFullYear()}/${postitem.fname.replace(/\.md$/, '/')}`);
+    anchor.textContent = postitem.title;
+    elem.childNodes[1].appendChild(anchor);
+    elem.childNodes[1].appendChild(Element.new('br'));
+  }
+  return renderHTML((await catehtml).toString().replace('CATEGORY-CONTENT', colladiv.toXML()), cache);
 }

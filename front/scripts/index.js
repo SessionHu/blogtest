@@ -86,15 +86,6 @@ layui.use(function () {
 });
 
 //#endregion
-
-/** @class */
-function Warning(message) {
-  Error.call(this, message);
-  this.name = 'Warning';
-}
-Warning.prototype = Object.create(Error.prototype);
-Warning.prototype.constructor = Warning;
-
 //#region UI
 
 var Renderer = {
@@ -109,7 +100,7 @@ var Renderer = {
       type: 0,
       title: e.name,
       content: e.stack.replace(/ /g, "&nbsp;").replace(/\n/g, "<br />"),
-      icon: e instanceof Warning ? 0 : 2,
+      icon: 2,
       skin: "layui-layer-win10",
       shade: .01,
       shadeClose: true,
@@ -128,6 +119,14 @@ var Renderer = {
       elem: e,
       width: "auto"
     });
+  },
+
+  collapse() {
+    var elem = $('.layui-collapse');
+    if (elem[0]) {
+      layui.element.render("collapse", elem);
+      $('.layui-colla-content' + location.hash + ':first', elem).addClass('layui-show');
+    }
   },
 
   /**
@@ -327,8 +326,6 @@ var Sess = {
         this.randomChildren();
         // create post index
         this.createPostIndex(document.getElementById("main"), path);
-        // fill category #category-container
-        await this.fillCategoryInfo(path);
         // fill .friends-page-main
         await this.fillFriendLinkPage();
         // lazyimg
@@ -380,6 +377,7 @@ var Sess = {
         // render
         Renderer.breadcrumb();
         Renderer.carousel();
+        Renderer.collapse();
         layui.code({
             elem: ".layui-code",
             langMarker: true,
@@ -467,80 +465,6 @@ var Sess = {
         Renderer.fortune();
         Renderer.pageview();
         Renderer.postscount();
-    },
-
-    //#endregion
-    //#region category
-
-    /**
-     * @param {string[]} path
-     */
-    async fillCategoryInfo(path) {
-        // check
-        const container = document.querySelector("div#category-container");
-        if (container === null) return;
-        // div
-        const collapseDiv = document.createElement("div");
-        collapseDiv.className = "layui-collapse";
-        collapseDiv.setAttribute("lay-filter", "cat-colla");
-        collapseDiv.setAttribute("lay-accordion", null);
-        // item
-        const categoryInfo = await this.getCategoryInfo();
-        for (const aCategoryName of Object.keys(categoryInfo)) {
-            const itemDiv = document.createElement("div");
-            itemDiv.className = "layui-colla-item";
-            // title
-            itemDiv.insertAdjacentHTML("afterbegin", `
-                <div class="layui-colla-title">
-                    ${aCategoryName} <span style="float:right;">${categoryInfo[aCategoryName].count}</span>
-                </div>
-            `);
-            // content
-            const contentDiv = document.createElement("div");
-            contentDiv.className = "layui-colla-content";
-            if (path.length >= 2) {
-                if (path[1] === aCategoryName) contentDiv.classList.add("layui-show");
-            } else {
-                if (collapseDiv.childElementCount === 0) contentDiv.classList.add("layui-show");
-            }
-            const contentText = [];
-            for (const link of categoryInfo[aCategoryName].links) {
-                contentText.push(`<a href="${link.url.replace(".md", "/")}">${link.title}</a><br/>`);
-            }
-            contentDiv.innerHTML = contentText.join("");
-            itemDiv.insertAdjacentElement("beforeend", contentDiv);
-            collapseDiv.appendChild(itemDiv);
-        }
-        // ensure one colla-item open
-        if (!collapseDiv.querySelector(".layui-show")) {
-            collapseDiv.querySelector(".layui-colla-content").classList.add("layui-show");
-        }
-        // render
-        container.appendChild(collapseDiv);
-        layui.element.render("collapse", "cat-colla");
-    },
-
-    async getCategoryInfo() {
-        // eg: {"cat":{"count":1,"links":["title":"iamtitle",url:"/"]}}
-        const categoryInfo = {};
-        const postsIndexJson = await (await fetch("/posts/index.json")).json();
-        for (const yearPosts of postsIndexJson) {
-            for (const aPost of yearPosts.posts) {
-                if (aPost.category in categoryInfo) {
-                    categoryInfo[aPost.category].count++;
-                } else {
-                    categoryInfo[aPost.category] = {
-                        count: 1,
-                        links: []
-                    };
-                }
-                categoryInfo[aPost.category].links.push({
-                    "title": aPost.title,
-                    "url": `/posts/${yearPosts.year}/${aPost.fname}`
-                });
-            }
-        }
-        return categoryInfo;
     },
 
     //#endregion
