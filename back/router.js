@@ -17,7 +17,7 @@ const rgxUrl2pathname = /^(https?:\/\/[a-zA-z\.0-9:]+?)?(\/.*?)(\?.*)?(#.*)?$/;
  * @returns {string}
  */
 export function req2file(uri) {
-  const pn = rgxUrl2pathname.exec(uri)[2];
+  const pn = (rgxUrl2pathname.exec(uri) || [])[2];
   // router patterns
   for (const [k, v] of routerPatterns) {
     if ((k === pn) ||

@@ -6,17 +6,17 @@ import path from "node:path";
 import { render } from "./ssg.js";
 import { req2file } from './router.js';
 
-const mimeTypes = {
-  png: "image/png",
-  jpg: "image/jpeg",
-  jpeg: "image/jpeg",
-  js: "text/javascript",
-  json: "application/json",
-  ico: "image/vnd.microsoft.icon",
-  html: "text/html",
-  css: "text/css",
-  md: 'text/html' // rendered
-};
+const mimeTypes = new Map([
+  ['png', "image/png"],
+  ['jpg', "image/jpeg"],
+  ['jpeg', "image/jpeg"],
+  ['js', "text/javascript"],
+  ['json', "application/json"],
+  ['ico', "image/vnd.microsoft.icon"],
+  ['html', "text/html"],
+  ['css', "text/css"],
+  ['md', 'text/html'] // rendered
+]);
 
 /**
  * @param {http.ServerResponse} res
@@ -47,11 +47,11 @@ function socketRemoteAddr(socket) {
 
 /**
  * @param {string} fname
- * @return {`${string}/${string}`}
+ * @return {string}
  */
 function guessMimeType(fname) {
   const extn = path.extname(fname).substring(1).toLowerCase();
-  return mimeTypes[extn] || 'application/octet-stream';
+  return mimeTypes.get(extn) || 'application/octet-stream';
 }
 
 http.createServer(async (request, response) => {
@@ -76,8 +76,8 @@ http.createServer(async (request, response) => {
     });
     response.end(content);
     console.log(socketRemoteAddr(request.socket), 200, request.url);
-  } catch (e) {
-    if (e.code === "ENOENT") {
+  } catch (/** @type {any} */e) {
+    if (e.code && e.code === "ENOENT") {
       await sendNotFound(response, e);
       console.warn(socketRemoteAddr(request.socket), 404, request.url, e);
       return;
