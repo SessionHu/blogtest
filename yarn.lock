@@ -21,6 +21,26 @@
   resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.9.tgz#d4597dbd4618264c414d7429363e3f50acb66ea2"
   integrity sha512-xzLEyKB50yqCUPUJkIsrVvoWNfFUbIZI+RspLWt8u+tIW/BetMBZtgV2LY/2o+tYH8dRvQ+eoPf3NdhQCcLE2w==
 
+layui-theme-dark@^2.9.21:
+  version "2.9.21"
+  resolved "https://registry.yarnpkg.com/layui-theme-dark/-/layui-theme-dark-2.9.21.tgz#174903693eb0dda71548726001b4692b6a0481c4"
+  integrity sha512-8tgVMUPvUgDb3SbOrX721VQX/bL4Rl8fjH6BpOoP5n27KkX6vafcB2Yll/kYOTKWLk8GlHrr0fb3PTHg+K7m2Q==
+
+layui@^2.9.21:
+  version "2.9.21"
+  resolved "https://registry.yarnpkg.com/layui/-/layui-2.9.21.tgz#2eab345f3b4bc23f302c20fddb94822043dbe8a8"
+  integrity sha512-vE73lV8Y6/LjHECQGh/RtOdQuiYuaQvE1HxWtCtZK6b/RBDppaLZqkyHVt558PrJAJ/6x05liJplPKkQW5C/pw==
+
+lunar-javascript@1.6.12:
+  version "1.6.12"
+  resolved "https://registry.yarnpkg.com/lunar-javascript/-/lunar-javascript-1.6.12.tgz#8394d2afddcb1de4ace45e2033757f0d5a1ce5d0"
+  integrity sha512-8BIYt50up4B2ihh0O1MCUh7+y6hDiDRIPp0ubP8KKaA7cIgAi4jD3QvM9OdZj0QNhSvopZPKipLt2Eb9+cLhxw==
+
+outeres@0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/outeres/-/outeres-0.1.3.tgz#e202f40a1892df4b7ee445903120412470d16d9a"
+  integrity sha512-HeTsVdEJrFYVhOvnntAMdBrfFQl3J55q7d2xpXl6uMBAISIYi0zRiHtMc9fwn2Idwiesp0/U6X+dL10QYwDoEw==
+
 typescript@^5.7.3:
   version "5.7.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.7.3.tgz#919b44a7dbb8583a9b856d162be24a54bf80073e"
