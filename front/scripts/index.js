@@ -462,89 +462,68 @@ var Sess = {
     Renderer.postscount();
   },
 
-    //#endregion
-    //#region posts
+  //#endregion
+  //#region posts
 
-    /**
-     * @param {HTMLDivElement} main
-     */
-    createPostIndex(main) {
-         if (!main) return;
-        const postIndexContainer = document.getElementById("post-index-container") || document.createElement("div");
-        if (!location.pathname.match(/\/(about|posts)/)) {
-            if (postIndexContainer.parentElement) postIndexContainer.remove();
-            return;
+  createPostIndex() {
+    var pic = document.getElementById("post-index-container") || document.createElement("div");
+    if (!location.pathname.match(/\/(about|posts)/)) {
+      if (pic.parentNode) pic.parentNode.removeChild(pic);
+      return;
+    }
+    // element
+    if (!pic.parentNode) {
+      var col = document.querySelector(".layui-row > .layui-col-md4");
+      pic.className = "layui-panel layui-card";
+      pic.id = "post-index-container";
+      pic.innerHTML = '\
+        <div class="layui-card-header">文章索引</div>\
+        <div class="layui-card-body" id="post-index"></div>\
+      ';
+      col.appendChild(pic);
+    }
+    // index data tree
+    var main = document.querySelector('main');
+    var mainContent = main.querySelectorAll("div.layui-text > *");
+    if (!mainContent.length) return 0;
+    var mainTitleDiv = main.querySelector("div.postcard-title") || $('h1:last', main)[0];
+    var roottreenode = {
+      title: mainTitleDiv.textContent,
+      id: "H1-root",
+      children: [],
+      spread: true
+    };
+    var lasttreenode = roottreenode;
+    mainContent.forEach(function (elem) {
+      if (elem.tagName.startsWith('H') && elem.tagName.length === 2 && elem.tagName !== "H1") {
+        while (parseInt(elem.tagName.charAt(1)) <= parseInt(lasttreenode.id.charAt(1))) {
+          lasttreenode = lasttreenode.parent;
         }
-        // element
-        if (!postIndexContainer.parentElement) {
-            const col = document.querySelector(".layui-row > .layui-col-md4");
-            const footer = col.querySelector("#footer");
-            postIndexContainer.className = "layui-panel layui-card";
-            postIndexContainer.id = "post-index-container";
-            postIndexContainer.innerHTML = `
-                <div class="layui-card-header">文章索引</div>
-                <div class="layui-card-body" id="post-index"></div>
-            `;
-            col.insertBefore(postIndexContainer, footer);
-        }
-        // index data tree
-        const mainTitleDiv = main.querySelector("div.postcard-title") || main.querySelector("h1");
-        const mainContent = main.querySelector("div.layui-text");
-        if (!mainContent) return;
-        const mainContentCollection = mainContent.children;
-        const roottreenode = {
-            title: mainTitleDiv.innerText,
-            id: "H1-root",
-            children: [],
-            spread: true
+        var newtreenode = {
+          title: elem.innerText,
+          id: elem.tagName + '-' + elem.textContent,
+          children: [],
+          parent: lasttreenode
         };
-        let lasttreenode = roottreenode;
-        for (const elem of mainContentCollection) {
-            if (elem.tagName.startsWith('H') && elem.tagName.length === 2 && elem.tagName !== "H1") {
-                while (parseInt(elem.tagName.charAt(1)) <= parseInt(lasttreenode.id.charAt(1))) {
-                    lasttreenode = lasttreenode.parent;
-                }
-                const newtreenode = {
-                    title: elem.innerText,
-                    id: `${elem.tagName}-${elem.innerText}`,
-                    children: [],
-                    parent: lasttreenode
-                };
-                lasttreenode.children.push(newtreenode);
-                lasttreenode = newtreenode;
-            }
-        }
-        // render
-        layui.tree.render({
-            elem: "#post-index",
-            data: [roottreenode],
-            accordion: true,
-            click: (obj) => {
-                const idps = ["", ""];
-                let overdash = false;
-                for (const c of obj.data.id) {
-                    if (!overdash) {
-                        if (c === '-') {
-                            overdash = true;
-                        } else {
-                            idps[0] += c;
-                        }
-                    } else {
-                        idps[1] += c;
-                    }
-                }
-                const elem = document.evaluate(
-                    `//${idps[0].toLowerCase()}[text()='${idps[1]}']`, main, null,
-                    XPathResult.FIRST_ORDERED_NODE_TYPE, null
-                ).singleNodeValue;
-                if (elem !== null) {
-                    elem.scrollIntoView({ behavior: "smooth" });
-                } else {
-                    mainTitleDiv.scrollIntoView({ behavior: "smooth" });
-                }
-            }
-        });
-    },
+        lasttreenode.children.push(newtreenode);
+        lasttreenode = newtreenode;
+      }
+    });
+    // render
+    layui.tree.render({
+      elem: "#post-index",
+      data: [roottreenode],
+      accordion: true,
+      click: function (obj) {
+        var idps = obj.data.id.split('-', 2);
+        var elem = document.evaluate(
+          '//' + idps[0].toLowerCase() + '[text()="' + idps[1] + '"]',
+          main, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null
+        ).singleNodeValue;
+        (elem ? elem : mainTitleDiv).scrollIntoView({ behavior: "smooth" });
+      }
+    });
+  },
 
     //#endregion
     //#region friends
@@ -633,6 +612,7 @@ var Sess = {
         for (const o of json.organizations) {
             this.fillFriendLinkElem(orgselem, o, true);
         }
+        Renderer.onscroll();
     },
 
     /**
