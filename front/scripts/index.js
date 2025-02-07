@@ -322,8 +322,8 @@ var Sess = {
           if (textStatus === 'timeout' || textStatus === 'error' || textStatus === 'parsererror') {
             this.innerHTML = '\
               <div class="layui-panel layui-card">\
-                  <h1 class="layui-card-header" id="main-title">Failed to fetch</h1>\
-                  <div class="layui-card-body" id="main">Please check your network connection and try again later...</div>\
+                <h1 class="layui-card-header" id="main-title">Failed to fetch</h1>\
+                <div class="layui-card-body" id="main">Please check your network connection and try again later...</div>\
               </div>\
             ';
           }
@@ -421,12 +421,12 @@ var Sess = {
     layui.util.on("lay-on", {
       "carousel-img": function () {
         layer.photos({
-          photos: `div[lay-on=${this.getAttribute("lay-on")}]`
+          photos: 'div[lay-on=' + this.getAttribute("lay-on") + ']'
         });
       },
       "post-img": function () {
         layer.photos({
-          photos: `div[lay-on=${this.getAttribute("lay-on")}]`
+          photos: 'div[lay-on=' + this.getAttribute("lay-on") + ']'
         });
       }
     });
@@ -452,6 +452,9 @@ var Sess = {
       $('ul.layui-nav li a').on('click', _onclick);
       $('footer .layui-col-sm8 > a').on('click', _onclick);
       $('main').on('click', _onclick);
+      window.addEventListener('popstate', function () {
+        loadMainAndCatch(location.href);
+     });
     }
     // forune & pageview
     Renderer.fortune();
@@ -679,8 +682,10 @@ var Sess = {
 }
 
 layui.use(function () {
-  Sess.main().catch((e) => {
+  try {
+    Sess.main();
+  } catch (e) {
     Renderer.openErrLayer(e);
     Renderer.progress("0%");
-  });
+  };
 });
