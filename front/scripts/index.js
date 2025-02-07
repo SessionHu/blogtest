@@ -549,45 +549,52 @@ var Sess = {
     //#endregion
     //#region friends
 
-    async friendLinkFooter() {
-        const json = await (await fetch("/friends.json")).json();
-        // 3 * friends + 8 * organizations
-        const result = [];
-        const friendlenall = json.friends.length;
-        for (let i = 0; i < (friendlenall < 3 ? friendlenall : 3); i++) {
-            const e = json.friends.splice(Math.floor(Math.random() * json.friends.length), 1)[0];
-            e.className = "personal-link";
-            result.push(e);
+  friendLinkFooter() {
+    $.getJSON('/friends.json', function (json) {
+      // 3 * friends + 8 * organizations
+      var result = [];
+      var len = json.friends.length;
+      for (var i = 0; i < (len < 3 ? len : 3); i++) {
+        var e = json.friends.splice(Math.floor(Math.random() * json.friends.length), 1)[0];
+        e.className = "personal-link";
+        result.push(e);
+      }
+      len = json.organizations.length;
+      for (var i = 0; i < (len < 8 ? len : 8); i++) {
+        var e = json.organizations.splice(Math.floor(Math.random() * json.organizations.length), 1)[0];
+        e.className = "layui-hide-xs";
+        result.push(e);
+      }
+      result.push({
+        "id": "more",
+        "title": "...",
+        "href": "/friends/",
+          "name": {
+          "en": ["More"],
+          "zh": ["更多"],
+          "jp": ["もっと"]
         }
-        const orglenall = json.organizations.length;
-        for (let i = 0; i < (orglenall < 8 ? orglenall : 8); i++) {
-            const e = json.organizations.splice(Math.floor(Math.random() * json.organizations.length), 1)[0];
-            e.className = "layui-hide-xs";
-            result.push(e);
+      });
+      // fill
+      var friendlinks = document.getElementById("friend-links");
+      if (!friendlinks) return;
+      for (var i = 0; i < result.length; i++) {
+        var lnk = result[i];
+        var names = Sess.friendLinkLangChooser(lnk.name);
+        var a = $('<a></a>').attr({
+          href: lnk.href,
+          title: names[Math.floor(Math.random() * names.length)]
+        }).addClass(lnk.className).text(lnk.title);
+        if (lnk.id !== 'more') {
+          a.attr({
+            target: '_blank',
+            rel: 'noopener'
+          });
         }
-        result.push({
-            "id": "more",
-            "title": "...",
-            "href": "/friends",
-            "name": {
-                "en": ["More"],
-                "zh": ["更多"],
-                "jp": ["もっと"]
-            }
-        });
-        // fill
-        const friendlinks = document.getElementById("friend-links");
-        if (friendlinks !== null) {
-            for (const lnk of result) {
-                const names = this.friendLinkLangChooser(lnk.name);
-                friendlinks.insertAdjacentHTML("beforeend", `
-                    <a href="${lnk.href}" ${lnk.id === "more" ? "" : 'target="_blank" rel="noopener"'}
-                        title="${names[Math.floor(Math.random() * names.length)]}"
-                        class="${lnk.className}">${lnk.title}</a>
-                `);
-            }
-        }
-    },
+        friendlinks.appendChild(a[0]);
+      }
+    });
+  },
 
     /**
      * @param {{zh:string[],en:string[],jp:string[]}} name 
