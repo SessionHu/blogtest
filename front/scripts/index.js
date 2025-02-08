@@ -339,7 +339,7 @@ var Sess = {
       // random
       Sess.randomChildren();
       // create post index
-      Sess.createPostIndex(document.getElementById("main"));
+      Sess.createPostIndex();
       // fill .friends-page-main
       return Sess.fillFriendLinkPage();
     }).then(function () {
@@ -530,17 +530,19 @@ var Sess = {
 
   friendLinkFooter() {
     $.getJSON('/friends.json', function (json) {
+      Sess.shufArray(json.friends);
+      Sess.shufArray(json.organizations);
       // 3 * friends + 8 * organizations
       var result = [];
       var len = json.friends.length;
       for (var i = 0; i < (len < 3 ? len : 3); i++) {
-        var e = json.friends.splice(Math.floor(Math.random() * json.friends.length), 1)[0];
+        var e = json.friends.pop();
         e.className = "personal-link";
         result.push(e);
       }
       len = json.organizations.length;
       for (var i = 0; i < (len < 8 ? len : 8); i++) {
-        var e = json.organizations.splice(Math.floor(Math.random() * json.organizations.length), 1)[0];
+        var e = json.organizations.pop();
         e.className = "layui-hide-xs";
         result.push(e);
       }
@@ -551,7 +553,6 @@ var Sess = {
           "name": {
           "en": ["More"],
           "zh": ["更多"],
-          "jp": ["もっと"]
         }
       });
       // fill
@@ -576,7 +577,7 @@ var Sess = {
   },
 
     /**
-     * @param {{zh:string[],en:string[],jp:string[]}} name 
+     * @param {{zh:string[],en:string[]}} name
      */
     friendLinkLangChooser(name) {
         // by user language
@@ -586,14 +587,11 @@ var Sess = {
                 if (name.zh.length > 0) return name.zh;
             } else if (langs[i].startsWith("en")) {
                 if (name.en.length > 0) return name.en;
-            } else if (langs[i].startsWith("jp")) {
-                if (name.jp.length > 0) return name.jp;
             }
         }
         // default
         if (name.zh.length > 0) return name.zh;
         if (name.en.length > 0) return name.en;
-        if (name.jp.length > 0) return name.jp;
     },
 
     async fillFriendLinkPage() {
@@ -652,7 +650,7 @@ var Sess = {
     },
 
     /**
-     * @param {any[]} arr 
+     * @param {any[]} arr
      */
     shufArray(arr) {
       for (var i = arr.length - 1; i > 0; i--) {

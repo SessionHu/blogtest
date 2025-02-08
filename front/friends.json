@@ -4,8 +4,7 @@
             "id": "shakaianee",
             "name": {
                 "zh": ["社会易姐QwQ"],
-                "en": ["ShakaiAneE", "SocialSisterYi"],
-                "jp": ["しゃかい　あね　イ"]
+                "en": ["ShakaiAneE", "SocialSisterYi"]
             },
             "href": "https://shakaianee.top/",
             "title": "易姐的博客",
@@ -16,20 +15,18 @@
             "id": "glowingstone",
             "name": {
                 "zh": [],
-                "en": ["glowingstone124"],
-                "jp": []
+                "en": ["glowingstone124"]
             },
             "href": "https://glowingstone.cn/",
-            "title": "glowingstone's blog",
-            "desc": "",
+            "title": "Glowstone 萤石",
+            "desc": "每月更新的可能性为lim -> 0，jvm痴子，全栈小白，性能优化魔怔人。",
             "icon": "https://avatars.githubusercontent.com/u/163746181?s=200&v=4"
         },
         {
             "id": "skyblogs",
             "name": {
                 "zh": ["凌空"],
-                "en": [],
-                "jp": []
+                "en": []
             },
             "href": "https://skyblogs.xyz/",
             "title": "凌空的博客小站",
@@ -42,8 +39,7 @@
             "id": "layui",
             "name": {
                 "zh": [],
-                "en": ["Layui"],
-                "jp": []
+                "en": ["Layui"]
             },
             "href": "https://layui.dev/",
             "title": "Layui",
@@ -54,8 +50,7 @@
             "id": "euorg",
             "name": {
                 "zh": [],
-                "en": ["EU.org"],
-                "jp": []
+                "en": ["EU.org"]
             },
             "href": "https://nic.eu.org/",
             "title": "EU.org",
@@ -66,8 +61,7 @@
             "id": "mcwiki",
             "name": {
                 "zh": [],
-                "en": ["Minecraft Wiki"],
-                "jp": []
+                "en": ["Minecraft Wiki"]
             },
             "href": "https://zh.minecraft.wiki/",
             "title": "Minecraft Wiki",
@@ -78,8 +72,7 @@
             "id": "limbowiki",
             "name": {
                 "zh": ["林泊百科"],
-                "en": ["Limbo Wiki"],
-                "jp": []
+                "en": ["Limbo Wiki"]
             },
             "href": "https://wiki.pigeon-games.com/",
             "title": "Limbo Wiki",
@@ -90,8 +83,7 @@
             "id": "debian",
             "name": {
                 "zh": [],
-                "en": ["Debian"],
-                "jp": []
+                "en": ["Debian"]
             },
             "href": "https://www.debian.org/",
             "title": "Debian",
