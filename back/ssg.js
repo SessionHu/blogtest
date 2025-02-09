@@ -206,7 +206,7 @@ async function renderCategoryHTML(cache = {}) {
       elem.appendChild(title);
       // content
       const content = Element.new('div');
-      content.setAttribute('class', 'layui-colla-content');
+      content.setAttribute('class', 'layui-colla-content layui-show');
       content.setAttribute('id', postitem.category);
       elem.appendChild(content);
       colladiv.appendChild(elem);

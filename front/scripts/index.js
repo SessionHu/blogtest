@@ -125,7 +125,7 @@ var Renderer = {
     var elem = $('.layui-collapse');
     if (elem[0]) {
       layui.element.render("collapse", elem);
-      $('.layui-colla-content' + location.hash + ':first', elem).addClass('layui-show');
+      $('.layui-colla-content', elem).removeClass('layui-show').filter(location.hash + ':first').addClass('layui-show');
     }
   },
 
