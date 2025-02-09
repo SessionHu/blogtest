@@ -54,7 +54,7 @@ layui.use(function () {
         ].join(';')
         var tipsText = [
           '<div class="preview-inner">',
-            '<div style="color:#333;">农历' + lunarDate.getMonthInChinese() + '月' + lunarDate.getDayInChinese() + '</div>',
+            '<div style="color:#333;color:var(--color-white);">农历' + lunarDate.getMonthInChinese() + '月' + lunarDate.getDayInChinese() + '</div>',
             '<div style="font-size:10px">' + lunarDate.getYearInGanZhi() + lunarDate.getYearShengXiao() + '年</div>',
             '<div style="font-size:10px">' + lunarDate.getMonthInGanZhi() + '月 ' + lunarDate.getDayInGanZhi() + '日</div>',
             '<div class="badge" style="' + holidayBadgeStyle  +'">' + displayHolidayBadge + '</div>',
