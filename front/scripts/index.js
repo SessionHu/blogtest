@@ -96,7 +96,7 @@ var Renderer = {
    * @param {any} options?
    */
   openErrLayer: function (e, options) {
-    layer.open({
+    var o = {
       type: 0,
       title: e.name,
       content: e.stack.replace(/ /g, "&nbsp;").replace(/\n/g, "<br />"),
@@ -105,8 +105,14 @@ var Renderer = {
       shade: .01,
       shadeClose: true,
       resize: false,
-      ...options // merge
-    });
+    };
+    if (options) {
+      var ks = Object.keys(options);
+      for (var i = 0; i < ks.length; i++) {
+        o[ks[i]] = options[ks[i]];
+      }
+    }
+    layer.open(o);
     console.error(e);
   },
 
@@ -494,7 +500,7 @@ var Sess = {
       spread: true
     };
     var lasttreenode = roottreenode;
-    mainContent.forEach(function (elem) {
+    Array.prototype.forEach.call(mainContent, function (elem) {
       if (elem.tagName.startsWith('H') && elem.tagName.length === 2 && elem.tagName !== "H1") {
         while (parseInt(elem.tagName.charAt(1)) <= parseInt(lasttreenode.id.charAt(1))) {
           lasttreenode = lasttreenode.parent;
@@ -642,11 +648,16 @@ var Sess = {
     //#region utils
 
     randomChildren() {
-      Array.from(document.getElementsByClassName("random")).forEach(function (elem) {
-        Sess.shufArray(Array.from(elem.childNodes)).forEach(function (e) {
-          elem.appendChild(e);
+      var rnds = document.querySelectorAll(".random");
+      for (var i = 0; i < rnds.length; i++) {
+        var arr = [];
+        for (var j = 0; j < rnds[i].childNodes.length; j++) {
+          arr.push(rnds[i].childNodes[j]);
+        }
+        Sess.shufArray(arr).forEach(function (e) {
+          rnds[i].appendChild(e);
         });
-      });
+      }
     },
 
     /**
