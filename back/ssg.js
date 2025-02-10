@@ -14,7 +14,8 @@ export async function render(fname, cache = {}) {
   if (extn === ".html") {
     if (fname === 'front/home.html') return renderHomeHTML(cache);
     if (fname === 'front/category.html') return renderCategoryHTML(cache);
-    else return renderHTML(readHTML(fname).then((res) => res.toString()), cache);
+    if (fname === 'front/friends.html') return renderFriendHTML(cache);
+    return renderHTML(readHTML(fname).then((res) => res.toString()), cache);
   } else if (extn === ".md") {
     return renderMarkdown(fname, cache);
   } else {
@@ -220,4 +221,64 @@ async function renderCategoryHTML(cache = {}) {
     elem.childNodes[1].appendChild(Element.new('br'));
   }
   return renderHTML((await catehtml).toString().replace('CATEGORY-CONTENT', colladiv.toXML()), cache);
+}
+
+/**
+ * @param {SSGCache} cache
+ * @returns {Promise<string>}
+ */
+async function renderFriendHTML(cache = {}) {
+  const frndhtml = readHTML('front/friends.html');
+  /** @type {FriendsJson} */
+  const fj = cache.friends || (cache.friends = JSON.parse(await fs.readFile('front/friends.json', 'utf8')));
+  shufArray(fj.friends);
+  shufArray(fj.organizations);
+  /**
+   * @param {ContactItem} item
+   * @param {boolean} isorg
+   * @return {Element}
+   */
+  const genFriendLinkElem = (item, isorg) => {
+    const a = Element.new('a');
+    a.setAttribute('class', 'layui-col-sm6');
+    a.setAttribute('href', item.href);
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener');
+    const panel = Element.new('div');
+    panel.setAttribute('class', 'layui-panel layui-card friends-page-bg-transp friends-page-bg-link');
+    a.appendChild(panel);
+    const header = Element.new('div');
+    header.setAttribute('class', 'layui-card-header');
+    header.textContent = JSON.stringify(item.name);  // parse at frontend
+    panel.appendChild(header);
+    const bodyr = Element.new('div');
+    bodyr.setAttribute('class', 'layui-card-body');
+    panel.appendChild(bodyr);
+    const img = Element.new('img');
+    img.setAttribute('alt', item.id);
+    img.setAttribute('referrerpolicy', 'no-referrer');
+    img.setAttribute('src', item.icon ? item.icon : item.href + '/favicon.ico');
+    img.setAttribute('class', `${isorg ? "friends-page-icon-org" : "layui-circle"} friends-page-icon`);
+    bodyr.appendChild(img);
+    const desc = Element.new('div');
+    desc.setAttribute('class', 'friends-page-desc');
+    desc.textContent = item.title + (item.title && item.desc ? ": " : "") + item.desc;
+    bodyr.appendChild(desc);
+    return a;
+  };
+  const frs = fj.friends.map((f) => genFriendLinkElem(f, false).toXML()).join('');
+  const ogs = fj.organizations.map((f) => genFriendLinkElem(f, true).toXML()).join('');
+  return (await readBaseHTML(cache)).replace('MAIN-CONTENT', (await frndhtml).toString().replace('FRIENDS-REAL', frs).replace('FRIENDS-ORGS', ogs));
+}
+
+/**
+ * @param {any[]} arr
+ * @returns {any[]}
+ */
+function shufArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * i);
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }

@@ -15,5 +15,23 @@ interface PostsIndexItem {
 
 interface SSGCache {
   postsindex?: PostsIndexYearly[],
-  basehtml?: string
+  basehtml?: string,
+  friends?: FriendsJson
+}
+
+interface FriendsJson {
+  friends: ContactItem[],
+  organizations: ContactItem[]
+}
+
+interface ContactItem {
+  id: string,
+  name: {
+    zh: string[],
+    en: string[]
+  },
+  href: string,
+  title: string,
+  desc: string,
+  icon: string
 }

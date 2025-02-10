@@ -349,7 +349,7 @@ pre.layui-code {
 }
 
 .friends-page-icon-org {
-    object-fit: scale-down;
+    object-fit: contain;
 }
 
 .friends-page-desc {

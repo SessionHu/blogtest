@@ -304,6 +304,12 @@ var Renderer = {
     layui.flow.lazyimg({
       elem: "img[lay-src]"
     });
+  },
+
+  friendLinkPage() {
+    $('.friends-page-bg-link .layui-card-header').text(function (_, text) {
+      return Sess.shufArray(Sess.friendLinkLangChooser(JSON.parse(text))).join(" / ");
+    });
   }
 
 };
@@ -347,8 +353,7 @@ var Sess = {
       // create post index
       Sess.createPostIndex();
       // fill .friends-page-main
-      return Sess.fillFriendLinkPage();
-    }).then(function () {
+      Renderer.friendLinkPage();
       // title
       Renderer.pageTitle(document.querySelector("#main-title > span.layui-breadcrumb"));
       // lazyimg
@@ -598,50 +603,6 @@ var Sess = {
         // default
         if (name.zh.length > 0) return name.zh;
         if (name.en.length > 0) return name.en;
-    },
-
-    async fillFriendLinkPage() {
-        const mainelem = document.getElementById("friends-page-main");
-        if (mainelem === null) return;
-        const json = await (await fetch("/friends.json")).json();
-        json.friends = this.shufArray(json.friends);
-        json.organizations = this.shufArray(json.organizations);
-        // friends
-        const friendelem = mainelem.querySelector("#friends-page-friends")
-        for (const f of json.friends) {
-            this.fillFriendLinkElem(friendelem, f, false);
-        }
-        // organizations
-        const orgselem = mainelem.querySelector("#friends-page-orgs");
-        for (const o of json.organizations) {
-            this.fillFriendLinkElem(orgselem, o, true);
-        }
-        Renderer.onscroll();
-    },
-
-    /**
-     * @param {HTMLDivElement} elem
-     * @param {any} link
-     */
-    fillFriendLinkElem(elem, link, isorg) {
-        const f = link;
-        const names = this.shufArray(this.friendLinkLangChooser(f.name)).join(" / ");
-        const title = f.title === names ? "" : f.title;
-        elem.insertAdjacentHTML("beforeend", `
-            <a class="layui-col-sm6" href="${f.href}" target="_blank" rel="noopener">
-                <div class="layui-panel layui-card friends-page-bg-transp friends-page-bg-link">
-                    <div class="layui-card-header">${names}</div>
-                    <div class="layui-card-body">
-                        <img alt="${f.id}" referrerpolicy="no-referrer"
-                            src="${f.icon === "" ? f.href + "/favicon.ico" : f.icon}"
-                            class="${isorg ? "friends-page-icon-org" : "layui-circle "}friends-page-icon" />
-                        <div class="friends-page-desc">
-                            ${title}${title !== "" && f.desc !== "" ? ": " : ""}${f.desc}
-                        </div>
-                    </div>
-                </div>
-            </a>
-        `);
     },
 
     //#endregion
