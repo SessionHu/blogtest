@@ -4,7 +4,7 @@
 
 if (location.pathname === '/index.html' || (document.referrer === 'https://shakaianee.top/' && location.hash === "#!/about")) {
   location.replace('/');
-} else if (location.hash.startsWith('#!/')) {
+} else if (location.hash.match(/^#!\//)) {
   location.replace(/^#!(\/.*?)(\.md)?$/.exec(location.hash)[1]);
 }
 
@@ -517,7 +517,7 @@ var Sess = {
     };
     var lasttreenode = roottreenode;
     Array.prototype.forEach.call(mainContent, function (elem) {
-      if (elem.tagName.startsWith('H') && elem.tagName.length === 2 && elem.tagName !== "H1") {
+      if (elem.tagName.match(/^H/) && elem.tagName.length === 2 && elem.tagName !== "H1") {
         while (parseInt(elem.tagName.charAt(1)) <= parseInt(lasttreenode.id.charAt(1))) {
           lasttreenode = lasttreenode.parent;
         }
@@ -598,54 +598,54 @@ var Sess = {
     });
   },
 
-    /**
-     * @param {{zh:string[],en:string[]}} name
-     */
-    friendLinkLangChooser(name) {
-        // by user language
-        const langs = window.navigator.languages
-        for (let i = 0; langs.length > i; i++) {
-            if (langs[i].startsWith("zh")) {
-                if (name.zh.length > 0) return name.zh;
-            } else if (langs[i].startsWith("en")) {
-                if (name.en.length > 0) return name.en;
-            }
-        }
-        // default
+  /**
+   * @param {{zh:string[],en:string[]}} name
+   */
+  friendLinkLangChooser(name) {
+    // by user language
+    var langs = navigator.languages;
+    for (var i = 0; langs.length > i; i++) {
+      if (langs[i].match(/^zh/)) {
         if (name.zh.length > 0) return name.zh;
+      } else if (langs[i].match(/^en/)) {
         if (name.en.length > 0) return name.en;
-    },
-
-    //#endregion
-    //#region utils
-
-    randomChildren() {
-      var rnds = document.querySelectorAll(".random");
-      for (var i = 0; i < rnds.length; i++) {
-        var arr = [];
-        for (var j = 0; j < rnds[i].childNodes.length; j++) {
-          arr.push(rnds[i].childNodes[j]);
-        }
-        Sess.shufArray(arr).forEach(function (e) {
-          rnds[i].appendChild(e);
-        });
       }
-    },
-
-    /**
-     * @param {any[]} arr
-     */
-    shufArray(arr) {
-      for (var i = arr.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * i);
-        var t = arr[j];
-        arr[j] = arr[i];
-        arr[i] = t;
-      }
-      return arr;
     }
+    // default
+    if (name.zh.length > 0) return name.zh;
+    if (name.en.length > 0) return name.en;
+  },
 
-    //#endregion
+  //#endregion
+  //#region utils
+
+  randomChildren() {
+    var rnds = document.querySelectorAll(".random");
+    for (var i = 0; i < rnds.length; i++) {
+      var arr = [];
+      for (var j = 0; j < rnds[i].childNodes.length; j++) {
+        arr.push(rnds[i].childNodes[j]);
+      }
+      Sess.shufArray(arr).forEach(function (e) {
+        rnds[i].appendChild(e);
+      });
+    }
+  },
+
+  /**
+   * @param {any[]} arr
+   */
+  shufArray(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * i);
+      var t = arr[j];
+      arr[j] = arr[i];
+      arr[i] = t;
+    }
+    return arr;
+  }
+
+  //#endregion
 
 }
 
