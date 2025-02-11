@@ -257,7 +257,7 @@ var Renderer = {
 
   datetime() {
     $('time[datetime]').text(function () {
-      return new Date(this.dateTime).toLocaleString().replace(/(\d{1,2})\:(\d{1,2})\:00/, '$1:$2');
+      return new Date(this.getAttribute('datetime')).toLocaleString().replace(/(\d{1,2})\:(\d{1,2})\:00/, '$1:$2');
     });
   },
 
