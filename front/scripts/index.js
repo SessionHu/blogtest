@@ -230,7 +230,7 @@ var Renderer = {
    * @param {string} progress
    */
   progress: function (progress) {
-    var el = $("*[lay-filter=pageload-progress]");
+    var el = $('.layui-progress');
     layui.element.progress("pageload-progress", progress);
     if (progress === "100%") {
       new $.Deferred(function () {

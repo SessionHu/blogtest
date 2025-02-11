@@ -4,6 +4,9 @@
   line-height: 100%;
 }
 
+.h-2 { height: 2px; }
+.h100 { height: 100%; }
+
 .w100 {
   width: 100%;
 }
@@ -32,6 +35,8 @@
   border-radius: 8px;
 }
 
+.border-w0 { border-width: 0 !important; }
+
 .bg-trans {
   background-color: transparent !important;
 }
@@ -39,6 +44,14 @@
 .color-white {
   color: white;
 }
+
+.flex { display: flex; }
+.flex-wrap { flex-wrap: wrap; }
+.space-around { justify-content: space-around; }
+
+.fixed { position: fixed; }
+
+.top-0 { top: 0; }
 
 .debug {
   border: red 0.001px dotted;

@@ -38,8 +38,8 @@
   <div class="background"></div>
   <!--<canvas id="dotLine"></canvas>-->
 
-  <div class="layui-progress" lay-filter="pageload-progress">
-    <div class="layui-progress-bar"></div>
+  <div class="layui-progress bg-trans fixed top-0 h-2">
+    <div class="layui-progress-bar h100"></div>
   </div>
 
   <ul class="layui-nav layui-bg-gray" lay-filter="nav-sess">
@@ -59,7 +59,7 @@
       <a href="https://gallery.xhustudio.eu.org/">画廊</a>
     </li>
     <li class="layui-nav-item" id="theme-switch">
-      <button type="button" class="layui-btn layui-btn-primary layui-btn-radius layui-btn-xs layui-icon">
+      <button type="button" class="layui-btn layui-btn-primary layui-btn-radius layui-btn-xs layui-icon lineh100">
         &#xe748;
       </button>
     </li>
@@ -71,13 +71,13 @@
       <main class="layui-col-md8" id="main-container">MAIN-CONTENT</main>
       
       <div class="layui-col-md4">
-        <div class="layui-panel layui-card" id="name-face-container">
+        <div class="layui-panel layui-card radius" id="name-face-container">
           <div class="layui-card-header">
             Session小胡
           </div>
-          <div class="layui-card-body">
+          <div class="layui-card-body flex">
             <div class="w100">
-              <div id="maincounter">
+              <div id="maincounter" class="flex space-around">
                 <div id="postscount-container">
                   <span class="layui-font-18">文章</span>
                   <span id="postscount">114514</span>
@@ -87,7 +87,7 @@
                   <span id="pageview">114514</span>
                 </div>
               </div>
-              <div id="communi-container" class="layui-icon">
+              <div id="communi-container" class="layui-icon flex flex-wrap space-around margin-t4">
                 <a href="https://github.com/SessionHu" title="GitHub">&#xe6a7;</a>
                 <a href="https://space.bilibili.com/645769214" title="Bilibili" class="iconfont">&#xe607;</a>
                 <a href="https://x.com/Session_Hu" title="Twitter" class="iconfont">&#xe6ab;</a>
@@ -101,7 +101,7 @@
             </div>
           </div>
         </div>
-        <div class="layui-panel layui-card" id="lunar-calendar-container">
+        <div class="layui-panel layui-card radius" id="lunar-calendar-container">
           <div class="layui-card-header">
             农历
           </div>

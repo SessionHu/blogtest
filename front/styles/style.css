@@ -30,10 +30,6 @@ body {
     }
 }
 
-#theme-switch>* {
-    line-height: 100%;
-}
-
 * {
     transition-property: color, background;
     transition-duration: 200ms;
@@ -56,7 +52,6 @@ div[carousel-item] > div > * {
 /* panel */
 
 div.layui-panel, div.layui-collapse {
-    border-radius: 8px;
     overflow: hidden;
 }
 
@@ -74,14 +69,6 @@ div.layui-panel, div.layui-collapse {
 }
 
 /* background */
-
-/*#dotLine {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}*/
 
 .background {
     position: fixed;
@@ -122,10 +109,6 @@ div.layui-panel, div.layui-collapse {
     overflow: hidden;
 }
 
-#name-face-container > .layui-card-body {
-    display: flex;
-}
-
 #face-container {
     width: 100px;
     height: 68px;
@@ -148,8 +131,6 @@ img[alt=face] {
 
 #maincounter {
     height: 44px;
-    display: flex;
-    justify-content: space-around;
     line-height: 1.4;
     margin-right: 12px;
 }
@@ -161,32 +142,20 @@ img[alt=face] {
     justify-content: center;
 }
 
-#communi-container {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-}
-
 #communi-container * {
-    display: inline-block;
     width: 20px;
     text-align: center;
 }
 
 /* pageload progress */
 
-*[lay-filter=pageload-progress] {
-    height: 2px;
-    position: fixed;
-    top: 0;
+.layui-progress {
     left: -1px;
     right: -1px;
-    background-color: transparent;
     z-index: 1;
 }
 
-*[lay-filter=pageload-progress] > * {
-    height: 100%;
+.layui-progress > * {
     transition-property: width;
 }
 

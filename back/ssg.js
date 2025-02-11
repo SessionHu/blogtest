@@ -123,7 +123,7 @@ async function renderMarkdown(fname, cache = {}) {
   // return
   if (!date) date = new Date(0);
   return (await readBaseHTML(cache)).replace('MAIN-CONTENT', `
-    <div class="layui-panel layui-card">
+    <div class="layui-panel layui-card radius">
       <h1 id="main-title" class="layui-card-header">
         <span class="layui-breadcrumb" lay-separator=">">
           <a href="/">首页</a>
@@ -187,7 +187,7 @@ async function renderCategoryHTML(cache = {}) {
   const catehtml = readHTML('front/category.html');
   // div
   const colladiv = Element.new('div');
-  colladiv.setAttribute('class', 'layui-collapse');
+  colladiv.setAttribute('class', 'layui-collapse radius');
   colladiv.setAttribute('lay-accordion', '');
   // item
   const /** @type {Map<string, Element>} */ collaitems = new Map();
@@ -245,7 +245,7 @@ async function renderFriendHTML(cache = {}) {
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener');
     const panel = Element.new('div');
-    panel.setAttribute('class', 'layui-panel layui-card friends-page-bg-transp friends-page-bg-link');
+    panel.setAttribute('class', 'layui-panel layui-card friends-page-bg-transp friends-page-bg-link radius');
     a.appendChild(panel);
     const header = Element.new('div');
     header.setAttribute('class', 'layui-card-header');
