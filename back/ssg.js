@@ -187,7 +187,7 @@ async function renderCategoryHTML(cache = {}) {
   const catehtml = readHTML('front/category.html');
   // div
   const colladiv = Element.new('div');
-  colladiv.setAttribute('class', 'layui-collapse radius');
+  colladiv.setAttribute('class', 'layui-collapse radius margin-t16 margin-b8');
   colladiv.setAttribute('lay-accordion', '');
   // item
   const /** @type {Map<string, Element>} */ collaitems = new Map();
