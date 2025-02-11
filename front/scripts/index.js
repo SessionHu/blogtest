@@ -128,11 +128,22 @@ var Renderer = {
   },
 
   collapse() {
+    // render
     var elem = $('.layui-collapse');
-    if (elem[0]) {
-      layui.element.render("collapse", elem);
-      $('.layui-colla-content', elem).removeClass('layui-show').filter(location.hash + ':first').addClass('layui-show');
-    }
+    if (!elem[0]) return;
+    $('.layui-colla-content', elem).removeClass('layui-show').filter(location.hash + ':first').addClass('layui-show');
+    layui.element.render("collapse", elem);
+    // prevent close
+    var l = elem[0].getElementsByClassName('layui-colla-title');
+    elem.on('click', function (ev) {
+      if ($('.layui-colla-content.layui-show', elem)[0]) return;
+      var i = Math.floor(l.length * Math.random());
+      if (l[i].contains(ev.target)) {
+        l[(i + 1) % l.length].click();
+      } else {
+        l[i].click();
+      }
+    });
   },
 
   /**
