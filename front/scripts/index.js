@@ -496,7 +496,7 @@ var Sess = {
     // element
     if (!pic.parentNode) {
       var col = document.querySelector(".layui-row > .layui-col-md4");
-      pic.className = "layui-panel layui-card";
+      pic.className = "layui-panel layui-card radius";
       pic.id = "post-index-container";
       pic.innerHTML = '\
         <div class="layui-card-header">文章索引</div>\
