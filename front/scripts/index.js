@@ -583,7 +583,7 @@ var Sess = {
       for (var i = 0; i < result.length; i++) {
         var lnk = result[i];
         var names = Sess.friendLinkLangChooser(lnk.name);
-        var a = $('<a></a>').attr({
+        var a = $('<a class="ws-nowrap w-0"></a>').attr({
           href: lnk.href,
           title: names[Math.floor(Math.random() * names.length)]
         }).addClass(lnk.className).text(lnk.title);

@@ -252,16 +252,16 @@ async function renderFriendHTML(cache = {}) {
     header.textContent = JSON.stringify(item.name);  // parse at frontend
     panel.appendChild(header);
     const bodyr = Element.new('div');
-    bodyr.setAttribute('class', 'layui-card-body');
+    bodyr.setAttribute('class', 'layui-card-body flex h-64');
     panel.appendChild(bodyr);
     const img = Element.new('img');
     img.setAttribute('alt', item.id);
     img.setAttribute('referrerpolicy', 'no-referrer');
     img.setAttribute('src', item.icon ? item.icon : item.href + '/favicon.ico');
-    img.setAttribute('class', `${isorg ? "friends-page-icon-org" : "layui-circle"} friends-page-icon`);
+    img.setAttribute('class', `${isorg ? "" : "layui-circle"} friends-page-icon h-64 w-64`);
     bodyr.appendChild(img);
     const desc = Element.new('div');
-    desc.setAttribute('class', 'friends-page-desc');
+    desc.setAttribute('class', 'friends-page-desc layui-font-14 pad-l8');
     desc.textContent = item.title + (item.title && item.desc ? ": " : "") + item.desc;
     bodyr.appendChild(desc);
     return a;

@@ -181,9 +181,6 @@ img[alt=face] {
 }
 
 .postcard-bg {
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
     position: absolute;
     height: 100%;
     width: 100%;
@@ -280,25 +277,12 @@ pre.layui-code {
 }
 
 #friend-links {
-    display: flex;
-    flex-wrap: wrap;
     flex-direction: column;
-    height: 48px;
     line-height: 1.333;
-}
-
-#friend-links > * {
-    width: 0;
-    white-space: nowrap;
 }
 
 .personal-link:hover {
     color: #6cf;
-}
-
-.friends-page-bg-link > .layui-card-body {
-    height: 64px;
-    display: flex;
 }
 
 .friends-page-bg-link {
@@ -311,20 +295,12 @@ pre.layui-code {
 }
 
 .friends-page-icon {
-    width: 64px;
-    height: 64px;
     object-fit: cover;
     object-position: center;
-}
-
-.friends-page-icon-org {
-    object-fit: contain;
 }
 
 .friends-page-desc {
     text-overflow: ellipsis;
     overflow: hidden;
-    font-size: 14px;
     line-height: 16px;
-    padding-left: 8px;
 }
