@@ -30,7 +30,7 @@
 
 - 对于暂时无法进行有线连接的设备, 可以在设置中开启无线调试, 确保设备处于同一局域网内, 使用 `adb connect <HOST>[:PORT]` 这样的格式的命令连接
 
-- 使用 `adb push &lt;local_file> &lt;remote_file>` 这样格式的命令将本地文件推送到手机
+- 使用 `adb push <local_file> <remote_file>` 这样格式的命令将本地文件推送到手机
 
 - 比如 `adb push /home/sess/Desktop/2233.png /sdcard/Downloads/`
 
@@ -84,7 +84,7 @@
 
 - 使用 `sshd` 启动 SSH 服务器, 对于 Systemd 系统请使用 `systemctl start ssh`
 
-- 使用 `sftp` 命令进行简单交互式文件传输, 使用 `sftp [&lt;username>@]&lt;device_ip> [-p &lt;port>]` 然后输入密码登录
+- 使用 `sftp` 命令进行简单交互式文件传输, 使用 `sftp [<username>@]<device_ip> [-p <port>]` 然后输入密码登录
 
 - 若使用 sshkey, 自行解决
 

@@ -1,5 +1,3 @@
-//@ts-check
-"use strict";
 class Md2html {
 
     /**
@@ -7,11 +5,11 @@ class Md2html {
      */
     static md2html(md) {
         let out = "";
-        const mdinline = md.split('\n');
+        const mdinline = md.split(/\r?\n/);
         let incodeblock = false;
         let spacecount = 0;
         for (let line of mdinline) {
-            if (line === "" && !incodeblock) continue;
+            if (!line && !incodeblock) continue;
             if (!incodeblock) {
                 if (line.startsWith(' ')) {
                     spacecount = line.length - line.trimStart().length;
@@ -98,7 +96,10 @@ class Md2html {
      */
     static code(text) {
         const rgx = /`(.+?)`/g;
-        return text.replace(rgx, '<code>$1</code>');
+        return text.replace(rgx, (_, /** @type {string} */p) => {
+          p = Array.from(p).map((c) => `&#${c.codePointAt(0)};`).join('');
+          return `<code>${p}</code>`;
+        });
     }
 
     /**
