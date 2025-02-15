@@ -26,10 +26,10 @@ layui-theme-dark@^2.9.21:
   resolved "https://registry.yarnpkg.com/layui-theme-dark/-/layui-theme-dark-2.9.21.tgz#174903693eb0dda71548726001b4692b6a0481c4"
   integrity sha512-8tgVMUPvUgDb3SbOrX721VQX/bL4Rl8fjH6BpOoP5n27KkX6vafcB2Yll/kYOTKWLk8GlHrr0fb3PTHg+K7m2Q==
 
-layui@^2.9.21:
-  version "2.9.21"
-  resolved "https://registry.yarnpkg.com/layui/-/layui-2.9.21.tgz#2eab345f3b4bc23f302c20fddb94822043dbe8a8"
-  integrity sha512-vE73lV8Y6/LjHECQGh/RtOdQuiYuaQvE1HxWtCtZK6b/RBDppaLZqkyHVt558PrJAJ/6x05liJplPKkQW5C/pw==
+layui@^2.9.22:
+  version "2.9.22"
+  resolved "https://registry.yarnpkg.com/layui/-/layui-2.9.22.tgz#1056bf2d4c7988bdd8b90ac4de2beae3508e4bf4"
+  integrity sha512-/jVPVuED/tB/E2wXM8ohPxycLfGdE5fmZ1DZInheAh9hWH74Ra6R1LgERRgnpWp4Ec80U2G6BRmwDASpreSbFA==
 
 lunar-javascript@1.6.12:
   version "1.6.12"
