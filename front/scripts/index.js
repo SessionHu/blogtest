@@ -206,18 +206,12 @@ var Renderer = {
       // show
       scvt.appendTo('body');
       // remove
-      var k = 1;
-      setTimeout(function cb() {
-        scvt.css({
-          opacity: parseFloat(scvt.css('opacity')) - .02,
-          top: parseFloat(scvt.css('top').substring(0, scvt.css('top').length - 2)) - (k += .1) + 'px'
-        });
-        if (parseFloat(scvt.css('opacity')) <= 0) {
-            scvt.remove();
-        } else {
-          setTimeout(cb, 20);
-        }
-      }, 20);
+      scvt.animate({
+        opacity: 0,
+        top: ev.clientY - 16 - 2e2 + 'px'
+      }, 1e3, function () {
+        scvt.remove();
+      });
     });
   },
 
