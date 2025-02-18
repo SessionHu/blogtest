@@ -200,17 +200,18 @@ var Renderer = {
         whiteSpace: "nowrap",
         userSelect: "none",
         transition: "none",
-        opacity: "1",
         zIndex: "1145141919"
       });
       // show
       scvt.appendTo('body');
       // remove
-      scvt.animate({
-        opacity: 0,
-        top: ev.clientY - 16 - 2e2 + 'px'
-      }, 1e3, function () {
+      scvt.fadeOut(1e3, 'linear', function () {
         scvt.remove();
+      }).animate({
+        top: ev.clientY - 4.2e2 + 'px'
+      }, {
+        duration: 2.4e3,
+        queue: false
       });
     });
   },
