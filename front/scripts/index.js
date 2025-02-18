@@ -4,7 +4,7 @@
 
 if (location.pathname === '/index.html' || (document.referrer === 'https://shakaianee.top/' && location.hash === "#!/about")) {
   location.replace('/');
-} else if (location.hash.match(/^#!\//)) {
+} else if (location.hash.match(/^#!\/.*$/)) {
   location.replace(/^#!(\/.*?)(\.md)?$/.exec(location.hash)[1]);
 }
 
@@ -29,8 +29,8 @@ layui.use(function () {
    * @param {boolean} tips
    */
   function _todark(tips) {
-    if (!layelem.parentNode) document.head.appendChild(layelem);
-    if (!fixelem.parentNode) document.head.appendChild(fixelem);
+    document.head.appendChild(layelem);
+    document.head.appendChild(fixelem);
     themeSwitchBtn.text("\ue6c2");
     if (tips) layer.tips('已启用深色模式', "#theme-switch", {
       tips: 3,
@@ -207,6 +207,7 @@ var Renderer = {
       // remove
       scvt.fadeOut(1e3, 'linear', function () {
         scvt.remove();
+        scvt.stop(true);
       }).animate({
         top: ev.clientY - 4.2e2 + 'px'
       }, {
@@ -239,25 +240,18 @@ var Renderer = {
     var el = $('.layui-progress');
     layui.element.progress("pageload-progress", progress);
     if (progress === "100%") {
-      new $.Deferred(function () {
-        var that = this;
-        window.setTimeout(function () {
-          el.animate({
-            top: '-2px',
-            opacity: 0
-          }, 2e2, 'linear', that.resolve);
+      new $.Deferred(function (df) {
+        setTimeout(function () {
+          el.hide(2e2, 'linear', df.resolve);
         }, 1e3);
       }).then(function () {
         layui.element.progress("pageload-progress", '0%');
-        window.setTimeout(function () {
-          el.animate({
-            top: 0,
-            opacity: 1
-          }, 2e2, 'linear');
+        setTimeout(function () {
+          el.show(2e2, 'linear');
         }, 2e2);
       });
     } else {
-      el.css('top', 0);
+      el.show();
     }
   },
 
@@ -292,7 +286,7 @@ var Renderer = {
     var count = 0;
     $.getJSON('/posts/index.json', function (res) {
       res.forEach(function (e) {
-          count += e.posts.length;
+        count += e.posts.length;
       });
       $('#postscount').text(count);
     });
@@ -334,23 +328,20 @@ var Sess = {
   loadMainContent(url) {
     return new $.Deferred(function (df) {
       // request
-      if (url) {
-        Renderer.progress("6%");
-        $('#main-container').load(url + ' #main-container > *', function (_, textStatus) {
-          if (textStatus === 'timeout' || textStatus === 'error' || textStatus === 'parsererror') {
-            this.innerHTML = '\
-              <div class="layui-panel layui-card">\
-                <h1 class="layui-card-header" id="main-title">Failed to fetch</h1>\
-                <div class="layui-card-body" id="main">Please check your network connection and try again later...</div>\
-              </div>\
-            ';
-          }
-          Renderer.progress("99%");
-          df.resolve();
-        });
-      } else {
+      if (!url) return df.resolve();
+      Renderer.progress("6%");
+      $('#main-container').load(url + ' #main-container > *', function (_, textStatus) {
+        if (textStatus === 'timeout' || textStatus === 'error' || textStatus === 'parsererror') {
+          this.innerHTML = '\
+            <div class="layui-panel layui-card radius">\
+              <h1 class="layui-card-header" id="main-title">Failed to fetch</h1>\
+              <div class="layui-card-body" id="main">Please check your network connection and try again later...</div>\
+            </div>\
+          ';
+        }
+        Renderer.progress("99%");
         df.resolve();
-      }
+      });
     }).then(function () {
       // datetime
       Renderer.datetime();
@@ -502,7 +493,7 @@ var Sess = {
     // index data tree
     var main = document.querySelector('main');
     var mainContent = main.querySelectorAll("div.layui-text > *");
-    if (!mainContent.length) return 0;
+    if (!mainContent.length) return;
     var mainTitleDiv = main.querySelector("div.postcard-title") || $('h1:last', main)[0];
     var roottreenode = {
       title: mainTitleDiv.textContent,
@@ -542,8 +533,8 @@ var Sess = {
     });
   },
 
-    //#endregion
-    //#region friends
+  //#endregion
+  //#region friends
 
   friendLinkFooter() {
     $.getJSON('/friends.json', function (json) {
