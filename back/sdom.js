@@ -126,11 +126,11 @@ export class Element extends Node {
   }
 
   toXML() {
-    const attrstr = this.#attributes.map((a) => a.toXML()).join(' ');
+    const attrstr = this.#attributes.length ? ' ' + this.#attributes.map((a) => a.toXML()).join(' ')  : '';
     if (!this.childNodes.length) {
-      return `<${encodeXML(this.tagName)} ${this.#attributes.length ? attrstr + ' ' : ''}/>`;
+      return `<${encodeXML(this.tagName)}${attrstr.length ? attrstr + ' ' : ''}/>`;
     } else {
-      return `<${encodeXML(this.tagName)} ${attrstr}>${
+      return `<${encodeXML(this.tagName)}${attrstr}>${
         this.childNodes.map((e) => e.toXML()).join('')
       }</${encodeXML(this.#tagName)}>`;
     }
