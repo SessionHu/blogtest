@@ -125,7 +125,7 @@ async function renderMarkdown(fname, cache = {}) {
   return (await readBaseHTML(cache)).replace('MAIN-CONTENT', `
     <div class="layui-panel layui-card radius">
       <h1 id="main-title" class="layui-card-header">
-        <span class="layui-breadcrumb" lay-separator=">">
+        <span class="layui-breadcrumb ws-nowrap" lay-separator=">">
           <a href="/">首页</a>
           <a href="/category/">分类</a>
           <a href="/category/#${categoryName}">${categoryName}</a>
@@ -248,8 +248,10 @@ async function renderFriendHTML(cache = {}) {
     panel.setAttribute('class', 'layui-panel layui-card friends-page-bg-transp friends-page-bg-link radius');
     a.appendChild(panel);
     const header = Element.new('div');
-    header.setAttribute('class', 'layui-card-header');
-    header.textContent = JSON.stringify(item.name);  // parse at frontend
+    header.setAttribute('class', 'layui-card-header ws-nowrap');
+    const noscript = Element.new('noscript');
+    noscript.textContent = JSON.stringify(item.name);  // parse at frontend
+    header.appendChild(noscript);
     panel.appendChild(header);
     const bodyr = Element.new('div');
     bodyr.setAttribute('class', 'layui-card-body flex h-64');
@@ -258,7 +260,7 @@ async function renderFriendHTML(cache = {}) {
     img.setAttribute('alt', item.id);
     img.setAttribute('referrerpolicy', 'no-referrer');
     img.setAttribute('src', item.icon ? item.icon : item.href + '/favicon.ico');
-    img.setAttribute('class', `${isorg ? "" : "layui-circle"} friends-page-icon h-64 w-64`);
+    img.setAttribute('class', `${isorg ? "" : "layui-circle "}friends-page-icon h-64 w-64`);
     bodyr.appendChild(img);
     const desc = Element.new('div');
     desc.setAttribute('class', 'friends-page-desc layui-font-14 pad-l8');

@@ -308,7 +308,7 @@ var Renderer = {
 
   friendLinkPage() {
     $('.friends-page-bg-link .layui-card-header').text(function (_, text) {
-      return Sess.shufArray(Sess.friendLinkLangChooser(JSON.parse(text))).join(" / ");
+      return Sess.shufArray(Sess.friendLinkLangChooser(JSON.parse(layui.util.unescape(text)))).join(" / ");
     });
   }
 
