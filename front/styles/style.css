@@ -64,10 +64,6 @@ div.layui-panel, div.layui-collapse {
     overflow-y: hidden;
 }
 
-#main-title > .layui-breadcrumb {
-    white-space: nowrap;
-}
-
 /* background */
 
 .background {
