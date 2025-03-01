@@ -14,7 +14,7 @@ if (!window.$) window.$ = layui.$;
 
 //#region theme
 
-layui.use(function () {
+(function () {
 
   var layelem = document.createElement('link');
   layelem.href = "https://unpkg.com/layui-theme-dark@2.9.21/dist/layui-theme-dark.css";
@@ -83,7 +83,7 @@ layui.use(function () {
     _switchTheme(true, false);
   }, 3e2));
 
-});
+})();
 
 //#endregion
 //#region UI
@@ -635,11 +635,9 @@ var Sess = {
 
 }
 
-layui.use(function () {
-  try {
-    Sess.main();
-  } catch (e) {
-    Renderer.openErrLayer(e);
-    Renderer.progress("0%");
-  };
-});
+try {
+  Sess.main();
+} catch (e) {
+  Renderer.openErrLayer(e);
+  Renderer.progress("0%");
+}

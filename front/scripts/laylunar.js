@@ -1,7 +1,7 @@
 'use strict';
 
 // https://layui.dev/docs/2/laydate/#demo-custom-cell
-layui.use(function () {
+(function () {
   var laydate = layui.laydate;
   var $ = layui.$;
   // var util = layui.util;
@@ -102,9 +102,9 @@ layui.use(function () {
       }
     },
   });
-});
+})();
 
-function showwhenenough() {
+var showwhenenough = (function cb() {
   try {
     var container = document.querySelector("div#lunar-calendar-container");
     if (360 > container.getBoundingClientRect().width) {
@@ -119,6 +119,6 @@ function showwhenenough() {
   } catch (e) {
     Sess.openErrLayer(e);
   }
-}
+  return cb;
+})();
 window.addEventListener("resize", showwhenenough);
-layui.use(showwhenenough);
