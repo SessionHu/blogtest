@@ -155,7 +155,7 @@
 
 - 字体下完了, 直接右键就可以安装了, 然后 `系统设置 -> 外观 -> 全局主题 -> 字体` 就可以调整字体了
 
-- 选择 Emoji 只需要按下 `Meta+句点` 或者运行 `/usr/bin/plasma-emojier` 就可以了 (Meta 就是 Windows 徽标键), 真的 KDE 什么都有, 就是找起来不太方便而已...
+- 选择 Emoji 只需要按下 `Super+句点` 或者运行 `/usr/bin/plasma-emojier` 就可以了 (Super 就是 Windows 徽标键), 真的 KDE 什么都有, 就是找起来不太方便而已...
 
 - 关于颜文字的列表可以看看 [这个存储库](https://github.com/rainlime/fcitx-quick-phrase-emoji) 和 [这个 Google 输入法的插件](https://github.com/tisyang/kaos)
 
