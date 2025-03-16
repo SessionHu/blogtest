@@ -62,11 +62,7 @@ http.createServer(async (request, response) => {
     });
     return response.end("Method Not Allowed");
   }
-  let target;
-  if (request.url?.startsWith('/node_modules')) {
-    target = '.' + request.url.replace(/\?.*$/, '');
-  }
-  if (!target) target =  req2file(request.url || '/');
+  const target = req2file(request.url || '/');
   if (target.includes('front/404.html')) {
     await sendNotFound(response);
     console.log(socketRemoteAddr(request.socket), 404, request.url);
@@ -74,14 +70,9 @@ http.createServer(async (request, response) => {
   }
   try {
     let content = await render(target);
-    if (typeof content === 'string') {
-      content = content.replace(/(\"|\')https:?\/\/unpkg\.com\/(.[^@]+)(@[^\/]+?)?\/(.+?)(\"|\')/g, (_, _quot, pkg, _ver, pathname) => {
-        return `"/node_modules/${pkg}/${pathname}"`;
-      });
-    }
     response.writeHead(200, {
       "content-type": guessMimeType(target),
-      'cache-control': request.url?.startsWith('/node_modules') ? 'max-age=114514' : 'max-age=0'
+      'cache-control': 'max-age=0'
     });
     response.end(content);
     console.log(socketRemoteAddr(request.socket), 200, request.url);
