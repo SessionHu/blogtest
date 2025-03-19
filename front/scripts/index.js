@@ -72,9 +72,9 @@ if (!window.$) window.$ = layui.$;
   if (window.matchMedia) {
     var mql = window.matchMedia("(prefers-color-scheme: dark)");
     _switchTheme(false, true, mql.matches);
-    mql.addEventListener("change", function (ev) {
-      _switchTheme(false, false, ev.matches);
-    });
+    mql.onchange = function (e) {
+      _switchTheme(false, false, e.matches);
+    };
   } else {
     _switchTheme(false, true);
   }
@@ -157,10 +157,10 @@ var Renderer = {
    * Render something on scroll.
    */
   onscroll: function () {
-    var sclY = window.scrollY || document.documentElement.scrollTop;
+    var sclY = window.scrollY;
     var docH = document.documentElement.scrollHeight;
-    var viuH = window.innerHeight || document.documentElement.clientHeight;
-    var viuW = window.innerWidth || document.documentElement.clientWidth;
+    var viuH = window.innerHeight;
+    var viuW = window.innerWidth;
     // footer
     var footer = $('footer');
     $('#footer-placeholder').css('height', footer.outerHeight() + 2 + 'px');

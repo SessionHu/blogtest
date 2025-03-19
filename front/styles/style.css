@@ -7,7 +7,7 @@ html {
 }
 
 body {
-    font-family: 'ZCOOL KuaiLe', 'HarmonyOS Sans SC', 'Noto Sans CJK SC', 'Noto Color Emoji', 'Unifont', 'Arial', sans-serif, serif;
+  font-family: 'ZCOOL KuaiLe', 'HarmonyOS Sans SC', 'Noto Sans CJK SC', 'Noto Color Emoji', 'Unifont', 'Arial', sans-serif, serif;
 }
 
 .layui-text a:not(.layui-btn):hover {
@@ -205,10 +205,10 @@ code {
     border-radius: 4px;
     background-color: #dddc;
     color: rgba(0, 0, 0, .8);
-    font-family: 'JetBrain Mono', 'Consolas', monospace;
+    font-family: 'JetBrainsMono NFM', 'JetBrainsMono', 'Noto Sans Mono CJK SC', 'Consolas', monospace;
     padding: 0 4px;
-    box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
 }
 
 pre.layui-code {
