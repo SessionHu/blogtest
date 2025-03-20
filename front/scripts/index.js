@@ -16,12 +16,15 @@ if (!window.$) window.$ = layui.$;
 
 (function () {
 
+  var fragment = document.createDocumentFragment();
   var layelem = document.createElement('link');
   layelem.href = "https://unpkg.com/layui-theme-dark@2.9.21/dist/layui-theme-dark.css";
   layelem.rel = 'stylesheet';
+  fragment.appendChild(layelem);
   var fixelem = document.createElement('link');
   fixelem.href = "/styles/dark-fix.css";
   fixelem.rel = 'stylesheet';
+  fragment.appendChild(fixelem);
 
   var themeSwitchBtn = $('#theme-switch > button');
 
@@ -29,8 +32,7 @@ if (!window.$) window.$ = layui.$;
    * @param {boolean} tips
    */
   function _todark(tips) {
-    document.head.appendChild(layelem);
-    document.head.appendChild(fixelem);
+    document.head.appendChild(fragment);
     themeSwitchBtn.text("\ue6c2");
     if (tips) layer.tips('已启用深色模式', "#theme-switch", {
       tips: 3,
@@ -42,8 +44,8 @@ if (!window.$) window.$ = layui.$;
    * @param {boolean} tips
    */
   function _tolight(tips) {
-    if (layelem.parentNode) layelem.parentNode.removeChild(layelem);
-    if (fixelem.parentNode) fixelem.parentNode.removeChild(fixelem);
+    fragment.appendChild(layelem);
+    fragment.appendChild(fixelem);
     themeSwitchBtn.text("\ue748");
     if (tips) layer.tips('已启用浅色模式', "#theme-switch", {
       tips: [3, "#666"],
@@ -300,12 +302,6 @@ var Renderer = {
     });
   },
 
-  lazyimg() {
-    layui.flow.lazyimg({
-      elem: "img[lay-src]"
-    });
-  },
-
   friendLinkPage() {
     $('.friends-page-bg-link .layui-card-header').text(function (_, text) {
       return Sess.shufArray(Sess.friendLinkLangChooser(JSON.parse(layui.util.unescape(text)))).join(" / ");
@@ -343,6 +339,13 @@ var Sess = {
         df.resolve();
       });
     }).then(function () {
+      // img
+      document.querySelectorAll('img').forEach(function (el) {
+        if (el.alt === 'face' || el.className.match('icon')) return;
+        el.addEventListener('error', function () {
+          el.src = ['https://picsum.photos', el.width, el.height, '?' + Math.random().toString().replace('.', '')].join('/');
+        }, { once: true });
+      });
       // datetime
       Renderer.datetime();
       // random
@@ -353,8 +356,6 @@ var Sess = {
       Renderer.friendLinkPage();
       // title
       Renderer.pageTitle(document.querySelector("#main-title > span.layui-breadcrumb"));
-      // lazyimg
-      Renderer.lazyimg();
       // top
       var picjq = $("#post-index-container");
       layui.util.fixbar({
