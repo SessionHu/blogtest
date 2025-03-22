@@ -327,13 +327,12 @@ var Sess = {
       if (!url) return df.resolve();
       Renderer.progress("6%");
       $('#main-container').load(url + ' #main-container > *', function (_, textStatus) {
-        if (textStatus === 'timeout' || textStatus === 'error' || textStatus === 'parsererror') {
-          this.innerHTML = '\
-            <div class="layui-panel layui-card radius">\
-              <h1 class="layui-card-header" id="main-title">Failed to fetch</h1>\
-              <div class="layui-card-body" id="main">Please check your network connection and try again later...</div>\
-            </div>\
-          ';
+        if (textStatus.match(/^timeout|error|parsererror$/)) {
+          this.innerHTML =
+            '<div class="layui-panel layui-card radius">' +
+              '<h1 class="layui-card-header" id="main-title">Failed to fetch</h1>' +
+              '<div class="layui-card-body" id="main">Please check your network connection and try again later...</div>' +
+            '</div>';
         }
         Renderer.progress("99%");
         df.resolve();
@@ -485,10 +484,9 @@ var Sess = {
       var col = document.querySelector(".layui-row > .layui-col-md4");
       pic.className = "layui-panel layui-card radius";
       pic.id = "post-index-container";
-      pic.innerHTML = '\
-        <div class="layui-card-header">文章索引</div>\
-        <div class="layui-card-body" id="post-index"></div>\
-      ';
+      pic.innerHTML =
+        '<div class="layui-card-header">文章索引</div>' +
+        '<div class="layui-card-body" id="post-index"></div>';
       col.appendChild(pic);
     }
     // index data tree
@@ -503,7 +501,7 @@ var Sess = {
       spread: true
     };
     var lasttreenode = roottreenode;
-    Array.prototype.forEach.call(mainContent, function (elem) {
+    mainContent.forEach(function (elem) {
       if (elem.tagName.match(/^H/) && elem.tagName.length === 2 && elem.tagName !== "H1") {
         while (parseInt(elem.tagName.charAt(1)) <= parseInt(lasttreenode.id.charAt(1))) {
           lasttreenode = lasttreenode.parent;
