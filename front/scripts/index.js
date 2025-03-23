@@ -372,7 +372,7 @@ var Sess = {
               type: 1,
               offset: 'r',
               anim: 'slideLeft',
-              area: [333 < document.documentElement.clientWidth ? '333px' : '100%', '100%'],
+              area: [333 < window.innerWidth ? '333px' : '100%', '100%'],
               shade: .01,
               shadeClose: true,
               skin: "layui-layer-win10",
@@ -411,20 +411,19 @@ var Sess = {
    */
   main() {
     // load UI
-    Renderer.sccrval();
-    $(window).on("resize", Renderer.onscroll);
-    $(window).on("scroll", Renderer.onscroll);
+    window.addEventListener("resize", Renderer.onscroll);
+    window.addEventListener("scroll", Renderer.onscroll);
     // load content
     /**
      * @param {string | URL} url
      */
-    function loadMainAndCatch(url) {
-      return Sess.loadMainContent(url).fail(function (e) {
+    var loadMainAndCatch = (function f(url) {
+      Sess.loadMainContent(url).fail(function (e) {
         Renderer.openErrLayer(e);
         Renderer.progress("0%");
       });
-    };
-    loadMainAndCatch();
+      return f;
+    })();
     // show big photos
     layui.util.on("lay-on", {
       "carousel-img": function () {
@@ -536,51 +535,50 @@ var Sess = {
   //#region friends
 
   friendLinkFooter() {
-    $.getJSON('/friends.json', function (json) {
-      Sess.shufArray(json.friends);
-      Sess.shufArray(json.organizations);
-      // 3 * friends + 8 * organizations
-      var result = [];
-      var len = json.friends.length;
-      for (var i = 0; i < (len < 3 ? len : 3); i++) {
-        var e = json.friends.pop();
-        e.className = "personal-link";
-        result.push(e);
-      }
-      len = json.organizations.length;
-      for (var i = 0; i < (len < 8 ? len : 8); i++) {
-        var e = json.organizations.pop();
-        e.className = "layui-hide-xs";
-        result.push(e);
-      }
-      result.push({
-        "id": "more",
-        "title": "...",
-        "href": "/friends/",
-          "name": {
-          "en": ["More"],
-          "zh": ["更多"],
-        }
-      });
-      // fill
-      var friendlinks = document.getElementById("friend-links");
-      if (!friendlinks) return;
-      for (var i = 0; i < result.length; i++) {
-        var lnk = result[i];
-        var names = Sess.friendLinkLangChooser(lnk.name);
-        var a = $('<a class="ws-nowrap w-0"></a>').attr({
-          href: lnk.href,
-          title: names[Math.floor(Math.random() * names.length)]
-        }).addClass(lnk.className).text(lnk.title);
-        if (lnk.id !== 'more') {
-          a.attr({
-            target: '_blank',
-            rel: 'noopener'
-          });
-        }
-        friendlinks.appendChild(a[0]);
+    var friendlinks = document.getElementById("friend-links");
+    if (!friendlinks) return;
+    var json = JSON.parse(layui.util.unescape(friendlinks.textContent));
+    Sess.shufArray(json.friends);
+    Sess.shufArray(json.organizations);
+    // 3 * friends + 8 * organizations
+    var result = [];
+    var len = json.friends.length;
+    for (var i = 0; i < (len < 3 ? len : 3); i++) {
+      var e = json.friends.pop();
+      e.className = "personal-link";
+      result.push(e);
+    }
+    len = json.organizations.length;
+    for (var i = 0; i < (len < 8 ? len : 8); i++) {
+      var e = json.organizations.pop();
+      e.className = "layui-hide-xs";
+      result.push(e);
+    }
+    result.push({
+      "id": "more",
+      "title": "…",
+      "href": "/friends/",
+        "name": {
+        "en": ["More"],
+        "zh": ["更多"],
       }
     });
+    // fill
+    for (var i = 0; i < result.length; i++) {
+      var lnk = result[i];
+      var names = Sess.friendLinkLangChooser(lnk.name);
+      var a = $('<a class="ws-nowrap w-0"></a>').attr({
+        href: lnk.href,
+        title: names[Math.floor(Math.random() * names.length)]
+      }).addClass(lnk.className).text(lnk.title);
+      if (lnk.id !== 'more') {
+        a.attr({
+          target: '_blank',
+          rel: 'noopener'
+        });
+      }
+      a.appendTo(friendlinks);
+    }
   },
 
   /**

@@ -3,7 +3,7 @@
 import fs from "node:fs/promises";
 import path from 'node:path';
 import { md2html } from './md2html.js';
-import { Element } from './sdom.js';
+import { Element, encodeXML } from './sdom.js';
 
 /**
  * @param {string} fname
@@ -46,7 +46,11 @@ async function readHTML(fname, options = void 0) {
  * @returns {Promise<string>}
  */
 async function readBaseHTML(cache = {}) {
-  return cache.basehtml || (cache.basehtml = (await readHTML('./front/index.html')).toString());
+  /** @type {FriendsJson} */
+  const fj = cache.friends || (cache.friends = JSON.parse(await fs.readFile('front/friends.json', 'utf8')));
+  shufArray(fj.friends);
+  shufArray(fj.organizations);
+  return cache.basehtml || (cache.basehtml = (await readHTML('./front/index.html')).toString().replace('FRIENDS-JSON', '<noscript>' + encodeXML(JSON.stringify(fj)) + '</noscript>'));
 }
 
 /**
