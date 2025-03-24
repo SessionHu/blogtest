@@ -344,7 +344,7 @@ var Sess = {
         var cb = function () {
           el.src = ['https://picsum.photos', el.width, el.height, '?' + Math.random().toString().replace('.', '')].join('/');
         };
-        if (!el.complete && !el.naturalHeight && !el.naturalWidth) cb();
+        if (el.complete && !el.naturalHeight && !el.naturalWidth) cb();
         else el.addEventListener('error', cb, { once: true });
       });
       // datetime
