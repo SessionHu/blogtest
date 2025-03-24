@@ -341,9 +341,11 @@ var Sess = {
       // img
       document.querySelectorAll('img').forEach(function (el) {
         if (el.alt === 'face' || el.className.match('icon')) return;
-        el.addEventListener('error', function () {
+        var cb = function () {
           el.src = ['https://picsum.photos', el.width, el.height, '?' + Math.random().toString().replace('.', '')].join('/');
-        }, { once: true });
+        };
+        if (!el.complete && !el.naturalHeight && !el.naturalWidth) cb();
+        else el.addEventListener('error', cb, { once: true });
       });
       // datetime
       Renderer.datetime();
