@@ -71,8 +71,8 @@ div.layui-panel, div.layui-collapse {
     position: fixed;
     top: -1px;
     right: -1px;
-    bottom: -1px;
-    left: -1px;
+    width: calc(100vw + 2px);
+    height: calc(100vh + 2px);
     filter: blur(1px);
     background-repeat: no-repeat;
     background-position: center;
