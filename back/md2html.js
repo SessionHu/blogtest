@@ -109,7 +109,7 @@ class Md2html {
         const rgx = /!\[(.*?)\]\((.*?)\)/g;
         return text.replace(rgx, (_, p1, p2) => {
             const [src, title] = p2.split(' ');
-            const html = `<div lay-on="post-img"><img lay-src="${src}" title=${title ? title : '""'} alt="${p1}" /></div>`;
+            const html = `<div lay-on="post-img"><img src="${src}" title=${title ? title : '""'} alt="${p1}" loading="lazy"/></div>`;
             return html;
         });
     }
