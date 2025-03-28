@@ -144,6 +144,10 @@ img[alt=face] {
     text-align: center;
 }
 
+#post-index-container {
+  box-sizing: border-box;
+}
+
 /* pageload progress */
 
 .layui-progress {

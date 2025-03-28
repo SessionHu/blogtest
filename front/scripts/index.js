@@ -169,11 +169,24 @@ var Renderer = {
     footer.css('bottom', sclY + viuH + 1 >= docH ? 0 : -footer.outerHeight() + 'px');
     // #post-index-container
     var pic = $('#post-index-container');
-    if (viuW >= 992 && !pic.hasClass('layui-layer-wrap')) {
-      var topn = sclY - pic.offsetParent().outerHeight() + pic.outerHeight();
-      pic.css('top', topn > 0 ? topn + 'px' : 0);
+    if (!pic[0]) return;
+    var picprect = pic.parent()[0].getBoundingClientRect();
+    pic.css('width', picprect.width - 16);
+    if (pic.hasClass('layui-layer-wrap')) {
+      pic.css({
+        position: 'absolute',
+        top: 'unset'
+      });
+    } else if (viuW >= 992 && picprect.height + picprect.y < 8 + 64) {
+      pic.css({
+        position: 'fixed',
+        top: 64
+      });
     } else {
-      pic.css('top', 0);
+      pic.css({
+        position: 'absolute',
+        top: 'unset'
+      });
     }
   },
 
@@ -275,6 +288,7 @@ var Renderer = {
   fortune() {
     $.get('https://v1.hitokoto.cn/?encode=text', function (res) {
       $('#lunar-calendar-container > .layui-card-body > p').text(res);
+      Renderer.onscroll();
     });
   },
 
@@ -413,6 +427,7 @@ var Sess = {
    */
   main() {
     // load UI
+    Renderer.sccrval();
     window.addEventListener("resize", Renderer.onscroll);
     window.addEventListener("scroll", Renderer.onscroll);
     // load content
