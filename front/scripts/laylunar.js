@@ -117,7 +117,7 @@ var showwhenenough = (function cb() {
         container.querySelector(".layui-card-header").innerText = "农历";
     }
   } catch (e) {
-    Sess.openErrLayer(e);
+    console.error(e);
   }
   return cb;
 })();
