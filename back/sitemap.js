@@ -149,10 +149,12 @@ export async function getFeed() {
     ['link', BASE_URL],
     ['description', 'Session 的个人博客, 这里有各种类型的有趣的文章内容, 网站使用纯 JavaScript 构建'],
     ['language', 'zh-CN'],
-   ['copyright', '2024-' + new Date().getUTCFullYear() + ' SessionHu'],
+    ['copyright', '2024-' + new Date().getUTCFullYear() + ' SessionHu'],
   ]) {
     channelElem.appendChild(Element.new(k, [v]));
   }
+  const lastBuildDateElem = Element.new('lastBuildDate');
+  channelElem.appendChild(lastBuildDateElem);
   const atomlinkElem = Element.new('atom:link');
   atomlinkElem.setAttribute('href', BASE_URL + 'feed.xml');
   atomlinkElem.setAttribute('rel', 'self');
@@ -168,11 +170,16 @@ export async function getFeed() {
       linkElem.textContent = new URL(fname.replace(/\.md$/, '/'), BASE_URL).toString();
       const guidElem = Element.new('guid', [linkElem.textContent]);
       itemElem.append(linkElem, guidElem);
+      // pubDate
       const pubDateElem = Element.new('pubDate', [new Date(pii.time).toUTCString()]);
       itemElem.append(pubDateElem);
+      // title
       const titleElem = Element.new('title', [pii.title]);
       itemElem.appendChild(titleElem);
+      // category
+      itemElem.appendChild(Element.new('category', [pii.category]));
     }
   }
+  lastBuildDateElem.textContent = new Date().toUTCString()
   return document;
 }
