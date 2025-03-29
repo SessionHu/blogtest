@@ -136,6 +136,43 @@ export async function getSitemap() {
  * @returns {Promise<Document>}
  */
 export async function getFeed() {
-  console.warn(new Error('Not implement yet'));
-  return new Document();
+  const /** @type {Promise<PostsIndexYearly[]>} */ postsjson = readFile('./posts/index.json', 'utf8').then(JSON.parse);
+  const document = new Document();
+  const rssElem = Element.new('rss');
+  rssElem.setAttribute('version', '2.0');
+  rssElem.setAttribute("xmlns:atom", "http://www.w3.org/2005/Atom");
+  document.appendChild(rssElem);
+  const channelElem = Element.new('channel');
+  rssElem.appendChild(channelElem);
+  for (const [k, v] of [
+    ['title', 'SЕSSのB10GТЕ5Т'],
+    ['link', BASE_URL],
+    ['description', 'Session 的个人博客, 这里有各种类型的有趣的文章内容, 网站使用纯 JavaScript 构建'],
+    ['language', 'zh-CN'],
+   ['copyright', '2024-' + new Date().getUTCFullYear() + ' SessionHu'],
+  ]) {
+    channelElem.appendChild(Element.new(k, [v]));
+  }
+  const atomlinkElem = Element.new('atom:link');
+  atomlinkElem.setAttribute('href', BASE_URL + 'feed.xml');
+  atomlinkElem.setAttribute('rel', 'self');
+  channelElem.appendChild(atomlinkElem);
+  for (const piy of await postsjson) {
+    for (const pii of piy.posts) {
+      const fname = `posts/${piy.year}/${pii.fname}`;
+      // item
+      const itemElem = Element.new('item');
+      channelElem.appendChild(itemElem);
+      // link / guid
+      const linkElem = Element.new('link');
+      linkElem.textContent = new URL(fname.replace(/\.md$/, '/'), BASE_URL).toString();
+      const guidElem = Element.new('guid', [linkElem.textContent]);
+      itemElem.append(linkElem, guidElem);
+      const pubDateElem = Element.new('pubDate', [new Date(pii.time).toUTCString()]);
+      itemElem.append(pubDateElem);
+      const titleElem = Element.new('title', [pii.title]);
+      itemElem.appendChild(titleElem);
+    }
+  }
+  return document;
 }

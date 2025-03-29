@@ -33,8 +33,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Build
         run: yarn build
-      - name: Copy Sitemap & RSS
-        run: wget https://github.com/SessionHu/blogtest-sitemap/raw/hidden/feed.xml -O ./dist/feed.xml
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

@@ -90,7 +90,7 @@ export class Element extends Node {
 
   /**
    * @param {string} tagName
-   * @param {Node[] | string[]} inner
+   * @param {(Node|string)[]} inner
    */
   constructor(tagName, inner = []) {
     super();
@@ -103,7 +103,7 @@ export class Element extends Node {
 
   /**
    * @param {string} tagName
-   * @param {Node[] | string[]} inner
+   * @param {(Node|string)[]} inner
    */
   static new(tagName, inner = []) {
     return new Element(tagName, inner);
