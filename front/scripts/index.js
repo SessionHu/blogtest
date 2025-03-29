@@ -163,21 +163,16 @@ var Renderer = {
     var docH = document.documentElement.scrollHeight;
     var viuH = window.innerHeight;
     var viuW = window.innerWidth;
+    var pic = $('#post-index-container');
     // footer
     var footer = $('footer');
-    $('#footer-placeholder').css('height', footer.outerHeight() + 2 + 'px');
-    footer.css('bottom', sclY + viuH + 1 >= docH ? 0 : -footer.outerHeight() + 'px');
+    $('#footer-placeholder').css('height', footer.outerHeight() + 2 + (viuW < 992 ? pic.outerHeight() : 0));
+    footer.css('bottom', sclY + viuH + 1 >= docH ? 0 : -footer.outerHeight());
     // #post-index-container
-    var pic = $('#post-index-container');
     if (!pic[0]) return;
     var picprect = pic.parent()[0].getBoundingClientRect();
     pic.css('width', picprect.width - 16);
-    if (pic.hasClass('layui-layer-wrap')) {
-      pic.css({
-        position: 'absolute',
-        top: 'unset'
-      });
-    } else if (viuW >= 992 && picprect.height + picprect.y < 8 + 64) {
+    if (viuW >= 992 && picprect.height + picprect.y < 8 + 64 && !pic.hasClass('layui-layer-wrap')) {
       pic.css({
         position: 'fixed',
         top: 64
@@ -288,7 +283,6 @@ var Renderer = {
   fortune() {
     $.get('https://v1.hitokoto.cn/?encode=text', function (res) {
       $('#lunar-calendar-container > .layui-card-body > p').text(res);
-      Renderer.onscroll();
     });
   },
 
