@@ -37,6 +37,13 @@ export class Node {
   }
 
   /**
+   * @param {Node[]} nodes
+   */
+  append(...nodes) {
+    for (const n of nodes) this.appendChild(n);
+  }
+
+  /**
    * @param {Node} node
    */
   removeChild(node) {
@@ -83,17 +90,23 @@ export class Element extends Node {
 
   /**
    * @param {string} tagName
+   * @param {Node[] | string[]} inner
    */
-  constructor(tagName) {
+  constructor(tagName, inner = []) {
     super();
     this.#tagName = tagName;
+    for (const n of inner) {
+      if (n instanceof Node) this.appendChild(n);
+      else this.appendChild(new TextNode(n));
+    }
   }
 
   /**
    * @param {string} tagName
+   * @param {Node[] | string[]} inner
    */
-  static new(tagName) {
-    return new Element(tagName);
+  static new(tagName, inner = []) {
+    return new Element(tagName, inner);
   }
 
   #tagName;
