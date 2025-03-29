@@ -34,7 +34,7 @@ jobs:
       - name: Build
         run: yarn build
       - name: Copy Sitemap & RSS
-        run: cd dist/ && wget https://github.com/SessionHu/blogtest-sitemap/raw/hidden/sitemap.xml https://github.com/SessionHu/blogtest-sitemap/raw/hidden/feed.xml
+        run: wget https://github.com/SessionHu/blogtest-sitemap/raw/hidden/feed.xml -O ./dist/feed.xml
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

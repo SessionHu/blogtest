@@ -15,6 +15,7 @@ const mimeTypes = new Map([
   ['ico', "image/vnd.microsoft.icon"],
   ['html', "text/html"],
   ['css', "text/css"],
+  ['xml', 'text/xml'],
   ['md', 'text/html'] // rendered
 ]);
 

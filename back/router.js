@@ -36,6 +36,9 @@ export function req2file(uri) {
   } else if (rema = pn.match(/^(\/posts\/\d{4,}\/.+?)(\/|\/index\.html)?$/)) {
     return '.' + rema[1] + '.md';
   }
+  // sitemap
+  if (pn === '/sitemap.xml') return '?sitemap.xml';
+  else if (pn === '/feed.xml') return '?feed.xml';
   // else
   return 'front/404.html';
 }
@@ -66,6 +69,8 @@ export function file2dist(fname) {
   } else if (rema = fname.match(/^(posts\/\d{4,}\/.+)\.md$/)) {
     return `dist/${rema[1]}/index.html`;
   }
+  // sitemap
+  if (fname.startsWith('?')) return fname.replace('?', 'dist/');
   // else
   return '/dev/null';
 }

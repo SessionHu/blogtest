@@ -4,12 +4,18 @@ import fs from "node:fs/promises";
 import path from 'node:path';
 import { md2html } from './md2html.js';
 import { Element, encodeXML } from './sdom.js';
+import { getSitemap, getFeed } from './sitemap.js';
 
 /**
  * @param {string} fname
  * @param {SSGCache} cache
  */
 export async function render(fname, cache = {}) {
+  if (fname.startsWith('?')) {
+    return (await (
+      fname === '?sitemap.xml' ? getSitemap() : getFeed()
+    )).toXML();
+  }
   const extn = path.extname(fname = path.normalize(fname)).toLowerCase();
   if (extn === ".html") {
     if (fname === 'front/home.html') return renderHomeHTML(cache);
