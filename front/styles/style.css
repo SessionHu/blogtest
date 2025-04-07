@@ -8,6 +8,10 @@ html {
 body {
   font-family: 'ZCOOL KuaiLe', 'HarmonyOS Sans SC', 'Noto Sans CJK SC', 'Noto Color Emoji', 'Unifont', 'Arial', sans-serif, serif;
   width: 100vw;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
 }
 
 .layui-text a:not(.layui-btn):hover {
@@ -22,12 +26,19 @@ body {
     content: "\00a0";
 }
 
+/* nav */
+
+ul.layui-nav {
+  overflow-x: scroll;
+  height: min-content;
+}
+
 /* theme switch */
 
-@media (min-width: 260px) {
-    #theme-switch {
-        float: right;
-    }
+@media (min-width: 385px) {
+  #theme-switch {
+    float: right;
+  }
 }
 
 * {
@@ -246,12 +257,9 @@ pre.layui-code {
 /* footer */
 
 #footer {
-    padding: 4px;
-    width: 100%;
-    opacity: .9;
-    position: fixed;
-    bottom: 0;
-    transition-property: bottom;
+  opacity: .9;
+  margin-top: auto;
+  width: initial;
 }
 
 #footer-main {
@@ -265,10 +273,6 @@ pre.layui-code {
 #footer-main > * {
     text-align: center;
     padding: 0 4px;
-}
-
-#footer-placeholder {
-    height: 32px;
 }
 
 /* friend link */

@@ -12,6 +12,7 @@
 .w-0 { width: 0; }
 .w-64 { width: 64px; }
 .w100 { width: 100%; }
+.w-inherit { width: inherit; }
 
 .margin-t4 {
   margin-top: 4px;
