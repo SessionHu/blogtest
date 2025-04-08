@@ -13,6 +13,7 @@
 .w-64 { width: 64px; }
 .w100 { width: 100%; }
 .w-inherit { width: inherit; }
+.w-max100 { max-width: 100%; }
 
 .margin-t4 { margin-top: 4px; }
 .margin-t8 { margin-top: 8px; }
