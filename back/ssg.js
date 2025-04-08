@@ -56,7 +56,7 @@ async function readBaseHTML(cache = {}) {
   const fj = cache.friends || (cache.friends = JSON.parse(await fs.readFile('front/friends.json', 'utf8')));
   shufArray(fj.friends);
   shufArray(fj.organizations);
-  return cache.basehtml || (cache.basehtml = (await readHTML('./front/index.html')).toString().replace('FRIENDS-JSON', '<noscript>' + encodeXML(JSON.stringify(fj)) + '</noscript>'));
+  return cache.basehtml || (cache.basehtml = (await readHTML('./front/index.html')).toString().replace('{{FRIENDS-JSON}}', '<noscript>' + encodeXML(JSON.stringify(fj)) + '</noscript>').replace('{{POSTS-COUNT}}', ((await getPostsCount(cache)).toString())));
 }
 
 /**
@@ -75,11 +75,24 @@ async function readPostsIndex(cache = {}) {
 }
 
 /**
+ * @param {SSGCache} cache
+ * @returns {Promise<number>}
+ */
+async function getPostsCount(cache = {}) {
+  const pij = readPostsIndex(cache);
+  let count = 0;
+  for (const i of await pij) {
+    count += i.posts.length;
+  }
+  return count;
+}
+
+/**
  * @param {string | Promise<string>} content
  * @param {SSGCache} cache
  */
 async function renderHTML(content, cache = {}) {
-  return (await readBaseHTML(cache)).replace('MAIN-CONTENT', (await content).toString());
+  return (await readBaseHTML(cache)).replace('{{MAIN-CONTENT}}', (await content).toString());
 }
 
 /**
@@ -132,7 +145,7 @@ async function renderMarkdown(fname, cache = {}) {
   }
   // return
   if (!date) date = new Date(0);
-  return (await readBaseHTML(cache)).replace('MAIN-CONTENT', `
+  return (await readBaseHTML(cache)).replace('{{MAIN-CONTENT}}', `
     <div class="layui-panel layui-card radius">
       <h1 id="main-title" class="layui-card-header">
         <span class="layui-breadcrumb ws-nowrap" lay-separator=">">
@@ -183,7 +196,7 @@ async function renderHomeHTML(cache = {}) {
       `.replace(/\s+/g, ' '));
     }
   }
-  return renderHTML((await homehtml).toString().replace('HOME-CONTENT', ls.join('')), cache);
+  return renderHTML((await homehtml).toString().replace('{{HOME-CONTENT}}', ls.join('')), cache);
 }
 
 /**
@@ -230,7 +243,7 @@ async function renderCategoryHTML(cache = {}) {
     elem.childNodes[1].appendChild(anchor);
     elem.childNodes[1].appendChild(Element.new('br'));
   }
-  return renderHTML((await catehtml).toString().replace('CATEGORY-CONTENT', colladiv.toXML()), cache);
+  return renderHTML((await catehtml).toString().replace('{{CATEGORY-CONTENT}}', colladiv.toXML()), cache);
 }
 
 /**
@@ -281,7 +294,7 @@ async function renderFriendHTML(cache = {}) {
   };
   const frs = fj.friends.map((f) => genFriendLinkElem(f, false).toXML()).join('');
   const ogs = fj.organizations.map((f) => genFriendLinkElem(f, true).toXML()).join('');
-  return (await readBaseHTML(cache)).replace('MAIN-CONTENT', (await frndhtml).toString().replace('FRIENDS-REAL', frs).replace('FRIENDS-ORGS', ogs));
+  return (await readBaseHTML(cache)).replace('{{MAIN-CONTENT}}', (await frndhtml).toString().replace('{{FRIENDS-REAL}}', frs).replace('{{FRIENDS-ORGS}}', ogs));
 }
 
 /**

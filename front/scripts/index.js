@@ -284,16 +284,6 @@ var Renderer = {
     });
   },
 
-  postscount() {
-    var count = 0;
-    $.getJSON('/posts/index.json', function (res) {
-      res.forEach(function (e) {
-        count += e.posts.length;
-      });
-      $('#postscount').text(count);
-    });
-  },
-
   code() {
     layui.code({
       elem: ".layui-code",
@@ -469,7 +459,6 @@ var Sess = {
     // forune & pageview
     Renderer.fortune();
     Renderer.pageview();
-    Renderer.postscount();
   },
 
   //#endregion

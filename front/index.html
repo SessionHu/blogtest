@@ -67,7 +67,7 @@
   <div class="layui-container w-inherit">
     <div class="layui-row layui-col-space16 layui-margin-1">
 
-      <main class="layui-col-md8" id="main-container">MAIN-CONTENT</main>
+      <main class="layui-col-md8" id="main-container">{{MAIN-CONTENT}}</main>
       
       <div class="layui-col-md4">
         <div class="layui-panel layui-card radius" id="name-face-container">
@@ -79,7 +79,7 @@
               <div id="maincounter" class="flex space-around">
                 <div id="postscount-container">
                   <span class="layui-font-18">文章</span>
-                  <span id="postscount">114514</span>
+                  <span id="postscount">{{POSTS-COUNT}}</span>
                 </div>
                 <div id="pageview-container">
                   <span class="layui-font-18">浏览</span>
@@ -147,7 +147,7 @@
       <div class="layui-col-sm8">
         <a id="friend-links-container" class="layui-font-12" href="/friends/">
           <span>友情链接</span>
-          <div id="friend-links" class="flex flex-wrap h-48">FRIENDS-JSON</div>
+          <div id="friend-links" class="flex flex-wrap h-48">{{FRIENDS-JSON}}</div>
         </a>
       </div>
     </div>
