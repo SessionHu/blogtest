@@ -159,11 +159,13 @@ var Renderer = {
    * Render something on scroll.
    */
   onscroll: function () {
-    var pic = $('#post-index-container');
+    var picp = $('.layui-container>div>.layui-col-md4');
     // #post-index-container
-    if (!pic[0]) return;
-    var picprect = pic.parent()[0].getBoundingClientRect();
+    var pic = picp.find('#post-index-container');
+    if (!pic[0]) return picp.css('margin-bottom', 'unset');
+    var picprect = picp[0].getBoundingClientRect();
     pic.css('width', picprect.width - 16);
+    picp.css('margin-bottom', pic.outerHeight());
     if (window.innerWidth >= 992 && picprect.height + picprect.y < 8 + 64 && !pic.hasClass('layui-layer-wrap')) {
       pic.css({
         position: 'fixed',
