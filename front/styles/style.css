@@ -1,8 +1,9 @@
 @charset "utf-8";
 
 html {
-    overflow-x: hidden;
-    scrollbar-width: thin;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  color-scheme: light only;
 }
 
 body {
