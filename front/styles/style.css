@@ -32,7 +32,7 @@ body {
 /* nav */
 
 ul.layui-nav {
-  overflow-x: scroll;
+  overflow-x: auto;
   height: min-content;
 }
 
@@ -88,7 +88,7 @@ div.layui-panel, div.layui-collapse {
 .background {
     position: fixed;
     top: -1px;
-    right: -1px;
+    left: -1px;
     width: calc(100vw + 2px);
     height: calc(100vh + 2px);
     filter: blur(1px);
