@@ -52,6 +52,10 @@ ul.layui-nav {
 
 /* carousel */
 
+.layui-carousel {
+  height: 280px;
+}
+
 div[carousel-item] > div {
     text-align: center;
     transition-property: left, right;

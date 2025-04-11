@@ -125,7 +125,8 @@ var Renderer = {
     var e = $('.layui-carousel:has(div[carousel-item]:has(*))');
     if (e[0]) layui.carousel.render({
       elem: e,
-      width: "auto"
+      width: "auto",
+      height: 280
     });
   },
 
