@@ -166,7 +166,7 @@ var Renderer = {
     if (!pic[0]) return picp.css('margin-bottom', 'unset');
     var picprect = picp[0].getBoundingClientRect();
     pic.css('width', picprect.width - 16);
-    picp.css('margin-bottom', pic.outerHeight());
+    picp.css('margin-bottom', pic.outerHeight() + 5);
     if (window.innerWidth >= 992 && picprect.height + picprect.y < 8 + 64 && !pic.hasClass('layui-layer-wrap')) {
       pic.css({
         position: 'fixed',
