@@ -349,7 +349,7 @@ var Sess = {
       // fill .friends-page-main
       Renderer.friendLinkPage();
       // title
-      Renderer.pageTitle(document.querySelector("#main-title > span.layui-breadcrumb"));
+      Renderer.pageTitle(document.querySelector("#main-title>.layui-breadcrumb"));
       // top
       var picjq = $("#post-index-container");
       layui.util.fixbar({
