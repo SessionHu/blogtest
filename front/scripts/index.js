@@ -247,12 +247,12 @@ var Renderer = {
     if (progress === "100%") {
       new $.Deferred(function (df) {
         setTimeout(function () {
-          el.hide(2e2, 'linear', df.resolve);
+          el.fadeOut(2e2, 'linear', df.resolve);
         }, 1e3);
       }).then(function () {
         layui.element.progress("pageload-progress", '0%');
         setTimeout(function () {
-          el.show(2e2, 'linear');
+          el.show();
         }, 2e2);
       });
     } else {
