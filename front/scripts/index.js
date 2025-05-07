@@ -18,7 +18,7 @@ if (!window.$) window.$ = layui.$;
 
   var fragment = document.createDocumentFragment();
   var layelem = document.createElement('link');
-  layelem.href = "https://unpkg.com/layui-theme-dark@2.9.21/dist/layui-theme-dark.css";
+  layelem.href = "https://unpkg.com/layui-theme-dark@2.10.0/dist/layui-theme-dark.css";
   layelem.rel = 'stylesheet';
   fragment.appendChild(layelem);
   var fixelem = document.createElement('link');
