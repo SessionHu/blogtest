@@ -10,6 +10,8 @@ if (location.pathname === '/index.html' || (document.referrer === 'https://shaka
 
 //#endregion
 
+if (!window.$) window.$ = layui.$;
+
 //#region theme
 
 (function () {
