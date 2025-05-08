@@ -10,8 +10,6 @@ if (location.pathname === '/index.html' || (document.referrer === 'https://shaka
 
 //#endregion
 
-if (!window.$) window.$ = layui.$;
-
 //#region theme
 
 (function () {
@@ -26,7 +24,7 @@ if (!window.$) window.$ = layui.$;
   fixelem.rel = 'stylesheet';
   fragment.appendChild(fixelem);
 
-  var themeSwitchBtn = $('#theme-switch > button');
+  var themeSwitchBtn = $('#theme-switch>button');
 
   /**
    * @param {boolean} tips
@@ -97,7 +95,7 @@ var Renderer = {
    * @param {Error} e
    * @param {any} options?
    */
-  openErrLayer: function (e, options) {
+  openErrLayer(e, options) {
     var o = {
       type: 0,
       title: e.name,
@@ -121,7 +119,7 @@ var Renderer = {
   /**
    * Render carousel.
    */
-  carousel: function () {
+  carousel() {
     var e = $('.layui-carousel:has(div[carousel-item]:has(*))');
     if (e[0]) layui.carousel.render({
       elem: e,
@@ -152,14 +150,14 @@ var Renderer = {
   /**
    * Render breadcrumb.
    */
-  breadcrumb: function () {
+  breadcrumb() {
     layui.element.render('breadcrumb', $('.layui-breadcrumb'));
   },
 
   /**
    * Render something on scroll.
    */
-  onscroll: function () {
+  onscroll() {
     var picp = $('.layui-container>div>.layui-col-md4');
     // #post-index-container
     var pic = picp.find('#post-index-container');
@@ -183,7 +181,7 @@ var Renderer = {
   /**
    * Load Socialist Core Values (社会主义核心价值观).
    */
-  sccrval: function () {
+  sccrval() {
     var scv = [
       '富强', '民主', '文明', '和谐',
       '自由', '平等', '公正', '法治',
@@ -225,11 +223,11 @@ var Renderer = {
   /**
    * Add .layui-this.
    */
-  nav: function () {
+  nav() {
     var pg = location.pathname.split('/')[1];
     if (pg === 'posts') pg = 'category';
     else if (pg === 'index.html' || !pg) pg = 'index';
-    $('ul[lay-filter=nav-sess] > *').each(function () {
+    $('ul[lay-filter=nav-sess]>*').each(function () {
       if (this.id === 'nav-' + pg) {
         this.classList.add('layui-this');
       } else {
@@ -241,7 +239,7 @@ var Renderer = {
   /**
    * @param {string} progress
    */
-  progress: function (progress) {
+  progress(progress) {
     var el = $('.layui-progress');
     layui.element.progress("pageload-progress", progress);
     if (progress === "100%") {
