@@ -32,6 +32,17 @@
             "title": "凌空的博客小站",
             "desc": "浪漫能邂逅现实吗",
             "icon": "https://www.skyblogs.xyz/wp-content/uploads/2023/01/cropped-head-192x192.jpg"
+        },
+        {
+            "id": "wuziqian211",
+            "name": {
+                "zh": ["晨叶梦春"],
+                "en": ["YumeHaru", "wuziqian211"]
+            },
+            "href": "https://www.yumeharu.top/",
+            "title": "晨叶梦春的小屋",
+            "desc": "Not for the best, just for the better.",
+            "icon": "https://www.yumeharu.top/images/face.png_compressed.webp"
         }
     ],
     "organizations": [
