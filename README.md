@@ -4,4 +4,6 @@
 
 - 你可以在 [sess.xhustudio.eu.org](https://sess.xhustudio.eu.org/) 访问该网站.
 
+- 开发构建分别使用 `yarn dev` 和 `yarn build`
+
 - 代码使用 [`MIT License`](LICENSE.txt), 文章及内容使用 [`CC-BY-NC-SA 4.0`](https://creativecommons.org/licenses/by-nc-sa/4.0/) 许可
