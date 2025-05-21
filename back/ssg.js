@@ -5,6 +5,7 @@ import path from 'node:path';
 import { md2html } from './md2html.js';
 import { Element, encodeXML } from './sdom.js';
 import { getSitemap, getFeed } from './sitemap.js';
+import friendEg from './friendeg.json' with { type: "json" };
 
 /**
  * @param {string} fname
@@ -308,6 +309,10 @@ async function renderFriendHTML(cache = {}) {
   };
   const frs = fj.friends.map((f) => genFriendLinkElem(f, false).toXML()).join('');
   const ogs = fj.organizations.map((f) => genFriendLinkElem(f, true).toXML()).join('');
+  const egpre = Element.new('pre');
+  egpre.setAttribute('class', 'layui-code');
+  egpre.setAttribute('lay-options', '{lang:"json"}');
+  egpre.textContent = JSON.stringify(friendEg, void 0, 2);
   return (await readBaseHTML(cache, '友链 - SESSのB10GTEST'))
     .replace(
       '{{MAIN-CONTENT}}',
@@ -315,6 +320,7 @@ async function renderFriendHTML(cache = {}) {
         .toString()
         .replace('{{FRIENDS-REAL}}', frs)
         .replace('{{FRIENDS-ORGS}}', ogs)
+        .replace('{{FRIENDS-EGPRE}}', egpre.toXML())
     );
 }
 
