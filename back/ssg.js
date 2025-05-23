@@ -61,7 +61,7 @@ async function readBaseHTML(cache = {}, title = 'SESSのB10GTEST') {
   if (!cache.basehtml)
     cache.basehtml = (await readHTML('./front/index.html')).toString();
   return cache.basehtml
-    .replace('{{FRIENDS-JSON}}', '<noscript>' + encodeXML(JSON.stringify(fj)) + '</noscript>')
+    .replace('{{FRIENDS-JSON}}', '<script>var __FRIENDS_JSON__ = ' + JSON.stringify(fj) + ';</script>')
     .replace('{{POSTS-COUNT}}', ((await getPostsCount(cache)).toString()))
     .replace('{{PAGE-TITLE}}', title);
 }
@@ -288,7 +288,7 @@ async function renderFriendHTML(cache = {}) {
     const header = Element.new('div');
     header.setAttribute('class', 'layui-card-header ws-nowrap');
     const noscript = Element.new('noscript');
-    noscript.textContent = JSON.stringify(item.name);  // parse at frontend
+    noscript.textContent = encodeURIComponent(JSON.stringify(item.name));  // parse at frontend
     header.appendChild(noscript);
     panel.appendChild(header);
     const bodyr = Element.new('div');

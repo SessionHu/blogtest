@@ -297,7 +297,7 @@ var Renderer = {
 
   friendLinkPage() {
     $('.friends-page-bg-link .layui-card-header').text(function (_, text) {
-      return Sess.shufArray(Sess.friendLinkLangChooser(JSON.parse(layui.util.unescape(text)))).join(" / ");
+      return Sess.shufArray(Sess.friendLinkLangChooser(JSON.parse(decodeURIComponent(text)))).join(" / ");
     });
   }
 
@@ -532,7 +532,7 @@ var Sess = {
   friendLinkFooter() {
     var friendlinks = document.getElementById("friend-links");
     if (!friendlinks) return;
-    var json = JSON.parse(layui.util.unescape(friendlinks.textContent));
+    var json = __FRIENDS_JSON__;
     Sess.shufArray(json.friends);
     Sess.shufArray(json.organizations);
     // 3 * friends + 8 * organizations
