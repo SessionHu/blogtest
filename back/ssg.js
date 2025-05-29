@@ -286,10 +286,8 @@ async function renderFriendHTML(cache = {}) {
     panel.setAttribute('class', 'layui-panel layui-card friends-page-bg-transp friends-page-bg-link radius');
     a.appendChild(panel);
     const header = Element.new('div');
-    header.setAttribute('class', 'layui-card-header ws-nowrap');
-    const noscript = Element.new('noscript');
-    noscript.textContent = encodeURIComponent(JSON.stringify(item.name));  // parse at frontend
-    header.appendChild(noscript);
+    header.setAttribute('class', 'layui-card-header text-ellipsis');
+    header.textContent = btoa(encodeURIComponent(JSON.stringify(item.name)));  // parse at frontend
     panel.appendChild(header);
     const bodyr = Element.new('div');
     bodyr.setAttribute('class', 'layui-card-body flex h-64');

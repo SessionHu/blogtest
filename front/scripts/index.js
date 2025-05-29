@@ -297,7 +297,7 @@ var Renderer = {
 
   friendLinkPage() {
     $('.friends-page-bg-link .layui-card-header').text(function (_, text) {
-      return Sess.shufArray(Sess.friendLinkLangChooser(JSON.parse(decodeURIComponent(text)))).join(" / ");
+      return Sess.shufArray(Sess.friendLinkLangChooser(JSON.parse(decodeURIComponent(atob(text))))).join(" / ");
     });
   }
 
