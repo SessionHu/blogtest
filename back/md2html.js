@@ -45,7 +45,7 @@ class Md2html {
                 for (let left = spacecount; left > 0; left -= 2) {
                     out += "<ul>";
                 }
-                if (line.startsWith("- ") || line.startsWith("+ ")) {
+                if (line.startsWith("- ") || line.startsWith("+ ") || line.startsWith("* ")) {
                     out += `<ul><li>${this.line(line.substring(2))}</li></ul>`;
                 } else {
                     out += this.line(line);
@@ -78,7 +78,7 @@ class Md2html {
             }
         }
         // return
-        return `<h${hashcount}>${line.substring(hashcount + 1)}</h${hashcount}>`
+        return `<h${hashcount}>${this.line(line.substring(hashcount + 1))}</h${hashcount}>`
     }
 
     /**
@@ -109,7 +109,7 @@ class Md2html {
         const rgx = /!\[(.*?)\]\((.*?)\)/g;
         return text.replace(rgx, (_, p1, p2) => {
             const [src, title] = p2.split(' ');
-            const html = `<div lay-on="post-img"><img src="${src}" title=${title ? title : '""'} alt="${p1}" loading="lazy"/></div>`;
+            const html = `<div lay-on="post-img"><img src="${src}" title=${title ? title : '""'} alt="${p1}" loading="lazy" ${src.includes('hdslb.com') ? 'referrerpolicy="no-referrer"' : " "}/></div>`;
             return html;
         });
     }
