@@ -4,6 +4,15 @@
     "posts": [
       {
         "type": "post",
+        "title": "一个拼写错误是如何让整个互联网一起犯错的",
+        "fname": "http-typo-referer.md",
+        "time": "2025-06-02T08:57:14.637714482+0800",
+        "category": "web",
+        "image": "https://static.xhustudio.eu.org/posts/2025/http-typo-referer/cover.svg",
+        "tags": ["web", "http", "javascript", "html", "history", "internet", "www", "referer", "rfc"]
+      },
+      {
+        "type": "post",
         "title": "通过 DevTools 绕过 SSR 抓包 B 站专栏正文接口",
         "fname": "devtools-vs-ssr-bac.md",
         "time": "2025-04-13T22:45:16.846997790+0800",
