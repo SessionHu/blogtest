@@ -4,6 +4,15 @@
     "posts": [
       {
         "type": "post",
+        "title": "在受版权限制的地区播放诈骗神曲",
+        "fname": "rickroll-bili-global.md",
+        "time": "2025-06-07T13:35:12.195537160+0800",
+        "category": "community",
+        "image": "http://i1.hdslb.com/bfs/archive/5242750857121e05146d5d5b13a47a2a6dd36e98.jpg",
+        "tags": ["bilibili", "video", "bac", "rickroll", "vlc", "sony", "music", "mainland", "copyright"]
+      },
+      {
+        "type": "post",
         "title": "一个拼写错误是如何让整个互联网一起犯错的",
         "fname": "http-typo-referer.md",
         "time": "2025-06-02T08:57:14.637714482+0800",
