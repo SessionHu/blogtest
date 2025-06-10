@@ -24,7 +24,7 @@
 }
 ```
 ## 过程
-* 先通过搜索获取 UP 主 mid (UID), 由于 rickroll 的 UP 是 索尼音乐中国, 所以我们之间搜索, 得到 mid (UID) 为 `486906719`
+* 先通过搜索获取 UP 主 mid (UID), 由于 rickroll 的 UP 是 索尼音乐中国, 所以我们直接搜索, 得到 mid (UID) 为 `486906719`
   ![搜索索尼音乐](https://i0.hdslb.com/bfs/archive/80e0fb35ad42c7fbc67b40447ebb03b6d960929b.jpg)
 * 通过关键词查询视频, 音乐的演唱者为 Rick Astley, 但不知道为什么输入空格会导致无返回, 所以我们直接搜索 `Astley`, 能查询到 `BV1GJ411x7h7`
   ```shell
@@ -34,7 +34,7 @@
     --url-query 'ps=50' \
     -s | jq .
   ```
-  ```json
+  ```jsonc
   {
     "code": 0,
     "message": "0",
@@ -70,7 +70,7 @@
   ```shell
   curl 'https://api.bilibili.com/x/player/pagelist?bvid=BV1GJ411x7h7' | jq .
   ```
-  ```jsonc
+  ```json
   {
     "code": 0,
     "message": "0",
