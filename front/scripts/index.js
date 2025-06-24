@@ -516,9 +516,9 @@ var Sess = {
       data: [roottreenode],
       accordion: true,
       click: function (obj) {
-        var idps = obj.data.id.split('-', 2);
+        var idps = obj.data.id.match(/^(.*?)-(.*)$/);
         var elem = document.evaluate(
-          '//' + idps[0].toLowerCase() + '[text()="' + idps[1] + '"]',
+          '//' + idps[1].toLowerCase() + '[text()="' + idps[2] + '"]',
           main, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null
         ).singleNodeValue;
         (elem ? elem : mainTitleDiv).scrollIntoView({ behavior: "smooth" });
