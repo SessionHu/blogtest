@@ -291,7 +291,8 @@ var Renderer = {
     layui.code({
       elem: ".layui-code",
       langMarker: true,
-      wordWrap: false
+      wordWrap: false,
+      encode: false
     });
   },
 
@@ -633,3 +634,6 @@ try {
   Renderer.openErrLayer(e);
   Renderer.progress("0%");
 }
+
+if (/eruda=true/.test(location.search) || localStorage.getItem('active-eruda') == 'true')
+  document.write('<script src="https://unpkg.com/eruda"></script><script>eruda.init();</script>');
