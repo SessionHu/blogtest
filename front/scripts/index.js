@@ -12,6 +12,9 @@ if (location.pathname === '/index.html' || (document.referrer === 'https://shaka
 
 if (!window.$) window.$ = layui.$;
 
+if (/eruda=true/.test(location.search) || localStorage.getItem('active-eruda') == 'true')
+  document.write('<script src="https://unpkg.com/eruda"></script><script>eruda.init();</script>');
+
 //#region theme
 
 (function () {
@@ -486,8 +489,7 @@ var Sess = {
     }
     // index data tree
     var main = document.querySelector('main');
-    var mainContent = main.querySelectorAll("div.layui-text > *");
-    if (!mainContent.length) return;
+    if (main.childElementCount <= 0) return;
     var mainTitleDiv = main.querySelector("div.postcard-title") || $('h1:last', main)[0];
     var roottreenode = {
       title: mainTitleDiv.textContent,
@@ -496,7 +498,7 @@ var Sess = {
       spread: true
     };
     var lasttreenode = roottreenode;
-    mainContent.forEach(function (elem) {
+    Array.prototype.forEach.call(main.children, function cb(elem) {
       if (elem.tagName.match(/^H/) && elem.tagName.length === 2 && elem.tagName !== "H1") {
         while (parseInt(elem.tagName.charAt(1)) <= parseInt(lasttreenode.id.charAt(1))) {
           lasttreenode = lasttreenode.parent;
@@ -509,6 +511,8 @@ var Sess = {
         };
         lasttreenode.children.push(newtreenode);
         lasttreenode = newtreenode;
+      } else if (elem.childElementCount > 0) {
+        Array.prototype.forEach.call(elem.children, cb);
       }
     });
     // render
@@ -634,6 +638,3 @@ try {
   Renderer.openErrLayer(e);
   Renderer.progress("0%");
 }
-
-if (/eruda=true/.test(location.search) || localStorage.getItem('active-eruda') == 'true')
-  document.write('<script src="https://unpkg.com/eruda"></script><script>eruda.init();</script>');
