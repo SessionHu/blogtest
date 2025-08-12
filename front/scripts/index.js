@@ -493,26 +493,24 @@ var Sess = {
     var mainTitleDiv = main.querySelector("div.postcard-title") || $('h1:last', main)[0];
     var roottreenode = {
       title: mainTitleDiv.textContent,
-      id: "H1-root",
+      elem: mainTitleDiv,
       children: [],
       spread: true
     };
     var lasttreenode = roottreenode;
-    Array.prototype.forEach.call(main.children, function cb(elem) {
-      if (elem.tagName.match(/^H/) && elem.tagName.length === 2 && elem.tagName !== "H1") {
-        while (parseInt(elem.tagName.charAt(1)) <= parseInt(lasttreenode.id.charAt(1))) {
+    main.querySelectorAll('h2, h3, h4, h5, h6').forEach(function (elem) {
+      if (elem.tagName.match(/^H[2-6]$/)) {
+        while (elem.tagName.charAt(1) <= lasttreenode.elem.tagName.charAt(1)) {
           lasttreenode = lasttreenode.parent;
         }
         var newtreenode = {
-          title: elem.innerText,
-          id: elem.tagName + '-' + elem.textContent,
+          title: elem.textContent,
+          elem,
           children: [],
           parent: lasttreenode
         };
         lasttreenode.children.push(newtreenode);
         lasttreenode = newtreenode;
-      } else if (elem.childElementCount > 0) {
-        Array.prototype.forEach.call(elem.children, cb);
       }
     });
     // render
@@ -521,12 +519,7 @@ var Sess = {
       data: [roottreenode],
       accordion: true,
       click: function (obj) {
-        var idps = obj.data.id.match(/^(.*?)-(.*)$/);
-        var elem = document.evaluate(
-          '//' + idps[1].toLowerCase() + '[text()="' + idps[2] + '"]',
-          main, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null
-        ).singleNodeValue;
-        (elem ? elem : mainTitleDiv).scrollIntoView({ behavior: "smooth" });
+        obj.data.elem.scrollIntoView({ behavior: "smooth" });
       }
     });
   },
