@@ -446,12 +446,10 @@ var Sess = {
        */
       function _onclick(ev) {
         var ac = ev.target;
-        while (true) {
-          if (!ac) break;
-          else if (ac instanceof HTMLAnchorElement) break;
-          else ac = ac.parentNode;
-        }
-        if (!ac || ac.host !== location.host || ac.href.match(/\.(json|ico|css|js|xml)$/)) return;
+        while (ac && !(ac instanceof HTMLAnchorElement))
+          ac = ac.parentNode;
+        if (!ac || ac.host !== location.host || ac.href.match(/\.(json|ico|css|js|xml)$/))
+          return;
         ev.preventDefault();
         history.pushState({}, '', ac.href);
         loadMainAndCatch(ac.href);
@@ -493,7 +491,7 @@ var Sess = {
     var mainTitleDiv = main.querySelector("div.postcard-title") || $('h1:last', main)[0];
     var roottreenode = {
       title: mainTitleDiv.textContent,
-      elem: mainTitleDiv,
+      elem: {tagName:'H0'},
       children: [],
       spread: true
     };
@@ -519,7 +517,8 @@ var Sess = {
       data: [roottreenode],
       accordion: true,
       click: function (obj) {
-        obj.data.elem.scrollIntoView({ behavior: "smooth" });
+        var s = obj.data.elem;
+        Element.prototype.scrollIntoView.call(s.scrollIntoView ? s : document.body, { behavior: "smooth" });
       }
     });
   },
