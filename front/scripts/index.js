@@ -323,8 +323,8 @@ var Sess = {
       // request
       if (!url) return df.resolve();
       Renderer.progress("6%");
-      $('#main-container').load(url + ' #main-container > *', function (_, textStatus) {
-        if (textStatus.match(/^timeout|error|parsererror$/)) {
+      $('#main-container').load(url + ' #main-container > *', function (_, stat) {
+        if (stat === 'timeout' || stat === 'error' || stat === 'parsererror') {
           this.innerHTML =
             '<div class="layui-panel layui-card radius">' +
               '<h1 class="layui-card-header" id="main-title">Failed to fetch</h1>' +
@@ -337,7 +337,7 @@ var Sess = {
     }).then(function () {
       // img
       document.querySelectorAll('img').forEach(function (el) {
-        if (el.alt === 'face' || el.className.match('icon')) return;
+        if (el.alt === 'face' || el.className.indexOf('icon') >= 0) return;
         var cb = function () {
           el.src = ['https://picsum.photos', el.width, el.height, '?' + Math.random().toString().replace('.', '')].join('/');
         };
@@ -448,7 +448,7 @@ var Sess = {
         var ac = ev.target;
         while (ac && !(ac instanceof HTMLAnchorElement))
           ac = ac.parentNode;
-        if (!ac || ac.host !== location.host || ac.href.match(/\.(json|ico|css|js|xml)$/))
+        if (!ac || ac.host !== location.host || /\.(json|ico|css|js|xml)$/.test(ac.href))
           return;
         ev.preventDefault();
         history.pushState({}, '', ac.href);
@@ -471,7 +471,7 @@ var Sess = {
 
   createPostIndex() {
     var pic = document.getElementById("post-index-container") || document.createElement("div");
-    if (!location.pathname.match(/\/(about|posts)/)) {
+    if (!/\/(about|posts)/.test(location.pathname)) {
       if (pic.parentNode) pic.parentNode.removeChild(pic);
       return;
     }
@@ -497,7 +497,7 @@ var Sess = {
     };
     var lasttreenode = roottreenode;
     main.querySelectorAll('h2, h3, h4, h5, h6').forEach(function (elem) {
-      if (elem.tagName.match(/^H[2-6]$/)) {
+      if (/^H[2-6]$/.test(elem.tagName)) {
         while (elem.tagName.charAt(1) <= lasttreenode.elem.tagName.charAt(1)) {
           lasttreenode = lasttreenode.parent;
         }
@@ -580,9 +580,9 @@ var Sess = {
     // by user language
     var langs = navigator.languages;
     for (var i = 0; langs.length > i; i++) {
-      if (langs[i].match(/^zh/)) {
+      if (langs[i].indexOf('zh') === 0) {
         if (name.zh.length > 0) return name.zh;
-      } else if (langs[i].match(/^en/)) {
+      } else if (langs[i].indexOf('en') === 0) {
         if (name.en.length > 0) return name.en;
       }
     }
