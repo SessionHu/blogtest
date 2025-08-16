@@ -107,6 +107,7 @@
   ```
   <details>
   <summary>查看 JSON 回复:</summary>
+
   ```json
   {
     "code": 0,
@@ -435,6 +436,7 @@
     }
   }
   ```
+
   </details>
 * 最后使用 VLC 进行播放, 你没被骗!
   ```shell
