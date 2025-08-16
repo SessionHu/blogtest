@@ -121,10 +121,10 @@ async function renderMarkdown(fname, cache = {}) {
   // basic information
   const year = (fname.match(/\d{4,}/) || [])[0];
   const basename = path.basename(fname);
-  let categoryName;
-  let titleName;
+  let /** @type {string} */ categoryName;
+  let /** @type {string} */ titleName = '';
   let date;
-  let image;
+  let /** @type {string} */ image;
   let tags = [""];
   // fill information
   /** @type {PostsIndexYearly[]} */
@@ -144,7 +144,7 @@ async function renderMarkdown(fname, cache = {}) {
     }
   }
   // colorful tags
-  const colorfultags = [];
+  const /** @type {string[]} */ colorfultags = [];
   const bgcolors = [
     "layui-bg-red", "layui-bg-orange", "layui-bg-green", "layui-bg-cyan",
     "layui-bg-blue", "layui-bg-purple", "layui-bg-black", "layui-bg-gray"
@@ -154,7 +154,7 @@ async function renderMarkdown(fname, cache = {}) {
   }
   // return
   if (!date) date = new Date(0);
-  return (await readBaseHTML(cache, titleName + ' - SESSのB10GTEST')).replace('{{MAIN-CONTENT}}', `
+  return (await readBaseHTML(cache, titleName + ' - SESSのB10GTEST')).replace('{{MAIN-CONTENT}}', () => `
     <div class="layui-panel layui-card radius">
       <h1 id="main-title" class="layui-card-header">
         <span class="layui-breadcrumb ws-nowrap" lay-separator=">">
@@ -167,14 +167,14 @@ async function renderMarkdown(fname, cache = {}) {
       </h1>
       <div class="layui-card-body" id="main">
         <div class="postcard layui-margin-2 layui-panel">
-          <div class="postcard-bg"><img src="${image}" loading="lazy" ${image.includes('hdslb.com') ? 'referrerpolicy="no-referrer"' : " "}/></div>
+          <div class="postcard-bg"><img src="${image}" loading="lazy" ${image?.includes('hdslb.com') ? 'referrerpolicy="no-referrer"' : " "}/></div>
           <div class="postcard-desc layui-padding-2">
             <div class="postcard-title layui-font-32">${titleName}</div>
             <div class="postcard-sub" style="opacity:.84;">${colorfultags.join(' ')}</div>
           </div>
         </div>
         <div class="layui-text">
-          ${md2html(mdfc).replace(new RegExp("<h1[^>]*>.*?</h1>", 'gi'), "")}
+          ${md2html(mdfc).replace(/\<h1[^\>]*?\>.*?\<\/h1\>/, "")}
         </div>
       </div>
     </div>
