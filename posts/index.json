@@ -4,6 +4,15 @@
     "posts": [
       {
         "type": "post",
+        "title": "草台班子学校之废弃服务器从占领到放弃",
+        "fname": "school-server-hacking-story.md",
+        "time": "2025-11-15T11:20:00.953262087+0800",
+        "category": "security",
+        "image": "https://cdn5.telesco.pe/file/R9es3Mh0oKF0vjYEnRoHTRqV3qkxWJ3nURHCOB-cWiGYMO5uRGbW_PgZSJmSL6SB8LqjHSUkP6VwUoFeL_eueiI_DrJFRVb1PEa8qO-x3yB_YoPH1As9DImvDblD_i4fUZScCSV5O6hIeVTXHFRp52tqXBSI4XADOr9uOepk5MD6Zz5dQNiqP6rl1MFCK9OYvnojxN7Ggre_Mlla2JQDu4agOfQ6YKi1sz4x9oARX8rF29TpID0r6rnjp68VdF9ceOS4y__87UG2-XODZeJdKqSOYxndJV2nCFVUh88M3bA2P5pakjCO2m2hWEiSgMZ10XHN-Z1l7dJGU59bwpNvTw.jpg",
+        "tags": ["security", "school", "nmap", "network", "internet", "vnc", "ssh", "ubuntu", "server", "linux", "qemu", "web", "hack"]
+      },
+      {
+        "type": "post",
         "title": "在受版权限制的地区播放诈骗神曲",
         "fname": "rickroll-bili-global.md",
         "time": "2025-06-07T13:35:12.195537160+0800",
@@ -66,7 +75,7 @@
         "title": "Debian 之 KDE 与 Wayland 调教指北",
         "fname": "deb-kde-wayland-guide.md",
         "time": "2024-07-30T21:40+0800",
-        "category": "graphics",
+        "category": "linux",
         "image": "https://static.xhustudio.eu.org/images/svg/Wayland_Logo.svg",
         "tags": ["kde", "linux", "debian", "wayland", "x11", "computer", "fcitx5", "obs", "java", "calendar"]
       },
