@@ -55,13 +55,9 @@ async function readHTML(fname, options = void 0) {
  */
 async function readBaseHTML(cache = {}, title = 'SESSのB10GTEST') {
   /** @type {FriendsJson} */
-  const fj = cache.friends || (cache.friends = JSON.parse(await fs.readFile('front/friends.json', 'utf8')));
-  shufArray(fj.friends);
-  shufArray(fj.organizations);
   if (!cache.basehtml)
     cache.basehtml = (await readHTML('./front/index.html')).toString();
   return cache.basehtml
-    .replace('{{FRIENDS-JSON}}', '<script>var __FRIENDS_JSON__ = ' + JSON.stringify(fj) + ';</script>')
     .replace('{{POSTS-COUNT}}', ((await getPostsCount(cache)).toString()))
     .replace('{{PAGE-TITLE}}', title);
 }
@@ -268,7 +264,7 @@ async function renderCategoryHTML(cache = {}) {
 async function renderFriendHTML(cache = {}) {
   const frndhtml = readHTML('front/friends.html');
   /** @type {FriendsJson} */
-  const fj = cache.friends || (cache.friends = JSON.parse(await fs.readFile('front/friends.json', 'utf8')));
+  const fj = JSON.parse(await fs.readFile('front/friends.json', 'utf8'));
   shufArray(fj.friends);
   shufArray(fj.organizations);
   /**

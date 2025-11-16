@@ -529,48 +529,49 @@ var Sess = {
   friendLinkFooter() {
     var friendlinks = document.getElementById("friend-links");
     if (!friendlinks) return;
-    var json = __FRIENDS_JSON__;
-    Sess.shufArray(json.friends);
-    Sess.shufArray(json.organizations);
-    // 3 * friends + 8 * organizations
-    var result = [];
-    var len = json.friends.length;
-    for (var i = 0; i < (len < 3 ? len : 3); i++) {
-      var e = json.friends.pop();
-      e.className = "personal-link";
-      result.push(e);
-    }
-    len = json.organizations.length;
-    for (var i = 0; i < (len < 8 ? len : 8); i++) {
-      var e = json.organizations.pop();
-      e.className = "layui-hide-xs";
-      result.push(e);
-    }
-    result.push({
-      "id": "more",
-      "title": "…",
-      "href": "/friends/",
-        "name": {
-        "en": ["More"],
-        "zh": ["更多"],
+    $.getJSON('/friends.json', function (json) {
+      Sess.shufArray(json.friends);
+      Sess.shufArray(json.organizations);
+      // 3 * friends + 8 * organizations
+      var result = [];
+      var len = json.friends.length;
+      for (var i = 0; i < (len < 3 ? len : 3); i++) {
+        var e = json.friends.pop();
+        e.className = "personal-link";
+        result.push(e);
+      }
+      len = json.organizations.length;
+      for (var i = 0; i < (len < 8 ? len : 8); i++) {
+        var e = json.organizations.pop();
+        e.className = "layui-hide-xs";
+        result.push(e);
+      }
+      result.push({
+        "id": "more",
+        "title": "…",
+        "href": "/friends/",
+          "name": {
+          "en": ["More"],
+          "zh": ["更多"],
+        }
+      });
+      // fill
+      for (var i = 0; i < result.length; i++) {
+        var lnk = result[i];
+        var names = Sess.friendLinkLangChooser(lnk.name);
+        var a = $('<a class="ws-nowrap w-0"></a>').attr({
+          href: lnk.href,
+          title: names[Math.floor(Math.random() * names.length)]
+        }).addClass(lnk.className).text(lnk.title);
+        if (lnk.id !== 'more') {
+          a.attr({
+            target: '_blank',
+            rel: 'noopener'
+          });
+        }
+        a.appendTo(friendlinks);
       }
     });
-    // fill
-    for (var i = 0; i < result.length; i++) {
-      var lnk = result[i];
-      var names = Sess.friendLinkLangChooser(lnk.name);
-      var a = $('<a class="ws-nowrap w-0"></a>').attr({
-        href: lnk.href,
-        title: names[Math.floor(Math.random() * names.length)]
-      }).addClass(lnk.className).text(lnk.title);
-      if (lnk.id !== 'more') {
-        a.attr({
-          target: '_blank',
-          rel: 'noopener'
-        });
-      }
-      a.appendTo(friendlinks);
-    }
   },
 
   /**
