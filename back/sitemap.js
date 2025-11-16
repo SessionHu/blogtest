@@ -10,8 +10,9 @@ const BASE_URL = 'https://sess.xhustudio.eu.org/';
  * @returns {Date}
  */
 function getFileLastModified(fname) {
-  return new Date(spawnSync(`git --no-pager log --pretty=format:%aI --max-count=1 -- ${fname}`, {
-    shell: 'sh',
+  return new Date(spawnSync('git', [
+    '--no-pager', 'log', '--pretty=format:%aI', '--max-count=1',  '--', fname
+  ], {
     encoding: 'utf8'
   }).stdout);
 }
