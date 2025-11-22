@@ -339,7 +339,24 @@ var Sess = {
       document.querySelectorAll('img').forEach(function (el) {
         if (el.alt === 'face' || el.className.indexOf('icon') >= 0) return;
         var cb = function () {
-          el.src = ['https://picsum.photos', el.width, el.height, '?' + Math.random().toString().replace('.', '')].join('/');
+          $.ajax({
+            url: el.src,
+            xhr: function () {
+              var xhr = new XMLHttpRequest();
+              xhr.responseType = 'blob';
+              return xhr;
+            },
+            success: function(d) {
+              var u = URL.createObjectURL(d);
+              $(el).one('load error', function () {
+                URL.revokeObjectURL(u);
+              })
+              el.src = u;
+            },
+            error: function () {
+              el.src = ['https://picsum.photos', el.width || 256, el.height || 256, '?' + Math.random().toString().replace('.', '')].join('/');
+            }
+          });
         };
         if (el.complete && !el.naturalHeight && !el.naturalWidth) cb();
         else el.addEventListener('error', cb, { once: true });
