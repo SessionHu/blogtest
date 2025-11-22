@@ -43,6 +43,17 @@
             "title": "晨叶梦春的小屋",
             "desc": "Not for the best, just for the better.",
             "icon": "https://www.yumeharu.top/images/face.png_compressed.webp"
+        },
+        {
+            "id": "happycola233",
+            "name": {
+                "zh": ["肥宅水水呀"],
+                "en": ["happycola", "happycola233"]
+            },
+            "href": "https://happycola.top/",
+            "title": "水水的小屋",
+            "desc": "写点有趣的东东 awa",
+            "icon": "https://happycola.top/img/avatar.png"
         }
     ],
     "organizations": [
