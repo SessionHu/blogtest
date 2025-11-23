@@ -54,6 +54,17 @@
             "title": "水水的小屋",
             "desc": "写点有趣的东东 awa",
             "icon": "https://happycola.top/img/avatar.png"
+        },
+        {
+            "id": "woxile_233",
+            "name": {
+                "zh": ["我汐了_233"],
+                "en": ["woxile", "woxile233"]
+            },
+            "href": "https://woxile.rth1.xyz/",
+            "title": "我汐了_233",
+            "desc": "孩子不懂事，目害写的",
+            "icon": "https://avatars.githubusercontent.com/u/141159229?v=4"
         }
     ],
     "organizations": [
