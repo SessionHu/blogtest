@@ -56,7 +56,8 @@
             "icon": "https://happycola.top/img/avatar.png"
         },
         {
-            "id":"woxile_233"
+            "id": "woxile_233",
+            "name": {
                 "zh": ["我汐了_233"],
                 "en": ["woxile", "woxile233"]
             },
