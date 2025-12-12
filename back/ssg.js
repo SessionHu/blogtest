@@ -22,7 +22,12 @@ export async function render(fname, cache = {}) {
     if (fname === 'front/home.html') return renderHomeHTML(cache);
     else if (fname === 'front/category.html') return renderCategoryHTML(cache);
     else if (fname === 'front/friends.html') return renderFriendHTML(cache);
-    else return renderHTML(readHTML(fname).then((res) => res.toString()), cache, fname === 'front/about.html' ? '关于 - SESSのB10GTEST' : void 0);
+    else return renderHTML(
+      readHTML(fname).then((res) => res.toString()),
+      cache,
+      fname === 'front/about.html' ? '关于 - SESSのB10GTEST' : void 0,
+      fname.replace(/\.html$/, '/')
+    );
   } else if (extn === ".md") {
     return renderMarkdown(fname, cache);
   } else {
@@ -51,14 +56,16 @@ async function readHTML(fname, options = void 0) {
 /**
  * @param {SSGCache} [cache]
  * @param {string} [title]
+ * @param {string} [cwd]
  * @returns {Promise<string>}
  */
-async function readBaseHTML(cache = {}, title = 'SESSのB10GTEST') {
+async function readBaseHTML(cache = {}, title = 'SESSのB10GTEST', cwd = '/') {
   /** @type {FriendsJson} */
   if (!cache.basehtml)
     cache.basehtml = (await readHTML('./front/index.html')).toString();
   return cache.basehtml
     .replace('{{POSTS-COUNT}}', ((await getPostsCount(cache)).toString()))
+    .replace('{{BASE-PATH}}', path.relative(cwd, '/'))
     .replace('{{PAGE-TITLE}}', title);
 }
 
@@ -94,9 +101,10 @@ async function getPostsCount(cache = {}) {
  * @param {string | Promise<string>} content
  * @param {SSGCache} [cache]
  * @param {string} [title]
+ * @param {string} [cwd]
  */
-async function renderHTML(content, cache = {}, title) {
-  return (await readBaseHTML(cache, title))
+async function renderHTML(content, cache = {}, title, cwd) {
+  return (await readBaseHTML(cache, title, cwd))
     .replace('{{MAIN-CONTENT}}', (await content).toString());
 }
 
@@ -150,13 +158,17 @@ async function renderMarkdown(fname, cache = {}) {
   }
   // return
   if (!date) date = new Date(0);
-  return (await readBaseHTML(cache, titleName + ' - SESSのB10GTEST')).replace('{{MAIN-CONTENT}}', () => `
+  return (await readBaseHTML(
+    cache,
+    titleName + ' - SESSのB10GTEST',
+    `/posts/${year}/${basename.replace(/\.md$/, '/')}`
+  )).replace('{{MAIN-CONTENT}}', () => `
     <div class="layui-panel layui-card radius">
       <h1 id="main-title" class="layui-card-header">
         <span class="layui-breadcrumb ws-nowrap" lay-separator=">">
-          <a href="/">首页</a>
-          <a href="/category/">分类</a>
-          <a href="/category/#${categoryName}">${categoryName}</a>
+          <a href="">首页</a>
+          <a href="category/">分类</a>
+          <a href="category/#${categoryName}">${categoryName}</a>
           <a><cite><time datetime="${date.toISOString()}">${date.toLocaleString('zh').replace(/\:00$/, "")}</time></cite></a>
           <a><cite>${titleName}</cite></a>
         </span>
@@ -189,7 +201,7 @@ async function renderHomeHTML(cache = {}) {
     for (const p of y.posts) {
       const date = new Date(p.time);
       ls.push(`
-        <a href="/posts/${y.year}/${p.fname.replace(/\.md$/, '/')}" class="postcard layui-margin-2 layui-panel">
+        <a href="posts/${y.year}/${p.fname.replace(/\.md$/, '/')}" class="postcard layui-margin-2 layui-panel">
           <div class="postcard-bg"><img src="${p.image}" loading="lazy" ${p.image.includes('hdslb.com') ? 'referrerpolicy="no-referrer"' : " "}/></div>
           <div class="postcard-desc layui-padding-2">
             <div class="postcard-title layui-font-20">${p.title}</div>
@@ -243,7 +255,7 @@ async function renderCategoryHTML(cache = {}) {
     const count = elem.childNodes[0].childNodes[1];
     count.textContent = (parseInt(count.textContent) + 1).toString();
     const anchor = Element.new('a');
-    anchor.setAttribute('href', `/posts/${new Date(postitem.time).getUTCFullYear()}/${postitem.fname.replace(/\.md$/, '/')}`);
+    anchor.setAttribute('href', `posts/${new Date(postitem.time).getUTCFullYear()}/${postitem.fname.replace(/\.md$/, '/')}`);
     anchor.textContent = postitem.title;
     elem.childNodes[1].appendChild(anchor);
     elem.childNodes[1].appendChild(Element.new('br'));
@@ -253,7 +265,8 @@ async function renderCategoryHTML(cache = {}) {
       .toString()
       .replace('{{CATEGORY-CONTENT}}', colladiv.toXML()),
     cache,
-    '分类 - SESSのB10GTEST'
+    '分类 - SESSのB10GTEST',
+    '/category/'
   );
 }
 
@@ -307,7 +320,7 @@ async function renderFriendHTML(cache = {}) {
   egpre.setAttribute('class', 'layui-code');
   egpre.setAttribute('lay-options', '{lang:"json"}');
   egpre.textContent = JSON.stringify(friendEg, void 0, 2);
-  return (await readBaseHTML(cache, '友链 - SESSのB10GTEST'))
+  return (await readBaseHTML(cache, '友链 - SESSのB10GTEST', '/friends/'))
     .replace(
       '{{MAIN-CONTENT}}',
       (await frndhtml)

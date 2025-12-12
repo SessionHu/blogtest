@@ -6,7 +6,10 @@
   <meta charset="utf-8" />
 
   <title>{{PAGE-TITLE}}</title>
-  <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico" />
+
+  <base href="{{BASE-PATH}}" />
+
+  <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico" />
   <link rel="icon" type="image/png" sizes="512x512" href="https://em-content.zobj.net/source/google/387/fish-cake-with-swirl_1f365.png" />
 
   <meta name="description" content="Session 的个人博客, 这里有各种类型的有趣的文章内容, 网站使用纯 JavaScript 构建" />
@@ -17,22 +20,22 @@
   <link rel="stylesheet" href="https://unpkg.com/layui@2.11.4/dist/css/layui.css" />
 
   <!--<script type="text/javascript" src="https://inde.xhustudio.eu.org/scripts/dotLine.js"></script>-->
-  <link rel="stylesheet" href="/styles/style.css" />
-  <link rel="stylesheet" href="/styles/atom.css" />
+  <link rel="stylesheet" href="styles/style.css" />
+  <link rel="stylesheet" href="styles/atom.css" />
 
   <link rel="stylesheet" href="https://dget.top/ipfs/bafybeidzmt57plrhasrzzbysoccxttoitfovvryg5j2hoz6avbx4qdgw7m?filename=iconfont.min.css" />
   <link href="https://fonts.loli.net/css?family=ZCOOL+KuaiLe" rel="preload" as="style" onload="this.rel='stylesheet'">
 
-  <link rel="preload" href="/scripts/index.js" as="script" />
+  <link rel="preload" href="scripts/index.js" as="script" />
 
   <script src="https://unpkg.com/lunar-javascript@1.6.12/lunar.js"></script>
-  <link rel="preload" href="/scripts/laylunar.js" as="script" />
-  <link rel="stylesheet" href="/styles/laylunar.css" />
+  <link rel="preload" href="scripts/laylunar.js" as="script" />
+  <link rel="stylesheet" href="styles/laylunar.css" />
 
   <link rel="preload" href="https://unpkg.com/layui-theme-dark@2.10.0/dist/layui-theme-dark.css" as="style" />
-  <link rel="preload" href="/styles/dark-fix.css" as="style" />
+  <link rel="preload" href="styles/dark-fix.css" as="style" />
 
-  <link rel="alternate" type="application/rss+xml" title="Session 的博客 - RSS 2.0" href="/feed.xml" />
+  <link rel="alternate" type="application/rss+xml" title="Session 的博客 - RSS 2.0" href="feed.xml" />
 
 </head>
 
@@ -47,16 +50,16 @@
 
   <ul class="layui-nav layui-bg-gray ws-nowrap w-inherit" lay-filter="nav-sess">
     <li class="layui-nav-item" id="nav-index">
-      <a href="/">首页</a>
+      <a href="">首页</a>
     </li>
     <li class="layui-nav-item" id="nav-category">
-      <a href="/category/">分类</a>
+      <a href="category/">分类</a>
     </li>
     <li class="layui-nav-item" id="nav-about">
-      <a href="/about/">关于</a>
+      <a href="about/">关于</a>
     </li>
     <li class="layui-nav-item" id="nav-friends">
-      <a href="/friends/">友链</a>
+      <a href="friends/">友链</a>
     </li>
     <li class="layui-nav-item">
       <a href="javascript:layer.alert('因为隐私原因, 画廊站入口暂时向公众关闭, 将会在重构完成后重新开放, 谅解!<br />请尊重版权! 如确有需要, 请邮件或电报联系.',{skin:'layui-layer-win10'});">画廊</a>
@@ -112,7 +115,7 @@
             <!-- fortune -->
             <p></p>
           </div>
-          <script src="/scripts/laylunar.js" async></script>
+          <script src="scripts/laylunar.js" async></script>
         </div>
       </div>
       
@@ -123,7 +126,7 @@
     <div class="layui-row layui-col-space2">
       <div class="layui-col-sm4" id="footer-main">
         <span>
-          (C) 2024 <a href="/">SessionHu</a>
+          (C) 2024 <a href="">SessionHu</a>
         </span>
         <a href="https://icp.gov.moe/?keyword=20241454" target="_blank" rel="noopener">萌ICP备20241454号</a>
         <span>
@@ -138,16 +141,16 @@
         </span>
         <span>
           推荐使用
-          <a href="https://chromium.woolyss.com/download/" target="_blank" rel="noopener">Chromium</a>,
           <a href="https://www.mozilla.org/en-US/firefox/" target="_blank" rel="noopener">Firefox</a>
+          <a href="https://chromium.woolyss.com/download/" target="_blank" rel="noopener">Chromium</a>,
         </span>
         <span>
-          <a href="/feed.xml"><i class="layui-icon-rss layui-icon"></i>RSS</a>&nbsp;&nbsp;
-          <a href="/sitemap.xml"><i class="layui-icon-layouts layui-icon"></i>网站地图</a>
+          <a href="feed.xml"><i class="layui-icon-rss layui-icon"></i>RSS</a>&nbsp;&nbsp;
+          <a href="sitemap.xml"><i class="layui-icon-layouts layui-icon"></i>网站地图</a>
         </span>
       </div>
       <div class="layui-col-sm8">
-        <a id="friend-links-container" class="layui-font-12" href="/friends/">
+        <a id="friend-links-container" class="layui-font-12" href="friends/">
           <span>友情链接</span>
           <div id="friend-links" class="flex flex-wrap h-48"></div>
         </a>
@@ -155,7 +158,7 @@
     </div>
   </footer>
 
-  <script type="text/javascript" src="/scripts/index.js"></script>
+  <script type="text/javascript" src="scripts/index.js"></script>
 
 </body>
 

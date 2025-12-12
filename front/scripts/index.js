@@ -25,7 +25,7 @@ if (/eruda=true/.test(location.search) || localStorage.getItem('active-eruda') =
   layelem.rel = 'stylesheet';
   fragment.appendChild(layelem);
   var fixelem = document.createElement('link');
-  fixelem.href = "/styles/dark-fix.css";
+  fixelem.href = "styles/dark-fix.css";
   fixelem.rel = 'stylesheet';
   fragment.appendChild(fixelem);
 
@@ -546,7 +546,7 @@ var Sess = {
   friendLinkFooter() {
     var friendlinks = document.getElementById("friend-links");
     if (!friendlinks) return;
-    $.getJSON('/friends.json', function (json) {
+    $.getJSON('friends.json', function (json) {
       Sess.shufArray(json.friends);
       Sess.shufArray(json.organizations);
       // 3 * friends + 8 * organizations
