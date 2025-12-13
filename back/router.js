@@ -7,7 +7,8 @@ const routerPatterns = [
   ['/friends.json', 'front/friends.json'],
   ['/category/', 'front/category.html'],
   ['/friends/', 'front/friends.html'],
-  ['/404.html', 'front/404.html']
+  ['/404.html', 'front/404.html'],
+  ['/_redirects', 'front/_redirects'],
 ];
 
 const rgxUrl2pathname = /^(https?:\/\/[a-zA-z\.0-9:]+?)?(\/.*?)(\?.*)?(#.*)?$/;
