@@ -431,6 +431,7 @@ var Sess = {
     window.addEventListener("resize", Renderer.onscroll);
     window.addEventListener("scroll", Renderer.onscroll);
     // load content
+    document.querySelector('base').href = document.baseURI;
     /**
      * @param {string | URL} url
      */
