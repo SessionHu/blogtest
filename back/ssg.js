@@ -59,7 +59,7 @@ async function readHTML(fname, options = void 0) {
  * @param {string} [cwd]
  * @returns {Promise<string>}
  */
-async function readBaseHTML(cache = {}, title = 'SESSのB10GTEST', cwd = '/') {
+async function readBaseHTML(cache = {}, title = 'Session 的个人博客 - SESSのB10GTEST', cwd = '/') {
   /** @type {FriendsJson} */
   if (!cache.basehtml)
     cache.basehtml = (await readHTML('./front/index.html')).toString();

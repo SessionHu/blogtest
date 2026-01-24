@@ -275,7 +275,7 @@ var Renderer = {
   pageTitle(bc) {
     if (!bc) return;
     var ctx = $("a > cite:last").text();
-    document.title = ctx === "首页" ? "SЕSSのB10GТЕ5Т" : ctx + " - SЕSSのB10GТЕ5Т";
+    document.title = (ctx === "首页" ? "Session 的个人博客" : ctx) + " - SЕSSのB10GТЕ5Т";
   },
 
   fortune() {
