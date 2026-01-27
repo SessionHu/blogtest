@@ -1,127 +1,174 @@
 {
-    "friends": [
-        {
-            "id": "shakaianee",
-            "name": {
-                "zh": ["社会易姐QwQ"],
-                "en": ["ShakaiAneE", "SocialSisterYi"]
-            },
-            "href": "https://shakaianee.top/",
-            "title": "易姐的博客",
-            "desc": "",
-            "icon": "https://i0.hdslb.com/bfs/face/aebb2639a0d47f2ce1fec0631f412eaf53d4a0be.jpg"
-        },
-        {
-            "id": "glowingstone",
-            "name": {
-                "zh": [],
-                "en": ["glowingstone124"]
-            },
-            "href": "https://glowingstone.cn/",
-            "title": "Glowstone 萤石",
-            "desc": "每月更新的可能性为lim -> 0，jvm痴子，全栈小白，性能优化魔怔人。",
-            "icon": "https://avatars.githubusercontent.com/u/163746181?s=200&v=4"
-        },
-        {
-            "id": "skyblogs",
-            "name": {
-                "zh": ["凌空"],
-                "en": []
-            },
-            "href": "https://skyblogs.xyz/",
-            "title": "凌空的博客小站",
-            "desc": "浪漫能邂逅现实吗",
-            "icon": "https://www.skyblogs.xyz/wp-content/uploads/2023/01/cropped-head-192x192.jpg"
-        },
-        {
-            "id": "wuziqian211",
-            "name": {
-                "zh": ["晨叶梦春"],
-                "en": ["YumeHaru", "wuziqian211"]
-            },
-            "href": "https://www.yumeharu.top/",
-            "title": "晨叶梦春的小屋",
-            "desc": "Not for the best, just for the better.",
-            "icon": "https://www.yumeharu.top/images/face.png_compressed.webp"
-        },
-        {
-            "id": "happycola233",
-            "name": {
-                "zh": ["肥宅水水呀"],
-                "en": ["happycola", "happycola233"]
-            },
-            "href": "https://happycola.top/",
-            "title": "水水的小屋",
-            "desc": "写点有趣的东东 awa",
-            "icon": "https://happycola.top/img/avatar.png"
-        },
-        {
-            "id": "woxile_233",
-            "name": {
-                "zh": ["我汐了_233"],
-                "en": ["woxile", "woxile233"]
-            },
-            "href": "https://woxile.rth1.xyz/",
-            "title": "我汐了_233",
-            "desc": "孩子不懂事，目害写的",
-            "icon": "https://avatars.githubusercontent.com/u/141159229?v=4"
-        }
-    ],
-    "organizations": [
-        {
-            "id": "layui",
-            "name": {
-                "zh": [],
-                "en": ["Layui"]
-            },
-            "href": "https://layui.dev/",
-            "title": "Layui",
-            "desc": "极简模块化 Web UI 组件库 ",
-            "icon": "https://layui.dev/favicon.ico"
-        },
-        {
-            "id": "euorg",
-            "name": {
-                "zh": [],
-                "en": ["EU.org"]
-            },
-            "href": "https://nic.eu.org/",
-            "title": "EU.org",
-            "desc": "EU.org, free domain names since 1996",
-            "icon": "https://nic.eu.org/favicon.ico"
-        },
-        {
-            "id": "mcwiki",
-            "name": {
-                "zh": [],
-                "en": ["Minecraft Wiki"]
-            },
-            "href": "https://zh.minecraft.wiki/",
-            "title": "Minecraft Wiki",
-            "desc": "这里致力于收集一切和Minecraft有关的信息",
-            "icon": "https://zh.minecraft.wiki/images/Wiki.png"
-        },
-        {
-            "id": "limbowiki",
-            "name": {
-                "zh": ["林泊百科"],
-                "en": ["Limbo Wiki"]
-            },
-            "href": "https://wiki.pigeon-games.com/",
-            "title": "Limbo Wiki",
-            "desc": "这里是专属林泊的像素塔百科全书，在这里你可以自由地查看本站词条，探索像素塔的世界。",
-            "icon": "https://wiki.pigeon-games.com/resources/assets/logo_limbo.png"
-        },
-        {
-            "id": "debian",
-            "name": {
-                "zh": [],
-                "en": ["Debian"]
-            },
-            "href": "https://www.debian.org/",
-            "title": "Debian",
-            "desc": "Debian GNU/Linux 是一个操作系统及自由软件的发行版，它是由一群自愿付出时间和精力的用户来维护并更新的。",
-            "icon": "https://www.debian.org/logos/openlogo-nd.svg"
-        }
-    ]
+  "friends": [
+    {
+      "id": "shakaianee",
+      "name": {
+        "zh": [
+          "社会易姐QwQ"
+        ],
+        "en": [
+          "ShakaiAneE",
+          "SocialSisterYi"
+        ]
+      },
+      "href": "https://shakaianee.top/",
+      "title": "易姐的博客",
+      "desc": "",
+      "icon": "https://i0.hdslb.com/bfs/face/aebb2639a0d47f2ce1fec0631f412eaf53d4a0be.jpg"
+    },
+    {
+      "id": "glowingstone",
+      "name": {
+        "zh": [],
+        "en": [
+          "glowingstone124"
+        ]
+      },
+      "href": "https://glowingstone.cn/",
+      "title": "Glowstone 萤石",
+      "desc": "每月更新的可能性为lim -> 0，jvm痴子，全栈小白，性能优化魔怔人。",
+      "icon": "https://avatars.githubusercontent.com/u/163746181?s=200&v=4"
+    },
+    {
+      "id": "skyblogs",
+      "name": {
+        "zh": [
+          "凌空"
+        ],
+        "en": []
+      },
+      "href": "https://skyblogs.xyz/",
+      "title": "凌空的博客小站",
+      "desc": "浪漫能邂逅现实吗",
+      "icon": "https://www.skyblogs.xyz/wp-content/uploads/2023/01/cropped-head-192x192.jpg"
+    },
+    {
+      "id": "wuziqian211",
+      "name": {
+        "zh": [
+          "晨叶梦春"
+        ],
+        "en": [
+          "YumeHaru",
+          "wuziqian211"
+        ]
+      },
+      "href": "https://www.yumeharu.top/",
+      "title": "晨叶梦春的小屋",
+      "desc": "Not for the best, just for the better.",
+      "icon": "https://www.yumeharu.top/images/face.png_compressed.webp"
+    },
+    {
+      "id": "happycola233",
+      "name": {
+        "zh": [
+          "肥宅水水呀"
+        ],
+        "en": [
+          "happycola",
+          "happycola233"
+        ]
+      },
+      "href": "https://happycola.top/",
+      "title": "水水的小屋",
+      "desc": "写点有趣的东东 awa",
+      "icon": "https://happycola.top/img/avatar.png"
+    },
+    {
+      "id": "woxile_233",
+      "name": {
+        "zh": [
+          "我汐了_233"
+        ],
+        "en": [
+          "woxile",
+          "woxile233"
+        ]
+      },
+      "href": "https://woxile.rth1.xyz/",
+      "title": "我汐了_233",
+      "desc": "孩子不懂事，目害写的",
+      "icon": "https://avatars.githubusercontent.com/u/141159229?v=4"
+    }
+  ],
+  "organizations": [
+    {
+      "id": "layui",
+      "name": {
+        "zh": [],
+        "en": [
+          "Layui"
+        ]
+      },
+      "href": "https://layui.dev/",
+      "title": "Layui",
+      "desc": "极简模块化 Web UI 组件库 ",
+      "icon": "https://layui.dev/favicon.ico"
+    },
+    {
+      "id": "euorg",
+      "name": {
+        "zh": [],
+        "en": [
+          "EU.org"
+        ]
+      },
+      "href": "https://nic.eu.org/",
+      "title": "EU.org",
+      "desc": "EU.org, free domain names since 1996",
+      "icon": "https://nic.eu.org/favicon.ico"
+    },
+    {
+      "id": "mcwiki",
+      "name": {
+        "zh": [],
+        "en": [
+          "Minecraft Wiki"
+        ]
+      },
+      "href": "https://zh.minecraft.wiki/",
+      "title": "Minecraft Wiki",
+      "desc": "这里致力于收集一切和Minecraft有关的信息",
+      "icon": "https://zh.minecraft.wiki/images/Wiki.png"
+    },
+    {
+      "id": "limbowiki",
+      "name": {
+        "zh": [
+          "林泊百科"
+        ],
+        "en": [
+          "Limbo Wiki"
+        ]
+      },
+      "href": "https://wiki.pigeon-games.com/",
+      "title": "Limbo Wiki",
+      "desc": "这里是专属林泊的像素塔百科全书，在这里你可以自由地查看本站词条，探索像素塔的世界。",
+      "icon": "https://wiki.pigeon-games.com/resources/assets/logo_limbo.png"
+    },
+    {
+      "id": "debian",
+      "name": {
+        "zh": [],
+        "en": [
+          "Debian"
+        ]
+      },
+      "href": "https://www.debian.org/",
+      "title": "Debian",
+      "desc": "Debian GNU/Linux 是一个操作系统及自由软件的发行版，它是由一群自愿付出时间和精力的用户来维护并更新的。",
+      "icon": "https://www.debian.org/logos/openlogo-nd.svg"
+    },
+    {
+      "id": "gnu",
+      "name": {
+        "zh": [],
+        "en": ["GNU"]
+      },
+      "href": "https://www.gnu.org/",
+      "title": "GNU",
+      "desc": "GNU 操作系统和自由软件运动",
+      "icon": "https://www.gnu.org/graphics/heckert_gnu.svg"
+    }
+  ]
 }
