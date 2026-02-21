@@ -4,6 +4,7 @@ const routerPatterns = [
   ['/', 'front/home.html'],
   ['/about/', 'front/about.html'],
   ['/favicon.ico', 'front/favicon.ico'],
+  ['/favicon.u1f365.svg', 'front/favicon.u1f365.svg'],
   ['/friends.json', 'front/friends.json'],
   ['/category/', 'front/category.html'],
   ['/friends/', 'front/friends.html'],
