@@ -1,5 +1,19 @@
 [
   {
+    "year": 2026,
+    "posts": [
+      {
+        "type": "post",
+        "title": "自制简易蜜罐: 从愿者上钩到世界地图",
+        "fname": "honeypot-from-nft-to-osm.md",
+        "time": "2026-03-14T17:21:08.777043853+0800",
+        "category": "security",
+        "image": "https://static.xhustudio.eu.org/posts/2026/honeypot-from-nft-to-osm/6172266191230012827.jpg",
+        "tags": ["security", "linux", "honeypot", "internet", "dn42", "dns", "http", "server", "dlang", "osm", "network", "podman", "cgi", "telnet", "nginx"]
+      }
+    ]
+  },
+  {
     "year": 2025,
     "posts": [
       {
