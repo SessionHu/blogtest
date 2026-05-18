@@ -3,7 +3,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Document, Element } from './sdom.js';
 
-const BASE_URL = 'https://sess.xhustudio.eu.org/';
+const BASE_URL = 'https://sess.moe/';
 
 /**
  * @param {string} fname
