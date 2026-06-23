@@ -73,6 +73,20 @@
       "title": "水水的小屋",
       "desc": "写点有趣的东东 awa",
       "icon": "https://happycola.top/img/avatar.png"
+    },
+    {
+      "id": "noxylva",
+      "name": {
+        "zh": [],
+        "en": [
+          "noxylva",
+          "nedifinita"
+        ]
+      },
+      "href": "https://noxylva.org/",
+      "title": "noxylva",
+      "desc": "For the world's more full of weeping than you can understand.",
+      "icon": "https://noxylva.org/picture.jpg"
     }
   ],
   "organizations": [
