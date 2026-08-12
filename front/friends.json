@@ -87,6 +87,17 @@
       "title": "noxylva",
       "desc": "For the world's more full of weeping than you can understand.",
       "icon": "https://noxylva.org/picture.jpg"
+    },
+    {
+      "id": "zxs24719",
+      "name": {
+        "zh": ["爱吃可比克的鲸鱼"],
+        "en": ["zxs24719"]
+      },
+      "href": "https://zxs24719.codeberg.page/",
+      "title": "爱吃可比克的鲸鱼",
+      "desc": "自由软件爱好者",
+      "icon": "https://zxs24719.codeberg.page/avatar.jpg"
     }
   ],
   "organizations": [
