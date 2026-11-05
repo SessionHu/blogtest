@@ -98,6 +98,17 @@
       "title": "爱吃可比克的鲸鱼",
       "desc": "自由软件爱好者",
       "icon": "https://zxs24719.codeberg.page/avatar.jpg"
+    },
+    {
+      "id": "cloveryan",
+      "name": {
+        "zh": [],
+        "en": ["Clover Yan"]
+      },
+      "href": "https://cloveryan.com/",
+      "title": "Clover Yan 的小屋",
+      "desc": "生命是灰色的，理论之树常青。",
+      "icon": "https://cloveryan.com/favicon.png"
     }
   ],
   "organizations": [
